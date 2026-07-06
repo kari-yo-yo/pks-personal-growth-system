@@ -12,6 +12,7 @@ import {
   Home,
   Lightbulb,
   Menu,
+  Route,
   Search,
   Settings,
   Sparkles,
@@ -29,6 +30,7 @@ const navItems = [
   { href: '/papers', label: '论文', icon: GraduationCap },
   { href: '/feynman', label: '费曼卡片', icon: Lightbulb },
   { href: '/insights', label: '灵感速记', icon: Zap },
+  { href: '/paths', label: '学习路径', icon: Route },
   { href: '/daily', label: '每日总结', icon: Calendar },
   { href: '/settings', label: '设置', icon: Settings },
 ];

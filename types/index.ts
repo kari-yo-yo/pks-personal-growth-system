@@ -147,3 +147,28 @@ export interface Insight {
   createdAt: string;
   pinned: boolean;
 }
+
+// ==================== 学习路径 ====================
+
+export type PathNodeStatus = 'locked' | 'available' | 'in_progress' | 'completed';
+
+export interface PathNode {
+  nodeId: string;       // 关联 knowledge node id，可选
+  title: string;
+  description?: string;
+  status: PathNodeStatus;
+  order: number;
+  resources?: string[]; // 论文/笔记引用 id
+}
+
+export interface LearningPath {
+  id: string;
+  title: string;
+  description?: string;
+  category: string;
+  nodes: PathNode[];
+  createdAt: string;
+  updatedAt: string;
+  color?: string;
+  archived: boolean;
+}
