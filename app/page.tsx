@@ -2,16 +2,32 @@
 
 import { useEffect, useState } from 'react';
 import Navigation from '@/components/Navigation';
-import { load, getDataStats, getAllNodes, getAllNotes, getAllPapers } from '@/lib/db';
+import DashboardBackground from '@/components/DashboardBackground';
+import {
+  load,
+  getDataStats,
+  getAllNodes,
+  getAllNotes,
+  getAllPapers,
+  getAllSummaries,
+} from '@/lib/db';
+import { getAllInsights } from '@/lib/insights';
+import { getAllPaths } from '@/lib/paths';
 import { KnowledgeNode, Note, Paper } from '@/types';
 import {
   BookOpen,
   Brain,
+  Calendar,
   FileText,
   GraduationCap,
+  Home,
   Lightbulb,
-  Plus,
+  Map,
+  Network,
+  Route,
   Sparkles,
+  Wind,
+  Zap,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -21,18 +37,24 @@ export default function HomePage() {
     nodes: 0,
     notes: 0,
     papers: 0,
+    insights: 0,
+    paths: 0,
+    summaries: 0,
   });
   const [recentNodes, setRecentNodes] = useState<KnowledgeNode[]>([]);
   const [recentNotes, setRecentNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     async function init() {
-      await load();
+      load().catch(() => {});
       const s = getDataStats();
       setStats({
-        nodes: s.nodes,
-        notes: s.notes,
-        papers: s.papers,
+        nodes: s.nodes || 0,
+        notes: s.notes || 0,
+        papers: s.papers || 0,
+        insights: getAllInsights().length,
+        paths: getAllPaths().length,
+        summaries: getAllSummaries().length,
       });
       setRecentNodes(getAllNodes().slice(0, 5));
       setRecentNotes(getAllNotes().slice(0, 5));
@@ -41,77 +63,84 @@ export default function HomePage() {
     init();
   }, []);
 
+  const today = new Date().toLocaleDateString('zh-CN', {
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+  });
+
   return (
     <div className="min-h-screen relative">
+      <DashboardBackground />
       <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
-        {/* Welcome */}
-        <div className="text-center mb-10 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-4">
-            <Sparkles className="w-8 h-8 text-primary" />
-          </div>
+        {/* Header */}
+        <div className="mb-10">
+          <p className="text-xs text-text-muted mb-2">{today}</p>
           <h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">
-            欢迎回来~ 今天的你也在进步哦
+            欢迎回来
           </h1>
-          <p className="text-text-secondary text-sm max-w-lg mx-auto">
-            点击卡片进入各系统，左侧导航栏查看完整层级，用 + 按钮快速记录灵感吧~
+          <p className="text-text-secondary text-sm max-w-lg">
+            今天的你也在进步。这里是你的个人知识中枢，所有学习足迹一目了然。
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-10 max-w-lg mx-auto">
-          <StatCard icon={Brain} label="知识节点" value={stats.nodes} color="text-primary" />
-          <StatCard icon={FileText} label="笔记" value={stats.notes} color="text-success" />
-          <StatCard icon={GraduationCap} label="论文" value={stats.papers} color="text-accent" />
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
+          <StatCard icon={Brain} label="知识节点" value={stats.nodes} color="text-primary" bg="bg-primary/10" />
+          <StatCard icon={FileText} label="笔记" value={stats.notes} color="text-success" bg="bg-success/10" />
+          <StatCard icon={GraduationCap} label="论文" value={stats.papers} color="text-accent" bg="bg-accent/10" />
+          <StatCard icon={Zap} label="灵感" value={stats.insights} color="text-warning" bg="bg-warning/10" />
+          <StatCard icon={Route} label="路径" value={stats.paths} color="text-pink-400" bg="bg-pink-400/10" />
+          <StatCard icon={Calendar} label="总结" value={stats.summaries} color="text-cyan-400" bg="bg-cyan-400/10" />
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 max-w-2xl mx-auto">
-          <ActionCard
-            href="/notes"
-            icon={FileText}
-            title="笔记导入"
-            subtitle="write"
-            description="拖拽上传自动归档"
-          />
-          <ActionCard
-            href="/knowledge"
-            icon={Lightbulb}
-            title="费曼卡片"
-            subtitle="think"
-            description="一句话讲清楚"
-          />
+        {/* Quick Access Grid */}
+        <div className="mb-10">
+          <h2 className="text-sm font-medium text-text-secondary mb-3">快捷入口</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+            <QuickAccess href="/knowledge" icon={Brain} label="知识系统" color="text-primary" />
+            <QuickAccess href="/notes" icon={FileText} label="笔记" color="text-success" />
+            <QuickAccess href="/papers" icon={GraduationCap} label="论文" color="text-accent" />
+            <QuickAccess href="/insights" icon={Zap} label="灵感" color="text-warning" />
+            <QuickAccess href="/paths" icon={Route} label="路径" color="text-pink-400" />
+            <QuickAccess href="/topology" icon={Network} label="拓扑" color="text-cyan-400" />
+            <QuickAccess href="/flow" icon={Wind} label="流场" color="text-violet-400" />
+            <QuickAccess href="/feynman" icon={Lightbulb} label="费曼" color="text-amber-400" />
+            <QuickAccess href="/daily" icon={Calendar} label="总结" color="text-emerald-400" />
+            <QuickAccess href="/galaxy" icon={Sparkles} label="星图" color="text-indigo-400" />
+            <QuickAccess href="/settings" icon={Home} label="设置" color="text-text-muted" />
+          </div>
         </div>
 
-        {/* Daily Summary */}
-        <div className="max-w-2xl mx-auto mb-10">
-          <div className="glass rounded-2xl p-5 card-hover">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-warning" />
+        {/* Daily check */}
+        <div className="max-w-2xl mb-10">
+          <Link href="/daily">
+            <div className="glass rounded-2xl p-5 card-hover border border-warning/10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-warning" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-text-primary">每日总结</h3>
+                    <p className="text-xs text-text-muted">记录今天的收获与反思</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-medium text-text-primary">今日尚未总结</h3>
-                  <p className="text-xs text-text-muted">点击此处记录今天的收获与反思</p>
+                <div className="px-3 py-1.5 rounded-lg bg-surface border border-border text-xs text-text-secondary hover:border-primary/30 transition-colors">
+                  去记录
                 </div>
               </div>
-              <Link
-                href="/notes"
-                className="px-3 py-1.5 rounded-lg bg-surface border border-border text-xs text-text-secondary hover:text-text-primary hover:border-primary/30 transition-colors"
-              >
-                去总结
-              </Link>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Recent Activity */}
         {loading ? (
           <div className="text-center py-12 text-text-muted">加载中...</div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-4xl">
             {/* Recent Nodes */}
             <div className="glass rounded-2xl p-5">
               <h3 className="font-medium text-text-primary mb-4 flex items-center gap-2">
@@ -121,14 +150,17 @@ export default function HomePage() {
               {recentNodes.length === 0 ? (
                 <p className="text-sm text-text-muted">暂无知识节点</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {recentNodes.map((node) => (
                     <Link
                       key={node.id}
                       href={`/knowledge?node=${node.id}`}
                       className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-surface-light transition-colors"
                     >
-                      <div className="w-2 h-2 rounded-full bg-primary/50" />
+                      <div
+                        className="w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: node.color || '#6366f1' }}
+                      />
                       <span className="text-sm text-text-secondary truncate">
                         {node.title}
                       </span>
@@ -147,14 +179,14 @@ export default function HomePage() {
               {recentNotes.length === 0 ? (
                 <p className="text-sm text-text-muted">暂无笔记</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {recentNotes.map((note) => (
                     <Link
                       key={note.id}
                       href={`/notes?id=${note.id}`}
                       className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-surface-light transition-colors"
                     >
-                      <div className="w-2 h-2 rounded-full bg-success/50" />
+                      <div className="w-2 h-2 rounded-full bg-success/50 shrink-0" />
                       <span className="text-sm text-text-secondary truncate">
                         {note.title}
                       </span>
@@ -175,51 +207,43 @@ function StatCard({
   label,
   value,
   color,
+  bg,
 }: {
   icon: React.ElementType;
   label: string;
   value: number;
   color: string;
+  bg: string;
 }) {
   return (
-    <div className="glass rounded-xl p-4 text-center">
-      <Icon className={`w-5 h-5 mx-auto mb-2 ${color}`} />
+    <div className="glass rounded-xl p-4 text-center card-hover">
+      <div className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center mx-auto mb-2`}>
+        <Icon className={`w-4 h-4 ${color}`} />
+      </div>
       <div className="text-xl font-bold text-text-primary">{value}</div>
-      <div className="text-xs text-text-muted">{label}</div>
+      <div className="text-[10px] text-text-muted">{label}</div>
     </div>
   );
 }
 
-function ActionCard({
+function QuickAccess({
   href,
   icon: Icon,
-  title,
-  subtitle,
-  description,
+  label,
+  color,
 }: {
   href: string;
   icon: React.ElementType;
-  title: string;
-  subtitle: string;
-  description: string;
+  label: string;
+  color: string;
 }) {
   return (
     <Link
       href={href}
-      className="glass rounded-2xl p-5 card-hover flex items-start gap-4"
+      className="glass rounded-xl p-3 card-hover flex flex-col items-center gap-2 text-center"
     >
-      <div className="w-12 h-12 rounded-xl bg-surface border border-border flex items-center justify-center shrink-0">
-        <Icon className="w-6 h-6 text-primary" />
-      </div>
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-medium text-text-primary">{title}</h3>
-          <span className="text-xs text-text-muted bg-surface px-1.5 py-0.5 rounded">
-            {subtitle}
-          </span>
-        </div>
-        <p className="text-xs text-text-secondary">{description}</p>
-      </div>
+      <Icon className={`w-5 h-5 ${color}`} />
+      <span className="text-xs text-text-secondary">{label}</span>
     </Link>
   );
 }
