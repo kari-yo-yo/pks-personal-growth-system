@@ -6,9 +6,11 @@ import { usePathname } from 'next/navigation';
 import {
   BookOpen,
   Brain,
+  Calendar,
   FileText,
   GraduationCap,
   Home,
+  Lightbulb,
   Menu,
   Settings,
   Sparkles,
@@ -21,6 +23,8 @@ const navItems = [
   { href: '/knowledge', label: '知识系统', icon: Brain },
   { href: '/notes', label: '笔记', icon: FileText },
   { href: '/papers', label: '论文', icon: GraduationCap },
+  { href: '/feynman', label: '费曼卡片', icon: Lightbulb },
+  { href: '/daily', label: '每日总结', icon: Calendar },
   { href: '/settings', label: '设置', icon: Settings },
 ];
 
