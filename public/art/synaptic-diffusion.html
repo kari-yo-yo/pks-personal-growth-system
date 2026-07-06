@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>突触扩散 — Synaptic Diffusion</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --anthropic-dark: #141413;
+            --anthropic-light: #faf9f5;
+            --anthropic-mid-gray: #b0aea5;
+            --anthropic-light-gray: #e8e6dc;
+            --anthropic-orange: #d97757;
+            --anthropic-blue: #6a9bcc;
+            --anthropic-green: #788c5d;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--anthropic-light) 0%, #f5f3ee 100%);
+            min-height: 100vh;
+            color: var(--anthropic-dark);
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(20, 20, 19, 0.1);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .sidebar h1 {
+            font-family: 'Lora', serif;
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+        .sidebar .subtitle {
+            color: var(--anthropic-mid-gray);
+            font-size: 14px;
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+        .control-section { margin-bottom: 32px; }
+        .control-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--anthropic-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .control-section h3::before {
+            content: '•';
+            color: var(--anthropic-orange);
+            font-weight: bold;
+        }
+        .seed-input {
+            width: 100%;
+            background: var(--anthropic-light);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 12px;
+            border: 1px solid var(--anthropic-light-gray);
+            text-align: center;
+        }
+        .seed-input:focus {
+            outline: none;
+            border-color: var(--anthropic-orange);
+            box-shadow: 0 0 0 2px rgba(217, 119, 87, 0.1);
+            background: white;
+        }
+        .seed-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .button {
+            background: var(--anthropic-orange);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        .button:hover { background: #c86641; transform: translateY(-1px); }
+        .button:active { transform: translateY(0); }
+        .button.secondary { background: var(--anthropic-blue); }
+        .button.secondary:hover { background: #5a8bb8; }
+        .button.tertiary { background: var(--anthropic-green); }
+        .button.tertiary:hover { background: #6b7b52; }
+        .button-row { display: flex; gap: 8px; }
+        .button-row .button { flex: 1; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: var(--anthropic-light-gray);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--anthropic-orange);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: #c86641;
+        }
+        .value-display {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+            min-width: 60px;
+            text-align: right;
+        }
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+        }
+        #canvas-container {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(20, 20, 19, 0.1);
+            background: white;
+        }
+        #canvas-container canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+        }
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--anthropic-mid-gray);
+            padding: 200px 0;
+        }
+        @media (max-width: 900px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>突触扩散</h1>
+            <div class="subtitle">知识如神经递质在神经网络中扩散传播 — 用算法可视化学习过程</div>
+
+            <div class="control-section">
+                <h3>种子</h3>
+                <input type="number" id="seed-input" class="seed-input" value="42" onchange="updateSeed()">
+                <div class="seed-controls">
+                    <button class="button secondary" onclick="previousSeed()">← 上一个</button>
+                    <button class="button secondary" onclick="nextSeed()">下一个 →</button>
+                </div>
+                <button class="button tertiary" onclick="randomSeedAndUpdate()">↻ 随机</button>
+            </div>
+
+            <div class="control-section">
+                <h3>参数</h3>
+                <div class="control-group">
+                    <label>粒子数量</label>
+                    <div class="slider-container">
+                        <input type="range" id="particleCount" min="500" max="8000" step="100" value="3000" oninput="updateParam('particleCount', this.value)">
+                        <span class="value-display" id="particleCount-value">3000</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>流场噪声尺度</label>
+                    <div class="slider-container">
+                        <input type="range" id="noiseScale" min="0.002" max="0.015" step="0.001" value="0.006" oninput="updateParam('noiseScale', this.value)">
+                        <span class="value-display" id="noiseScale-value">0.006</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>流动速度</label>
+                    <div class="slider-container">
+                        <input type="range" id="flowSpeed" min="0.5" max="4.0" step="0.1" value="1.5" oninput="updateParam('flowSpeed', this.value)">
+                        <span class="value-display" id="flowSpeed-value">1.5</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>轨迹残留</label>
+                    <div class="slider-container">
+                        <input type="range" id="trailAlpha" min="1" max="30" step="1" value="8" oninput="updateParam('trailAlpha', this.value)">
+                        <span class="value-display" id="trailAlpha-value">8</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>注意力强度</label>
+                    <div class="slider-container">
+                        <input type="range" id="attention" min="0.1" max="1.0" step="0.05" value="0.7" oninput="updateParam('attention', this.value)">
+                        <span class="value-display" id="attention-value">0.7</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>操作</h3>
+                <div class="button-row">
+                    <button class="button" onclick="resetParameters()">重置</button>
+                    <button class="button secondary" onclick="saveCanvas('synaptic-diffusion-' + params.seed, 'png')">下载</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-area">
+            <div id="canvas-container">
+                <div class="loading">初始化生成艺术...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════
+        // SYNAPTIC DIFFUSION — Knowledge Flow Field Algorithm
+        // ═══════════════════════════════════════════════════════════════════════
+
+        let params = {
+            seed: 42,
+            particleCount: 3000,
+            noiseScale: 0.006,
+            flowSpeed: 1.5,
+            trailAlpha: 8,
+            attention: 0.7
+        };
+        let defaultParams = { ...params };
+
+        let particles = [];
+        let zOff = 0;
+        let palette = [];
+
+        function setup() {
+            let canvas = createCanvas(900, 900);
+            canvas.parent('canvas-container');
+            colorMode(HSB, 360, 100, 100, 100);
+            document.querySelector('.loading').style.display = 'none';
+            initializeSystem();
+        }
+
+        function initializeSystem() {
+            randomSeed(params.seed);
+            noiseSeed(params.seed);
+            zOff = 0;
+
+            // Golden-ratio distributed palette
+            let baseHue = random(360);
+            let golden = 137.508;
+            palette = [];
+            for (let i = 0; i < 5; i++) {
+                let h = (baseHue + i * golden) % 360;
+                palette.push(color(h, 70, 90));
+            }
+
+            particles = [];
+            for (let i = 0; i < params.particleCount; i++) {
+                particles.push(new KnowledgeParticle());
+            }
+
+            background(42, 8, 96); // warm off-white
+        }
+
+        function draw() {
+            // Trail fade
+            noStroke();
+            fill(42, 8, 96, params.trailAlpha);
+            rect(0, 0, width, height);
+
+            for (let p of particles) {
+                p.followFlow();
+                p.update();
+                p.edges();
+                p.display();
+            }
+
+            zOff += 0.0003;
+        }
+
+        // ─── Knowledge Particle ───
+        class KnowledgeParticle {
+            constructor() {
+                this.pos = createVector(random(width), random(height));
+                this.vel = createVector(0, 0);
+                this.acc = createVector(0, 0);
+                this.maxSpeed = params.flowSpeed * random(0.6, 1.4);
+                this.lifespan = random(200, 800);
+                this.age = 0;
+                this.col = random(palette);
+                this.size = random(0.5, 2.5);
+                this.attentionWeight = random(0.3, 1.0);
+            }
+
+            followFlow() {
+                let x = this.pos.x * params.noiseScale;
+                let y = this.pos.y * params.noiseScale;
+
+                // Multi-octave flow field
+                let angle = noise(x, y, zOff) * TWO_PI * 2;
+                angle += noise(x * 2, y * 2, zOff * 1.5) * TWO_PI * 0.5;
+                angle += noise(x * 0.5, y * 0.5, zOff * 0.7) * TWO_PI * 0.3;
+
+                // Attention modulates field following
+                let deviation = (1 - this.attentionWeight) * random(-0.5, 0.5);
+                angle += deviation;
+
+                let force = p5.Vector.fromAngle(angle);
+                force.mult(0.15 * params.attention);
+                this.acc.add(force);
+            }
+
+            update() {
+                this.vel.add(this.acc);
+                this.vel.limit(this.maxSpeed);
+                this.pos.add(this.vel);
+                this.acc.mult(0);
+                this.age++;
+
+                if (this.age > this.lifespan) {
+                    this.respawn();
+                }
+            }
+
+            respawn() {
+                this.pos = createVector(random(width), random(height));
+                this.vel.mult(0);
+                this.age = 0;
+                this.lifespan = random(200, 800);
+                this.col = random(palette);
+                this.maxSpeed = params.flowSpeed * random(0.6, 1.4);
+            }
+
+            edges() {
+                if (this.pos.x > width) this.pos.x = 0;
+                if (this.pos.x < 0) this.pos.x = width;
+                if (this.pos.y > height) this.pos.y = 0;
+                if (this.pos.y < 0) this.pos.y = height;
+            }
+
+            display() {
+                let speed = this.vel.mag();
+                let lifeRatio = 1 - this.age / this.lifespan;
+
+                // Velocity affects saturation and brightness
+                let sat = map(speed, 0, params.flowSpeed * 1.4, 40, 90);
+                let bri = map(speed, 0, params.flowSpeed * 1.4, 60, 95) * lifeRatio;
+                let alpha = map(lifeRatio, 0, 1, 0, 70);
+
+                let c = color(hue(this.col), sat, bri, alpha);
+
+                noStroke();
+                fill(c);
+                ellipse(this.pos.x, this.pos.y, this.size * map(speed, 0, 2, 1, 2.5));
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // UI HANDLERS
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateParam(paramName, value) {
+            params[paramName] = parseFloat(value);
+            document.getElementById(paramName + '-value').textContent = value;
+
+            if (paramName === 'particleCount') {
+                initializeSystem();
+            }
+        }
+
+        function updateSeedDisplay() {
+            document.getElementById('seed-input').value = params.seed;
+        }
+
+        function updateSeed() {
+            let input = document.getElementById('seed-input');
+            let newSeed = parseInt(input.value);
+            if (newSeed && newSeed > 0) {
+                params.seed = newSeed;
+                initializeSystem();
+            } else {
+                updateSeedDisplay();
+            }
+        }
+
+        function previousSeed() {
+            params.seed = Math.max(1, params.seed - 1);
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function nextSeed() {
+            params.seed = params.seed + 1;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function randomSeedAndUpdate() {
+            params.seed = Math.floor(Math.random() * 999999) + 1;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function resetParameters() {
+            params = { ...defaultParams };
+
+            document.getElementById('particleCount').value = params.particleCount;
+            document.getElementById('particleCount-value').textContent = params.particleCount;
+            document.getElementById('noiseScale').value = params.noiseScale;
+            document.getElementById('noiseScale-value').textContent = params.noiseScale;
+            document.getElementById('flowSpeed').value = params.flowSpeed;
+            document.getElementById('flowSpeed-value').textContent = params.flowSpeed;
+            document.getElementById('trailAlpha').value = params.trailAlpha;
+            document.getElementById('trailAlpha-value').textContent = params.trailAlpha;
+            document.getElementById('attention').value = params.attention;
+            document.getElementById('attention-value').textContent = params.attention;
+
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        window.addEventListener('load', function () {
+            updateSeedDisplay();
+        });
+    </script>
+</body>
+</html>

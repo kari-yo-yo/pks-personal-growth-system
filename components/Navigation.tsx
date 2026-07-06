@@ -16,6 +16,7 @@ import {
   Search,
   Settings,
   Sparkles,
+  Wind,
   X,
   Zap,
 } from 'lucide-react';
@@ -31,6 +32,7 @@ const navItems = [
   { href: '/feynman', label: '费曼卡片', icon: Lightbulb },
   { href: '/insights', label: '灵感速记', icon: Zap },
   { href: '/paths', label: '学习路径', icon: Route },
+  { href: '/flow', label: '流场', icon: Wind },
   { href: '/daily', label: '每日总结', icon: Calendar },
   { href: '/settings', label: '设置', icon: Settings },
 ];
