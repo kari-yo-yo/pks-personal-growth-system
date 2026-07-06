@@ -11,11 +11,13 @@ import {
   Home,
   Menu,
   Settings,
+  Sparkles,
   X,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: '首页', icon: Home },
+  { href: '/galaxy', label: '星图', icon: Sparkles },
   { href: '/knowledge', label: '知识系统', icon: Brain },
   { href: '/notes', label: '笔记', icon: FileText },
   { href: '/papers', label: '论文', icon: GraduationCap },
