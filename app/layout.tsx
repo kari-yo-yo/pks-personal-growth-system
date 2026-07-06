@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import GlobalSearch from '@/components/GlobalSearch';
 
 export const metadata: Metadata = {
   title: '个人知识系统',
@@ -16,6 +17,7 @@ export default function RootLayout({
       <body className="antialiased">
         <Starfield />
         {children}
+        <GlobalSearch />
       </body>
     </html>
   );

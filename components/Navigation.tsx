@@ -12,10 +12,12 @@ import {
   Home,
   Lightbulb,
   Menu,
+  Search,
   Settings,
   Sparkles,
   X,
 } from 'lucide-react';
+import { openGlobalSearch } from './GlobalSearch';
 
 const navItems = [
   { href: '/', label: '首页', icon: Home },
@@ -31,6 +33,10 @@ const navItems = [
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+
+  const openSearch = () => {
+    openGlobalSearch();
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border">
@@ -65,13 +71,25 @@ export default function Navigation() {
             })}
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-light"
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          {/* Search Button + Mobile toggle */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={openSearch}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-surface-light transition-colors"
+            >
+              <Search className="w-4 h-4" />
+              <span className="hidden sm:inline">搜索</span>
+              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded bg-surface border border-border text-[10px] text-text-muted ml-1">
+                Ctrl+K
+              </kbd>
+            </button>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-light"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
