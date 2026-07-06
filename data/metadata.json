@@ -1,0 +1,17 @@
+{
+  "description": "知识管理系统数据存储",
+  "createdAt": "2026-07-06T00:00:00Z",
+  "version": "1.0.0",
+  "collections": {
+    "nodes": "知识节点",
+    "notes": "笔记",
+    "papers": "论文",
+    "paper_progress": "论文阅读进度",
+    "paper_notes": "论文笔记",
+    "summaries": "每日总结",
+    "attachments": "附件",
+    "relations": "关联关系",
+    "knowledge_paper": "知识-论文关联",
+    "paper_knowledge": "论文-知识关联"
+  }
+}
