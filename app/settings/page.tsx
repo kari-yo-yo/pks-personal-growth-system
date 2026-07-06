@@ -14,6 +14,7 @@ import {
   Save,
   Shield,
 } from 'lucide-react';
+import ThemePanel from '@/components/ThemePanel';
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
@@ -79,6 +80,11 @@ export default function SettingsPage() {
                   ))}
                 </div>
               )}
+            </section>
+
+            {/* 主题设置 */}
+            <section className="glass rounded-2xl p-6">
+              <ThemePanel />
             </section>
 
             {/* GitHub 同步状态 */}

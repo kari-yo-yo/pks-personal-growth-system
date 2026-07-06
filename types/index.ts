@@ -172,3 +172,30 @@ export interface LearningPath {
   color?: string;
   archived: boolean;
 }
+
+// ==================== 主题系统 ====================
+
+export interface ThemeColors {
+  background: string;
+  surface: string;
+  surfaceLight: string;
+  primary: string;
+  primaryLight: string;
+  accent: string;
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  border: string;
+  success: string;
+  warning: string;
+  error: string;
+}
+
+export interface ThemeConfig {
+  id: string;
+  name: string;
+  description: string;
+  colors: ThemeColors;
+  particleColor: { r: number; g: number; b: number };
+  auraStyle: string;
+}

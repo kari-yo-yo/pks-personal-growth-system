@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import GlobalSearch from '@/components/GlobalSearch';
 import InsightFAB from '@/components/InsightFAB';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
   title: '个人知识系统',
@@ -16,10 +17,12 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="dark">
       <body className="antialiased">
-        <Starfield />
-        {children}
-        <GlobalSearch />
-        <InsightFAB />
+        <ThemeProvider>
+          <Starfield />
+          {children}
+          <GlobalSearch />
+          <InsightFAB />
+        </ThemeProvider>
       </body>
     </html>
   );
