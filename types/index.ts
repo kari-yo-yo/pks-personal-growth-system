@@ -131,3 +131,19 @@ export interface ValidationResult {
 }
 
 export type CollectionName = keyof DataCollections;
+
+// ==================== 灵感速记 ====================
+
+export type InsightMood = '💡 灵感' | '🔥 突破' | '🤔 思考' | '📖 收获' | '⚠️ 疑问' | '🎯 计划';
+
+export type InsightColor = 'indigo' | 'amber' | 'emerald' | 'rose' | 'cyan' | 'violet';
+
+export interface Insight {
+  id: string;
+  content: string;
+  mood: InsightMood;
+  color: InsightColor;
+  tags: string[];
+  createdAt: string;
+  pinned: boolean;
+}

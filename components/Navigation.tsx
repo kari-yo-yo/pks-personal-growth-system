@@ -16,8 +16,10 @@ import {
   Settings,
   Sparkles,
   X,
+  Zap,
 } from 'lucide-react';
 import { openGlobalSearch } from './GlobalSearch';
+import { openInsightFAB } from './InsightFAB';
 
 const navItems = [
   { href: '/', label: '首页', icon: Home },
@@ -26,6 +28,7 @@ const navItems = [
   { href: '/notes', label: '笔记', icon: FileText },
   { href: '/papers', label: '论文', icon: GraduationCap },
   { href: '/feynman', label: '费曼卡片', icon: Lightbulb },
+  { href: '/insights', label: '灵感速记', icon: Zap },
   { href: '/daily', label: '每日总结', icon: Calendar },
   { href: '/settings', label: '设置', icon: Settings },
 ];
