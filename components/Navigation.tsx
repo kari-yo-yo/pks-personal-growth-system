@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  BarChart3,
   BookOpen,
   Brain,
   Calendar,
@@ -36,6 +37,7 @@ const navItems = [
   { href: '/insights', label: '灵感速记', icon: Zap },
   { href: '/paths', label: '学习路径', icon: Route },
   { href: '/timeline', label: '时间线', icon: Clock },
+  { href: '/analytics', label: '统计', icon: BarChart3 },
   { href: '/flow', label: '流场', icon: Wind },
   { href: '/daily', label: '每日总结', icon: Calendar },
   { href: '/settings', label: '设置', icon: Settings },
