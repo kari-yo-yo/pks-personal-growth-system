@@ -1,18 +1,33 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Navigation from '@/components/Navigation';
 import DataRecoveryPanel from '@/components/DataRecoveryPanel';
 import { load, getDataStats, saveAll } from '@/lib/db';
 import { isGitHubSyncEnabled } from '@/lib/githubSync';
 import {
+  exportFullJSON,
+  exportNodesMarkdown,
+  exportNotesMarkdown,
+  exportPapersMarkdown,
+  exportInsightsMarkdown,
+  downloadFile,
+} from '@/lib/export';
+import { importFullJSON, clearAllData } from '@/lib/import';
+import {
   Cloud,
   Database,
+  Download,
+  FileJson,
+  FileText,
   GitBranch,
   HardDrive,
+  Import,
   RefreshCw,
   Save,
   Shield,
+  Trash2,
+  Upload,
 } from 'lucide-react';
 import ThemePanel from '@/components/ThemePanel';
 
@@ -21,6 +36,9 @@ export default function SettingsPage() {
   const [stats, setStats] = useState<Record<string, number> | null>(null);
   const [syncEnabled, setSyncEnabled] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [importMode, setImportMode] = useState<'merge' | 'replace'>('merge');
+  const [importResult, setImportResult] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function init() {
@@ -43,6 +61,47 @@ export default function SettingsPage() {
       alert('同步失败');
     } finally {
       setSyncing(false);
+    }
+  };
+
+  const handleExportJSON = () => {
+    const json = exportFullJSON();
+    const date = new Date().toISOString().split('T')[0];
+    downloadFile(json, `pks-backup-${date}.json`);
+  };
+
+  const handleExportMD = (type: 'nodes' | 'notes' | 'papers' | 'insights') => {
+    const exporters: Record<string, () => string> = {
+      nodes: exportNodesMarkdown,
+      notes: exportNotesMarkdown,
+      papers: exportPapersMarkdown,
+      insights: exportInsightsMarkdown,
+    };
+    const md = exporters[type]();
+    const date = new Date().toISOString().split('T')[0];
+    downloadFile(md, `pks-${type}-${date}.md`, 'text/markdown');
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const content = ev.target?.result as string;
+      const result = importFullJSON(content, importMode);
+      setImportResult(result.success ? `✅ ${result.message}` : `❌ ${result.message}`);
+      if (result.success) {
+        setStats(getDataStats());
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleClear = () => {
+    if (confirm('确定要清空所有本地数据吗？此操作不可恢复！')) {
+      const result = clearAllData();
+      alert(result.message);
+      setStats(getDataStats());
     }
   };
 
@@ -146,6 +205,127 @@ export default function SettingsPage() {
                 从 GitHub 恢复数据、检查数据完整性、自动修复数据问题。
               </p>
               <DataRecoveryPanel />
+            </section>
+
+            {/* 数据导出 */}
+            <section className="glass rounded-2xl p-6">
+              <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
+                <Download className="w-5 h-5 text-primary" />
+                数据导出
+              </h2>
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={handleExportJSON}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors text-sm"
+                  >
+                    <FileJson className="w-4 h-4" />
+                    完整备份 (JSON)
+                  </button>
+                  <button
+                    onClick={() => handleExportMD('nodes')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface border border-border text-text-secondary hover:text-text-primary transition-colors text-sm"
+                  >
+                    <FileText className="w-4 h-4" />
+                    知识节点 (MD)
+                  </button>
+                  <button
+                    onClick={() => handleExportMD('notes')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface border border-text-primary transition-colors text-sm"
+                  >
+                    <FileText className="w-4 h-4" />
+                    笔记 (MD)
+                  </button>
+                  <button
+                    onClick={() => handleExportMD('papers')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface border border-border text-text-secondary hover:text-text-primary transition-colors text-sm"
+                  >
+                    <FileText className="w-4 h-4" />
+                    论文 (MD)
+                  </button>
+                  <button
+                    onClick={() => handleExportMD('insights')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface border border-border text-text-secondary hover:text-text-primary transition-colors text-sm"
+                  >
+                    <FileText className="w-4 h-4" />
+                    灵感 (MD)
+                  </button>
+                </div>
+                <p className="text-xs text-text-muted">
+                  JSON 备份包含所有模块数据，Markdown 导出便于阅读和分享。
+                </p>
+              </div>
+            </section>
+
+            {/* 数据导入 */}
+            <section className="glass rounded-2xl p-6">
+              <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
+                <Upload className="w-5 h-5 text-success" />
+                数据导入
+              </h2>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
+                    <input
+                      type="radio"
+                      value="merge"
+                      checked={importMode === 'merge'}
+                      onChange={() => setImportMode('merge')}
+                      className="accent-primary"
+                    />
+                    合并模式（保留现有数据）
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
+                    <input
+                      type="radio"
+                      value="replace"
+                      checked={importMode === 'replace'}
+                      onChange={() => setImportMode('replace')}
+                      className="accent-primary"
+                    />
+                    替换模式（覆盖现有数据）
+                  </label>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".json"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-success/10 border border-success/30 text-success hover:bg-success/20 transition-colors text-sm"
+                >
+                  <Import className="w-4 h-4" />
+                  选择备份文件导入
+                </button>
+                {importResult && (
+                  <p className="text-sm px-3 py-2 rounded-lg bg-surface border border-border">
+                    {importResult}
+                  </p>
+                )}
+              </div>
+            </section>
+
+            {/* 危险操作 */}
+            <section className="glass rounded-2xl p-6 border border-error/20">
+              <h2 className="text-lg font-medium text-error mb-4 flex items-center gap-2">
+                <Trash2 className="w-5 h-5" />
+                危险操作
+              </h2>
+              <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-error/5 border border-error/10">
+                <div>
+                  <p className="text-sm font-medium text-text-primary">清空所有本地数据</p>
+                  <p className="text-xs text-text-muted">此操作不可恢复，请确保已备份</p>
+                </div>
+                <button
+                  onClick={handleClear}
+                  className="px-4 py-2 rounded-xl bg-error/10 border border-error/30 text-error hover:bg-error/20 transition-colors text-sm"
+                >
+                  清空数据
+                </button>
+              </div>
             </section>
 
             {/* 存储信息 */}

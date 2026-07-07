@@ -106,7 +106,7 @@ export function getAllData(): Partial<DataCollections> {
 /**
  * 恢复数据到缓存
  */
-function restoreToCache(data: Partial<DataCollections>) {
+export function restoreToCache(data: Partial<DataCollections>) {
   if (data.nodes) cache.nodes = objectToMap(data.nodes);
   if (data.notes) cache.notes = objectToMap(data.notes);
   if (data.papers) cache.papers = objectToMap(data.papers);
