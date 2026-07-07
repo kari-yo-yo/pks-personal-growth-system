@@ -168,24 +168,6 @@ export function applyThemeToDOM(theme: ThemeConfig): void {
   root.style.setProperty('--color-success', c.success);
   root.style.setProperty('--color-warning', c.warning);
   root.style.setProperty('--color-error', c.error);
-
-  // body 背景
-  document.body.style.backgroundColor = c.background;
-  document.body.style.color = c.textPrimary;
-
-  // 滚动条
-  const style = document.createElement('style');
-  style.id = 'theme-dynamic';
-  const prev = document.getElementById('theme-dynamic');
-  if (prev) prev.remove();
-
-  style.textContent = `
-    ::-webkit-scrollbar-track { background: ${c.background}; }
-    ::-webkit-scrollbar-thumb { background: ${c.border}; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: ${c.primary}40; }
-    ::selection { background: ${c.primary}40; color: ${c.textPrimary}; }
-  `;
-  document.head.appendChild(style);
 }
 
 export function getThemeById(id: string): ThemeConfig | undefined {
