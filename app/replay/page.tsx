@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation';
 import { load } from '@/lib/db';
 import { getDailyActivity } from '@/lib/analytics';
 import { getAllPaths } from '@/lib/paths';
+import { assetPath } from '@/lib/config';
 import { RotateCcw, Sparkles } from 'lucide-react';
 
 export default function ReplayPage() {
@@ -39,7 +40,7 @@ export default function ReplayPage() {
     params.set('papers', stats.week.papers.toString());
     params.set('insights', stats.week.insights.toString());
     params.set('paths', JSON.stringify(stats.paths));
-    return `/replay/index.html?${params.toString()}`;
+    return `${assetPath('/replay/index.html')}?${params.toString()}`;
   }, [stats]);
 
   useEffect(() => {

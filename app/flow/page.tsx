@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Navigation from '@/components/Navigation';
+import { assetPath } from '@/lib/config';
 import {
   Download,
   ExternalLink,
@@ -25,7 +26,7 @@ export default function FlowPage() {
   };
 
   const handleOpenStandalone = () => {
-    window.open('/art/synaptic-diffusion.html', '_blank');
+    window.open(assetPath('/art/synaptic-diffusion.html'), '_blank');
   };
 
   return (
@@ -119,7 +120,7 @@ export default function FlowPage() {
           )}
           <iframe
             ref={iframeRef}
-            src="/art/synaptic-diffusion.html"
+            src={assetPath('/art/synaptic-diffusion.html')}
             className={`w-full h-[600px] border-0 ${iframeLoaded ? 'block' : 'hidden'}`}
             onLoad={() => setIframeLoaded(true)}
             title="突触扩散生成艺术"
