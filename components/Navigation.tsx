@@ -9,6 +9,7 @@ import {
   Brain,
   Calendar,
   Clock,
+  Compass,
   FileText,
   GraduationCap,
   Home,
@@ -30,6 +31,7 @@ import { openInsightFAB } from './InsightFAB';
 const navItems = [
   { href: '/', label: '首页', icon: Home },
   { href: '/galaxy', label: '星图', icon: Sparkles },
+  { href: '/wander', label: '漫游', icon: Compass },
   { href: '/knowledge', label: '知识系统', icon: Brain },
   { href: '/topology', label: '拓扑', icon: Network },
   { href: '/notes', label: '笔记', icon: FileText },
