@@ -25,6 +25,7 @@ export const THEMES: Record<string, ThemeConfig> = {
     },
     particleColor: { r: 99, g: 102, b: 241 },
     auraStyle: 'indigo',
+    dynamics: 'cosmic',
   },
   aurora: {
     id: 'aurora',
@@ -47,6 +48,7 @@ export const THEMES: Record<string, ThemeConfig> = {
     },
     particleColor: { r: 16, g: 185, b: 129 },
     auraStyle: 'green',
+    dynamics: 'forest',
   },
   nebula: {
     id: 'nebula',
@@ -69,6 +71,7 @@ export const THEMES: Record<string, ThemeConfig> = {
     },
     particleColor: { r: 232, g: 121, b: 160 },
     auraStyle: 'rose',
+    dynamics: 'nebula',
   },
   ocean: {
     id: 'ocean',
@@ -91,6 +94,7 @@ export const THEMES: Record<string, ThemeConfig> = {
     },
     particleColor: { r: 14, g: 165, b: 233 },
     auraStyle: 'cyan',
+    dynamics: 'ocean',
   },
   amber: {
     id: 'amber',
@@ -113,6 +117,7 @@ export const THEMES: Record<string, ThemeConfig> = {
     },
     particleColor: { r: 245, g: 158, b: 11 },
     auraStyle: 'amber',
+    dynamics: 'golden',
   },
   monochrome: {
     id: 'monochrome',
@@ -135,6 +140,7 @@ export const THEMES: Record<string, ThemeConfig> = {
     },
     particleColor: { r: 161, g: 161, b: 170 },
     auraStyle: 'gray',
+    dynamics: 'monochrome',
   },
 };
 

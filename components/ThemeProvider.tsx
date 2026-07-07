@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { ThemeConfig } from '@/types';
 import { THEMES, getStoredThemeId, setStoredThemeId, applyThemeToDOM } from '@/lib/theme';
+import ThemeDynamics from './theme/ThemeDynamics';
 
 interface ThemeContextValue {
   theme: ThemeConfig;
@@ -50,6 +51,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ theme, themeId, setTheme, themes: THEMES }}>
+      <ThemeDynamics dynamics={theme.dynamics} />
       {children}
     </ThemeContext.Provider>
   );
