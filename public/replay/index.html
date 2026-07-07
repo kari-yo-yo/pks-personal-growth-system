@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>学习回顾</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0f;
+      color: #e2e8f0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+    }
+    .scene.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Scene 1: Title */
+    .s1-title {
+      font-size: 56px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+    }
+    .s1-subtitle {
+      font-size: 20px;
+      color: #94a3b8;
+      margin-top: 16px;
+    }
+    .s1-date {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 8px;
+    }
+
+    /* Scene 2: Stats */
+    .s2-label {
+      font-size: 14px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+    }
+    .stats-grid {
+      display: flex;
+      gap: 48px;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 64px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+    .stat-num.nodes { color: #6366f1; }
+    .stat-num.notes { color: #10b981; }
+    .stat-num.papers { color: #f59e0b; }
+    .stat-num.insights { color: #ec4899; }
+
+    /* Scene 3: Paths */
+    .s3-label {
+      font-size: 14px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+    }
+    .path-list {
+      width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .path-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .path-name {
+      font-size: 16px;
+      color: #e2e8f0;
+      width: 200px;
+      flex-shrink: 0;
+    }
+    .path-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .path-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      width: 0%;
+    }
+    .path-pct {
+      font-size: 14px;
+      color: #94a3b8;
+      width: 48px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Scene 4: Closing */
+    .s4-text {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .s4-sub {
+      font-size: 18px;
+      color: #94a3b8;
+      margin-top: 20px;
+    }
+
+    /* Background particles */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .scene-content {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Scene 1: Title -->
+  <div class="scene" id="scene1">
+    <div class="scene-content">
+      <div class="s1-title">学习回顾</div>
+      <div class="s1-subtitle">你的知识成长轨迹</div>
+      <div class="s1-date" id="date-display"></div>
+    </div>
+  </div>
+
+  <!-- Scene 2: Stats -->
+  <div class="scene" id="scene2">
+    <div class="scene-content">
+      <div class="s2-label">本周数据</div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num nodes" id="stat-nodes">0</div>
+          <div class="stat-label">知识节点</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num notes" id="stat-notes">0</div>
+          <div class="stat-label">笔记</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num papers" id="stat-papers">0</div>
+          <div class="stat-label">论文</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num insights" id="stat-insights">0</div>
+          <div class="stat-label">灵感</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 3: Paths -->
+  <div class="scene" id="scene3">
+    <div class="scene-content">
+      <div class="s3-label">学习路径</div>
+      <div class="path-list" id="path-list"></div>
+    </div>
+  </div>
+
+  <!-- Scene 4: Closing -->
+  <div class="scene" id="scene4">
+    <div class="scene-content">
+      <div class="s4-text">每一步都算数<br>继续向前</div>
+      <div class="s4-sub">Personal Knowledge System</div>
+    </div>
+  </div>
+
+  <script>
+    // Parse URL params for data injection
+    const params = new URLSearchParams(location.search);
+    const nodes = parseInt(params.get('nodes') || '0');
+    const notes = parseInt(params.get('notes') || '0');
+    const papers = parseInt(params.get('papers') || '0');
+    const insights = parseInt(params.get('insights') || '0');
+    const pathsData = JSON.parse(params.get('paths') || '[]');
+
+    document.getElementById('date-display').textContent = new Date().toLocaleDateString('zh-CN');
+    document.getElementById('stat-nodes').textContent = nodes;
+    document.getElementById('stat-notes').textContent = notes;
+    document.getElementById('stat-papers').textContent = papers;
+    document.getElementById('stat-insights').textContent = insights;
+
+    const pathList = document.getElementById('path-list');
+    pathsData.forEach(p => {
+      const pct = p.total > 0 ? Math.round(p.completed / p.total * 100) : 0;
+      const row = document.createElement('div');
+      row.className = 'path-row';
+      row.innerHTML = `
+        <div class="path-name">${p.title}</div>
+        <div class="path-bar-bg"><div class="path-bar-fill" style="background:${p.color};width:0%"></div></div>
+        <div class="path-pct">${pct}%</div>
+      `;
+      pathList.appendChild(row);
+    });
+
+    // Background particles
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    resize();
+    addEventListener('resize', resize);
+
+    const particles = Array.from({length: 60}, () => ({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      size: Math.random() * 1.5 + 0.5,
+      alpha: Math.random() * 0.4 + 0.1
+    }));
+
+    function drawBg() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(99, 102, 241, ${p.alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(drawBg);
+    }
+    drawBg();
+
+    // GSAP Timeline
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines = window.__timelines || {};
+    window.__timelines['replay'] = tl;
+
+    const s1 = document.getElementById('scene1');
+    const s2 = document.getElementById('scene2');
+    const s3 = document.getElementById('scene3');
+    const s4 = document.getElementById('scene4');
+
+    function show(el) { el.classList.add('active'); }
+    function hide(el) { el.classList.remove('active'); }
+
+    // Scene 1: 0-3s
+    tl.call(() => { show(s1); hide(s2); hide(s3); hide(s4); }, [], 0);
+    tl.from('.s1-title', { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out' }, 0.2);
+    tl.from('.s1-subtitle', { y: 20, opacity: 0, duration: 0.6, ease: 'power2.out' }, 0.5);
+    tl.from('.s1-date', { opacity: 0, duration: 0.4 }, 0.8);
+    tl.to('.s1-title', { scale: 1.02, duration: 1.5, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 1);
+
+    // Transition to Scene 2: 3-3.5s
+    tl.call(() => { hide(s1); show(s2); }, [], 3);
+
+    // Scene 2: 3.5-7s
+    tl.from('.s2-label', { y: 20, opacity: 0, duration: 0.5, ease: 'power2.out' }, 3.5);
+    tl.from('.stat-item', { y: 30, opacity: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out' }, 3.8);
+    tl.to('.stat-num', { innerText: function(i) { return [nodes, notes, papers, insights][i]; }, duration: 1, snap: { innerText: 1 }, ease: 'power2.out' }, 4.2);
+
+    // Transition to Scene 3: 7-7.5s
+    tl.call(() => { hide(s2); show(s3); }, [], 7);
+
+    // Scene 3: 7.5-11s
+    tl.from('.s3-label', { y: 20, opacity: 0, duration: 0.5 }, 7.5);
+    tl.from('.path-row', { x: -30, opacity: 0, duration: 0.5, stagger: 0.2, ease: 'power2.out' }, 7.8);
+    tl.to('.path-bar-fill', { width: function(i, el) {
+      const pct = pathsData[i] && pathsData[i].total > 0 ? Math.round(pathsData[i].completed / pathsData[i].total * 100) : 0;
+      return pct + '%';
+    }, duration: 0.8, stagger: 0.2, ease: 'power2.out' }, 8.2);
+
+    // Transition to Scene 4: 11-11.5s
+    tl.call(() => { hide(s3); show(s4); }, [], 11);
+
+    // Scene 4: 11.5-14s
+    tl.from('.s4-text', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, 11.5);
+    tl.from('.s4-sub', { y: 15, opacity: 0, duration: 0.5 }, 12);
+
+    // Auto play
+    tl.play();
+  </script>
+</body>
+</html>
