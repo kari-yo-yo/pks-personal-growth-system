@@ -13,16 +13,17 @@ import {
 } from '@/lib/db';
 import { getAllInsights } from '@/lib/insights';
 import { getAllPaths } from '@/lib/paths';
+import { getStreakInfo, getContributionGrid, StreakInfo } from '@/lib/streak';
 import { KnowledgeNode, Note, Paper } from '@/types';
 import {
   BookOpen,
   Brain,
   Calendar,
   FileText,
+  Flame,
   GraduationCap,
   Home,
   Lightbulb,
-  Map,
   Network,
   Route,
   Sparkles,
@@ -43,6 +44,8 @@ export default function HomePage() {
   });
   const [recentNodes, setRecentNodes] = useState<KnowledgeNode[]>([]);
   const [recentNotes, setRecentNotes] = useState<Note[]>([]);
+  const [streak, setStreak] = useState<StreakInfo | null>(null);
+  const [grid, setGrid] = useState<{ date: string; level: number }[][]>([]);
 
   useEffect(() => {
     async function init() {
@@ -58,6 +61,8 @@ export default function HomePage() {
       });
       setRecentNodes(getAllNodes().slice(0, 5));
       setRecentNotes(getAllNotes().slice(0, 5));
+      setStreak(getStreakInfo());
+      setGrid(getContributionGrid(20));
       setLoading(false);
     }
     init();
@@ -113,6 +118,85 @@ export default function HomePage() {
             <QuickAccess href="/settings" icon={Home} label="设置" color="text-text-muted" />
           </div>
         </div>
+
+        {/* Streak & Contribution */}
+        {streak && streak.totalActiveDays > 0 && (
+          <div className="mb-10">
+            <div className="glass rounded-2xl p-5 border border-primary/10">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Flame className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-text-primary">连续学习</h3>
+                    <p className="text-xs text-text-muted">
+                      当前 {streak.currentStreak} 天 · 最长 {streak.longestStreak} 天
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-3 sm:ml-auto">
+                  <div className="text-center px-3 py-1.5 rounded-lg bg-surface border border-border">
+                    <div className="text-lg font-bold text-primary">{streak.currentStreak}</div>
+                    <div className="text-[10px] text-text-muted">当前连续</div>
+                  </div>
+                  <div className="text-center px-3 py-1.5 rounded-lg bg-surface border border-border">
+                    <div className="text-lg font-bold text-warning">{streak.longestStreak}</div>
+                    <div className="text-[10px] text-text-muted">最长连续</div>
+                  </div>
+                  <div className="text-center px-3 py-1.5 rounded-lg bg-surface border border-border">
+                    <div className="text-lg font-bold text-success">{streak.totalActiveDays}</div>
+                    <div className="text-[10px] text-text-muted">活跃天数</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Weekly activity bar */}
+              <div className="flex items-end gap-1.5 h-12 mb-3">
+                {streak.weeklyActivity.map((day) => {
+                  const maxCount = Math.max(...streak.weeklyActivity.map((d) => d.count), 1);
+                  const height = day.count > 0 ? Math.max((day.count / maxCount) * 100, 20) : 8;
+                  const dayName = new Date(day.date).toLocaleDateString('zh-CN', { weekday: 'narrow' });
+                  return (
+                    <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className={`w-full rounded-sm transition-all ${
+                          day.count > 0 ? 'bg-primary/60' : 'bg-surface'
+                        }`}
+                        style={{ height: `${height}px` }}
+                      />
+                      <span className="text-[9px] text-text-muted">{dayName}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Contribution grid */}
+              <div className="flex gap-[3px] overflow-x-auto pb-1">
+                {grid.map((week, wi) => (
+                  <div key={wi} className="flex flex-col gap-[3px]">
+                    {week.map((day, di) => {
+                      const colors = [
+                        'bg-surface',
+                        'bg-primary/20',
+                        'bg-primary/40',
+                        'bg-primary/60',
+                        'bg-primary',
+                      ];
+                      return (
+                        <div
+                          key={di}
+                          className={`w-2.5 h-2.5 rounded-[2px] ${colors[day.level]}`}
+                          title={`${day.date}: ${day.level} 级活跃`}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Daily check */}
         <div className="max-w-2xl mb-10">
