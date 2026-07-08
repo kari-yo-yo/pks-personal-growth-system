@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import DashboardBackground from '@/components/DashboardBackground';
 import {
   load,
   getDataStats,
@@ -13,7 +12,7 @@ import {
 import { getAllInsights } from '@/lib/insights';
 import { getAllPaths } from '@/lib/paths';
 import { getStreakInfo, getContributionGrid, StreakInfo } from '@/lib/streak';
-import { KnowledgeNode, Note, Paper } from '@/types';
+import { KnowledgeNode, Note } from '@/types';
 import {
   BookOpen,
   Brain,
@@ -21,25 +20,22 @@ import {
   FileText,
   Flame,
   GraduationCap,
-  Home,
   Lightbulb,
   Network,
   Route,
   Sparkles,
   Wind,
   Zap,
+  ArrowRight,
+  TrendingUp,
 } from 'lucide-react';
 import Link from 'next/link';
+import PageTransition from '@/components/PageTransition';
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    nodes: 0,
-    notes: 0,
-    papers: 0,
-    insights: 0,
-    paths: 0,
-    summaries: 0,
+    nodes: 0, notes: 0, papers: 0, insights: 0, paths: 0, summaries: 0,
   });
   const [recentNodes, setRecentNodes] = useState<KnowledgeNode[]>([]);
   const [recentNotes, setRecentNotes] = useState<Note[]>([]);
@@ -58,8 +54,8 @@ export default function HomePage() {
         paths: getAllPaths().length,
         summaries: getAllSummaries().length,
       });
-      setRecentNodes(getAllNodes().slice(0, 5));
-      setRecentNotes(getAllNotes().slice(0, 5));
+      setRecentNodes(getAllNodes().slice(0, 6));
+      setRecentNotes(getAllNotes().slice(0, 6));
       setStreak(getStreakInfo());
       setGrid(getContributionGrid(20));
       setLoading(false);
@@ -73,118 +69,134 @@ export default function HomePage() {
     weekday: 'long',
   });
 
-  return (
-    <div className="min-h-screen relative">
-      <DashboardBackground />
+  const total = stats.nodes + stats.notes + stats.papers + stats.insights + stats.paths + stats.summaries;
 
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="mb-10">
-          <p className="text-xs text-text-muted mb-2">{today}</p>
-          <h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">
+  return (
+    <PageTransition>
+      <main className="pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+
+        {/* ── Hero: Greeting ── */}
+        <header className="pt-8 sm:pt-12 mb-12 stagger-enter" style={{ '--stagger-i': 0 } as React.CSSProperties}>
+          <p className="text-sm text-[var(--color-text-muted)] mb-3 font-medium tracking-wide uppercase">
+            {today}
+          </p>
+          <h1 className="heading-display text-4xl sm:text-5xl text-[var(--color-text-primary)] mb-3">
             欢迎回来
           </h1>
-          <p className="text-text-secondary text-sm max-w-lg">
+          <p className="body-text text-base">
             今天的你也在进步。这里是你的个人知识中枢，所有学习足迹一目了然。
           </p>
-        </div>
+        </header>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
-          <StatCard icon={Brain} label="知识节点" value={stats.nodes} color="text-primary" bg="bg-primary/10" />
-          <StatCard icon={FileText} label="笔记" value={stats.notes} color="text-success" bg="bg-success/10" />
-          <StatCard icon={GraduationCap} label="论文" value={stats.papers} color="text-accent" bg="bg-accent/10" />
-          <StatCard icon={Zap} label="灵感" value={stats.insights} color="text-warning" bg="bg-warning/10" />
-          <StatCard icon={Route} label="路径" value={stats.paths} color="text-pink-400" bg="bg-pink-400/10" />
-          <StatCard icon={Calendar} label="总结" value={stats.summaries} color="text-cyan-400" bg="bg-cyan-400/10" />
-        </div>
+        {/* ── Stats: Inline pill row (no cards) ── */}
+        <section
+          className="mb-12 stagger-enter"
+          style={{ '--stagger-i': 1 } as React.CSSProperties}
+          aria-label="学习统计"
+        >
+          <div className="flex flex-wrap gap-2 items-center">
+            <span className="heading-section text-sm text-[var(--color-text-muted)] mr-1">共</span>
+            <span className="text-2xl font-bold text-[var(--color-primary)] heading-display tabular-nums">
+              {total}
+            </span>
+            <span className="heading-section text-sm text-[var(--color-text-muted)] mr-3">条记录</span>
 
-        {/* Quick Access Grid */}
-        <div className="mb-10">
-          <h2 className="text-sm font-medium text-text-secondary mb-3">快捷入口</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-            <QuickAccess href="/knowledge" icon={Brain} label="知识系统" color="text-primary" />
-            <QuickAccess href="/notes" icon={FileText} label="笔记" color="text-success" />
-            <QuickAccess href="/papers" icon={GraduationCap} label="论文" color="text-accent" />
-            <QuickAccess href="/insights" icon={Zap} label="灵感" color="text-warning" />
-            <QuickAccess href="/paths" icon={Route} label="路径" color="text-pink-400" />
-            <QuickAccess href="/topology" icon={Network} label="拓扑" color="text-cyan-400" />
-            <QuickAccess href="/flow" icon={Wind} label="流场" color="text-violet-400" />
-            <QuickAccess href="/feynman" icon={Lightbulb} label="费曼" color="text-amber-400" />
-            <QuickAccess href="/daily" icon={Calendar} label="总结" color="text-emerald-400" />
-            <QuickAccess href="/galaxy" icon={Sparkles} label="星图" color="text-indigo-400" />
-            <QuickAccess href="/settings" icon={Home} label="设置" color="text-text-muted" />
+            <StatPill icon={Brain} label="节点" value={stats.nodes} color="--color-primary" />
+            <StatPill icon={FileText} label="笔记" value={stats.notes} color="--color-success" />
+            <StatPill icon={GraduationCap} label="论文" value={stats.papers} color="--color-accent" />
+            <StatPill icon={Zap} label="灵感" value={stats.insights} color="--color-warning" />
+            <StatPill icon={Route} label="路径" value={stats.paths} color="--color-primary-light" />
+            <StatPill icon={Calendar} label="总结" value={stats.summaries} color="--color-accent" />
           </div>
-        </div>
+        </section>
 
-        {/* Streak & Contribution */}
+        {/* ── Quick Access: Horizontal link list (no card grid) ── */}
+        <section
+          className="mb-12 stagger-enter"
+          style={{ '--stagger-i': 2 } as React.CSSProperties}
+          aria-label="快捷入口"
+        >
+          <div className="flex flex-wrap gap-1">
+            <QuickLink href="/knowledge" icon={Brain} label="知识系统" />
+            <QuickLink href="/notes" icon={FileText} label="笔记" />
+            <QuickLink href="/papers" icon={GraduationCap} label="论文" />
+            <QuickLink href="/insights" icon={Zap} label="灵感速记" />
+            <QuickLink href="/paths" icon={Route} label="学习路径" />
+            <QuickLink href="/topology" icon={Network} label="拓扑" />
+            <QuickLink href="/flow" icon={Wind} label="流场" />
+            <QuickLink href="/feynman" icon={Lightbulb} label="费曼卡片" />
+            <QuickLink href="/daily" icon={Calendar} label="每日总结" />
+            <QuickLink href="/galaxy" icon={Sparkles} label="星图" />
+            <QuickLink href="/wander" icon={TrendingUp} label="漫游" />
+          </div>
+        </section>
+
+        {/* ── Streak & Contribution ── */}
         {streak && streak.totalActiveDays > 0 && (
-          <div className="mb-10">
-            <div className="glass rounded-2xl p-5 border border-primary/10">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+          <section
+            className="mb-12 stagger-enter"
+            style={{ '--stagger-i': 3 } as React.CSSProperties}
+            aria-label="学习连续性"
+          >
+            <div className="surface-raised p-5 sm:p-6">
+              <div className="flex items-start justify-between mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Flame className="w-5 h-5 text-primary" />
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    style={{ background: 'color-mix(in srgb, var(--color-warning) 15%, var(--color-surface))' }}
+                  >
+                    <Flame className="w-5 h-5 text-[var(--color-warning)]" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-text-primary">连续学习</h3>
-                    <p className="text-xs text-text-muted">
-                      当前 {streak.currentStreak} 天 · 最长 {streak.longestStreak} 天
+                    <h2 className="heading-section text-base text-[var(--color-text-primary)]">
+                      连续学习
+                    </h2>
+                    <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
+                      当前 {streak.currentStreak} 天 · 最长 {streak.longestStreak} 天 · 共 {streak.totalActiveDays} 天活跃
                     </p>
-                  </div>
-                </div>
-                <div className="flex gap-3 sm:ml-auto">
-                  <div className="text-center px-3 py-1.5 rounded-lg bg-surface border border-border">
-                    <div className="text-lg font-bold text-primary">{streak.currentStreak}</div>
-                    <div className="text-[10px] text-text-muted">当前连续</div>
-                  </div>
-                  <div className="text-center px-3 py-1.5 rounded-lg bg-surface border border-border">
-                    <div className="text-lg font-bold text-warning">{streak.longestStreak}</div>
-                    <div className="text-[10px] text-text-muted">最长连续</div>
-                  </div>
-                  <div className="text-center px-3 py-1.5 rounded-lg bg-surface border border-border">
-                    <div className="text-lg font-bold text-success">{streak.totalActiveDays}</div>
-                    <div className="text-[10px] text-text-muted">活跃天数</div>
                   </div>
                 </div>
               </div>
 
-              {/* Weekly activity bar */}
-              <div className="flex items-end gap-1.5 h-12 mb-3">
+              {/* Weekly activity bars */}
+              <div className="flex items-end gap-1.5 h-10 mb-4">
                 {streak.weeklyActivity.map((day) => {
                   const maxCount = Math.max(...streak.weeklyActivity.map((d) => d.count), 1);
-                  const height = day.count > 0 ? Math.max((day.count / maxCount) * 100, 20) : 8;
+                  const height = day.count > 0 ? Math.max((day.count / maxCount) * 100, 20) : 6;
                   const dayName = new Date(day.date).toLocaleDateString('zh-CN', { weekday: 'narrow' });
                   return (
                     <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
                       <div
-                        className={`w-full rounded-sm transition-all ${
-                          day.count > 0 ? 'bg-primary/60' : 'bg-surface'
-                        }`}
-                        style={{ height: `${height}px` }}
+                        className="w-full rounded-full"
+                        style={{
+                          height: `${height}px`,
+                          background: day.count > 0
+                            ? 'color-mix(in srgb, var(--color-primary) 60%, var(--color-surface))'
+                            : 'var(--color-surface)',
+                          transition: 'height 300ms var(--ease-out-quart)',
+                        }}
                       />
-                      <span className="text-[9px] text-text-muted">{dayName}</span>
+                      <span className="text-[9px] text-[var(--color-text-muted)]">{dayName}</span>
                     </div>
                   );
                 })}
               </div>
 
               {/* Contribution grid */}
-              <div className="flex gap-[3px] overflow-x-auto pb-1">
+              <div className="flex gap-[3px] overflow-x-auto pb-1 scrollbar-hide">
                 {grid.map((week, wi) => (
                   <div key={wi} className="flex flex-col gap-[3px]">
                     {week.map((day, di) => {
-                      const colors = [
-                        'bg-surface',
-                        'bg-primary/20',
-                        'bg-primary/40',
-                        'bg-primary/60',
-                        'bg-primary',
-                      ];
+                      const opacities = [0, 0.2, 0.4, 0.6, 1];
                       return (
                         <div
                           key={di}
-                          className={`w-2.5 h-2.5 rounded-[2px] ${colors[day.level]}`}
+                          className="w-2.5 h-2.5 rounded-[2px]"
+                          style={{
+                            background: day.level > 0
+                              ? `color-mix(in srgb, var(--color-primary) ${opacities[day.level] * 100}%, var(--color-surface))`
+                              : 'var(--color-surface)',
+                          }}
                           title={`${day.date}: ${day.level} 级活跃`}
                         />
                       );
@@ -193,139 +205,157 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Daily check */}
-        <div className="max-w-2xl mb-10">
-          <Link href="/daily">
-            <div className="glass rounded-2xl p-5 card-hover border border-warning/10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
-                    <BookOpen className="w-5 h-5 text-warning" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-text-primary">每日总结</h3>
-                    <p className="text-xs text-text-muted">记录今天的收获与反思</p>
-                  </div>
+        {/* ── Daily Summary CTA ── */}
+        <section
+          className="mb-12 stagger-enter"
+          style={{ '--stagger-i': 4 } as React.CSSProperties}
+        >
+          <Link href="/daily" className="block group">
+            <div className="surface pressable p-4 sm:p-5 flex items-center justify-between"
+              style={{ borderColor: 'color-mix(in srgb, var(--color-warning) 20%, var(--color-border))' }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: 'color-mix(in srgb, var(--color-warning) 12%, var(--color-surface))' }}
+                >
+                  <BookOpen className="w-4 h-4 text-[var(--color-warning)]" />
                 </div>
-                <div className="px-3 py-1.5 rounded-lg bg-surface border border-border text-xs text-text-secondary hover:border-primary/30 transition-colors">
-                  去记录
+                <div>
+                  <h2 className="heading-section text-sm text-[var(--color-text-primary)]">每日总结</h2>
+                  <p className="text-xs text-[var(--color-text-muted)]">记录今天的收获与反思</p>
                 </div>
               </div>
+              <ArrowRight className="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)] group-hover:translate-x-1 transition-all duration-200" />
             </div>
           </Link>
-        </div>
+        </section>
 
-        {/* Recent Activity */}
+        {/* ── Recent Activity: Two-column list (no identical cards) ── */}
         {loading ? (
-          <div className="text-center py-12 text-text-muted">加载中...</div>
+          <div className="text-center py-16 text-[var(--color-text-muted)]">加载中...</div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-4xl">
-            {/* Recent Nodes */}
-            <div className="glass rounded-2xl p-5">
-              <h3 className="font-medium text-text-primary mb-4 flex items-center gap-2">
-                <Brain className="w-4 h-4 text-primary" />
+          <section
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-4xl stagger-enter"
+            style={{ '--stagger-i': 5 } as React.CSSProperties}
+            aria-label="最近动态"
+          >
+            {/* Recent Nodes — clean list, no card shell */}
+            <div>
+              <h2 className="heading-section text-sm text-[var(--color-text-primary)] mb-3 flex items-center gap-2">
+                <Brain className="w-4 h-4 text-[var(--color-primary)]" />
                 最近知识节点
-              </h3>
+              </h2>
               {recentNodes.length === 0 ? (
-                <p className="text-sm text-text-muted">暂无知识节点</p>
+                <EmptyState message="暂无知识节点，从知识系统开始创建" />
               ) : (
-                <div className="space-y-1">
+                <ul className="space-y-0.5">
                   {recentNodes.map((node) => (
-                    <Link
-                      key={node.id}
-                      href={`/knowledge?node=${node.id}`}
-                      className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-surface-light transition-colors"
-                    >
-                      <div
-                        className="w-2 h-2 rounded-full shrink-0"
-                        style={{ backgroundColor: node.color || '#6366f1' }}
-                      />
-                      <span className="text-sm text-text-secondary truncate">
-                        {node.title}
-                      </span>
-                    </Link>
+                    <li key={node.id}>
+                      <Link
+                        href={`/knowledge?node=${node.id}`}
+                        className="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-[var(--color-surface)] transition-colors group"
+                      >
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ backgroundColor: node.color || 'var(--color-primary)' }}
+                        />
+                        <span className="text-sm text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors truncate flex-1">
+                          {node.title}
+                        </span>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
 
-            {/* Recent Notes */}
-            <div className="glass rounded-2xl p-5">
-              <h3 className="font-medium text-text-primary mb-4 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-success" />
+            {/* Recent Notes — clean list, no card shell */}
+            <div>
+              <h2 className="heading-section text-sm text-[var(--color-text-primary)] mb-3 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[var(--color-success)]" />
                 最近笔记
-              </h3>
+              </h2>
               {recentNotes.length === 0 ? (
-                <p className="text-sm text-text-muted">暂无笔记</p>
+                <EmptyState message="暂无笔记，记下你的第一条想法" />
               ) : (
-                <div className="space-y-1">
+                <ul className="space-y-0.5">
                   {recentNotes.map((note) => (
-                    <Link
-                      key={note.id}
-                      href={`/notes?id=${note.id}`}
-                      className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-surface-light transition-colors"
-                    >
-                      <div className="w-2 h-2 rounded-full bg-success/50 shrink-0" />
-                      <span className="text-sm text-text-secondary truncate">
-                        {note.title}
-                      </span>
-                    </Link>
+                    <li key={note.id}>
+                      <Link
+                        href={`/notes?id=${note.id}`}
+                        className="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-[var(--color-surface)] transition-colors group"
+                      >
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ background: 'color-mix(in srgb, var(--color-success) 50%, var(--color-surface))' }}
+                        />
+                        <span className="text-sm text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors truncate flex-1">
+                          {note.title}
+                        </span>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
-          </div>
+          </section>
         )}
       </main>
-    </div>
+    </PageTransition>
   );
 }
 
-function StatCard({
+/* ── StatPill: inline stat (replaces StatCard) ── */
+function StatPill({
   icon: Icon,
   label,
   value,
   color,
-  bg,
 }: {
   icon: React.ElementType;
   label: string;
   value: number;
   color: string;
-  bg: string;
 }) {
   return (
-    <div className="glass rounded-xl p-4 text-center card-hover">
-      <div className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center mx-auto mb-2`}>
-        <Icon className={`w-4 h-4 ${color}`} />
-      </div>
-      <div className="text-xl font-bold text-text-primary">{value}</div>
-      <div className="text-[10px] text-text-muted">{label}</div>
+    <div className="stat-pill pressable">
+      <Icon className="w-3.5 h-3.5" style={{ color: `var(${color})` }} />
+      <span className="text-sm font-semibold tabular-nums text-[var(--color-text-primary)]">{value}</span>
+      <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
     </div>
   );
 }
 
-function QuickAccess({
+/* ── QuickLink: text-based link (replaces QuickAccess card) ── */
+function QuickLink({
   href,
   icon: Icon,
   label,
-  color,
 }: {
   href: string;
   icon: React.ElementType;
   label: string;
-  color: string;
 }) {
   return (
     <Link
       href={href}
-      className="glass rounded-xl p-3 card-hover flex flex-col items-center gap-2 text-center"
+      className="pressable flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface)] transition-colors"
     >
-      <Icon className={`w-5 h-5 ${color}`} />
-      <span className="text-xs text-text-secondary">{label}</span>
+      <Icon className="w-3.5 h-3.5 shrink-0" />
+      <span>{label}</span>
     </Link>
+  );
+}
+
+/* ── EmptyState: high-contrast empty message ── */
+function EmptyState({ message }: { message: string }) {
+  return (
+    <p className="text-sm text-[var(--color-text-secondary)] py-4 px-1 border-l-2 border-[var(--color-border)] pl-3">
+      {message}
+    </p>
   );
 }
