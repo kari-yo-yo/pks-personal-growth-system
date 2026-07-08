@@ -101,9 +101,9 @@ export default function GlobalSearch() {
       nodes
         .filter(
           (n) =>
-            n.title.toLowerCase().includes(q) ||
-            n.description?.toLowerCase().includes(q) ||
-            n.tags?.some((t) => t.toLowerCase().includes(q))
+            (n.title || '').toLowerCase().includes(q) ||
+            (n.description || '').toLowerCase().includes(q) ||
+            (n.tags || []).some((t) => t.toLowerCase().includes(q))
         )
         .forEach((n) => {
           items.push({
@@ -122,7 +122,7 @@ export default function GlobalSearch() {
         .filter(
           (n) =>
             n.title.toLowerCase().includes(q) ||
-            n.content.toLowerCase().includes(q)
+            n.content?.toLowerCase().includes(q)
         )
         .slice(0, 10)
         .forEach((n) => {
@@ -134,7 +134,7 @@ export default function GlobalSearch() {
             id: n.id,
             title: n.title,
             subtitle: nodeTitle,
-            description: n.content.substring(0, 100),
+            description: (n.content || '').substring(0, 100),
             href: `/notes`,
             icon: FileText,
             category: nodeTitle,
@@ -147,15 +147,15 @@ export default function GlobalSearch() {
         .filter(
           (p) =>
             p.title.toLowerCase().includes(q) ||
-            p.authors.some((a) => a.toLowerCase().includes(q)) ||
-            p.tags?.some((t) => t.toLowerCase().includes(q))
+            (p.authors || []).some((a) => a.toLowerCase().includes(q)) ||
+            (p.tags || []).some((t) => t.toLowerCase().includes(q))
         )
         .forEach((p) => {
           items.push({
             type: 'paper',
             id: p.id,
             title: p.title,
-            subtitle: p.authors.join(', '),
+            subtitle: (p.authors || []).join(', '),
             description: p.abstract?.substring(0, 100),
             href: `/papers`,
             icon: GraduationCap,

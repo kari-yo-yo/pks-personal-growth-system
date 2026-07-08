@@ -133,9 +133,9 @@ function noteToReviewItem(note: Note): ReviewItem {
   return {
     id: `note-${note.id}`,
     type: 'note',
-    title: note.title,
-    front: `笔记「${note.title}」记录了什么？`,
-    back: note.summary || note.content.slice(0, 300),
+    title: note.title || '无标题',
+    front: `笔记「${note.title || '无标题'}」记录了什么？`,
+    back: note.summary || (note.content ? note.content.slice(0, 300) : ''),
     tags: note.tags || [],
     color: '#10b981',
   };
@@ -147,7 +147,7 @@ function paperToReviewItem(paper: Paper): ReviewItem {
     type: 'paper',
     title: paper.title,
     front: `论文「${paper.title}」的核心贡献是什么？`,
-    back: paper.abstract || `作者: ${paper.authors.join(', ')}\n年份: ${paper.year || '未知'}`,
+    back: paper.abstract || `作者: ${(paper.authors || []).join(', ')}\n年份: ${paper.year || '未知'}`,
     tags: paper.tags || [],
     color: '#f59e0b',
   };

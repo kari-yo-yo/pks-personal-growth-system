@@ -76,33 +76,45 @@ export function getDailyActivity(days = 30): DailyActivity[] {
     dateMap.set(item.date, item);
   }
 
+  /** 安全提取 ISO 日期字符串中的日期部分 */
+  const toDateStr = (iso: string | undefined | null): string => {
+    if (!iso || typeof iso !== 'string') return '';
+    try { return iso.split('T')[0] || ''; } catch { return ''; }
+  };
+
   for (const node of getAllNodes()) {
-    const date = node.createdAt.split('T')[0];
+    const date = toDateStr(node.createdAt);
+    if (!date) continue;
     const item = dateMap.get(date);
     if (item) { item.nodes++; item.total++; }
   }
   for (const note of getAllNotes()) {
-    const date = note.createdAt.split('T')[0];
+    const date = toDateStr(note.createdAt);
+    if (!date) continue;
     const item = dateMap.get(date);
     if (item) { item.notes++; item.total++; }
   }
   for (const paper of getAllPapers()) {
-    const date = paper.createdAt.split('T')[0];
+    const date = toDateStr(paper.createdAt);
+    if (!date) continue;
     const item = dateMap.get(date);
     if (item) { item.papers++; item.total++; }
   }
   for (const insight of getAllInsights()) {
-    const date = insight.createdAt.split('T')[0];
+    const date = toDateStr(insight.createdAt);
+    if (!date) continue;
     const item = dateMap.get(date);
     if (item) { item.insights++; item.total++; }
   }
   for (const path of getAllPaths()) {
-    const date = path.createdAt.split('T')[0];
+    const date = toDateStr(path.createdAt);
+    if (!date) continue;
     const item = dateMap.get(date);
     if (item) { item.paths++; item.total++; }
   }
   for (const summary of getAllSummaries()) {
-    const date = summary.createdAt.split('T')[0];
+    const date = toDateStr(summary.createdAt);
+    if (!date) continue;
     const item = dateMap.get(date);
     if (item) { item.summaries++; item.total++; }
   }

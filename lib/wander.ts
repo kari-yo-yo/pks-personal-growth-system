@@ -36,12 +36,17 @@ function nodeToWanderItem(node: KnowledgeNode): WanderItem {
   };
 }
 
+function safeSlice(s: string | undefined | null, max: number): string {
+  if (!s || typeof s !== 'string') return '';
+  try { return s.slice(0, max); } catch { return ''; }
+}
+
 function noteToWanderItem(note: Note): WanderItem {
   return {
     id: note.id,
     type: 'note',
-    title: note.title,
-    content: note.summary || note.content.slice(0, 200),
+    title: note.title || '无标题',
+    content: note.summary || safeSlice(note.content, 200),
     tags: note.tags || [],
     color: '#10b981',
     date: note.updatedAt || note.createdAt,
@@ -56,12 +61,12 @@ function paperToWanderItem(paper: Paper): WanderItem {
     id: paper.id,
     type: 'paper',
     title: paper.title,
-    content: paper.abstract || `作者: ${paper.authors.join(', ')}`,
+    content: paper.abstract || `作者: ${(paper.authors || []).join(', ')}`,
     tags: paper.tags || [],
     color: '#f59e0b',
     date: paper.updatedAt || paper.createdAt,
     meta: {
-      authors: paper.authors.join(', '),
+      authors: (paper.authors || []).join(', '),
       year: paper.year,
       venue: paper.venue,
     },

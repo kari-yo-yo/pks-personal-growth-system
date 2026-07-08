@@ -61,15 +61,16 @@ export function getTimelineEvents(): TimelineEvent[] {
 
   // Notes
   for (const note of getAllNotes()) {
+    const contentSafe = note.content || '';
     events.push({
       id: `note-${note.id}`,
       type: 'note',
-      title: note.title,
+      title: note.title || '无标题',
       description:
         note.summary ||
-        (note.content.length > 80
-          ? note.content.slice(0, 80) + '...'
-          : note.content),
+        (contentSafe.length > 80
+          ? contentSafe.slice(0, 80) + '...'
+          : contentSafe),
       timestamp: new Date(note.createdAt),
       link: `/notes?id=${note.id}`,
       ...TYPE_CONFIG.note,
@@ -98,10 +99,11 @@ export function getTimelineEvents(): TimelineEvent[] {
 
   // Insights
   for (const insight of getAllInsights()) {
+    const insightContent = insight.content || '';
     events.push({
       id: `insight-${insight.id}`,
       type: 'insight',
-      title: insight.content.slice(0, 60) + (insight.content.length > 60 ? '...' : ''),
+      title: insightContent.slice(0, 60) + (insightContent.length > 60 ? '...' : ''),
       description: insight.mood,
       timestamp: new Date(insight.createdAt),
       link: `/insights`,
