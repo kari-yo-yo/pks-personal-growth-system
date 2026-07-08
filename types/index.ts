@@ -173,34 +173,4 @@ export interface LearningPath {
   archived: boolean;
 }
 
-// ==================== 主题系统 ====================
-
-export interface ThemeColors {
-  background: string;
-  surface: string;
-  surfaceLight: string;
-  primary: string;
-  primaryLight: string;
-  accent: string;
-  textPrimary: string;
-  textSecondary: string;
-  textMuted: string;
-  border: string;
-  success: string;
-  warning: string;
-  error: string;
-}
-
-export type ThemeType = 'ocean' | 'forest' | 'hope' | 'pink' | 'cosmic';
-
-export interface ThemeConfig {
-  id: ThemeType;
-  name: string;
-  description: string;
-  icon: string;
-  colors: ThemeColors;
-  particleColor: { r: number; g: number; b: number };
-  auraStyle: string;
-  dynamics: ThemeType;
-  decorations: string[];
-}
+// Theme system removed - ready for rebuild
