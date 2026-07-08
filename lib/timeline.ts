@@ -170,7 +170,8 @@ export function groupEventsByDate(events: TimelineEvent[]): {
     if (!groups.has(dateStr)) {
       groups.set(dateStr, []);
     }
-    groups.get(dateStr)!.push(event);
+    const group = groups.get(dateStr);
+    if (group) group.push(event);
   }
 
   return Array.from(groups.entries()).map(([date, events]) => ({

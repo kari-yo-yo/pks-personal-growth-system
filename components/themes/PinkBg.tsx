@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback } from 'react';
+import { safeReplace } from '@/lib/safeAccess';
 
 interface Petal {
   x: number;
@@ -95,8 +96,8 @@ export default function PinkBg() {
         orb.x + driftX, orb.y + driftY, 0,
         orb.x + driftX, orb.y + driftY, orb.radius
       );
-      const c1 = orb.color1.replace('ALPHA', (currentAlpha * 0.7).toString());
-      const c2 = orb.color2.replace('ALPHA', (currentAlpha * 0.3).toString());
+      const c1 = safeReplace(orb.color1, 'ALPHA', (currentAlpha * 0.7).toString());
+      const c2 = safeReplace(orb.color2, 'ALPHA', (currentAlpha * 0.3).toString());
       grad.addColorStop(0, c1);
       grad.addColorStop(0.4, c2);
       grad.addColorStop(1, 'transparent');
@@ -125,7 +126,7 @@ export default function PinkBg() {
       const sway = Math.sin(t * 0.35 + i * 0.7) * 12;
       const fallY = (py + t * (15 + (seed % 8) * 1.5)) % (height + 120);
       const colorIdx = seed % petalColors.length;
-      const color = petalColors[colorIdx].replace('ALPHA', alpha.toString());
+      const color = safeReplace(petalColors[colorIdx], 'ALPHA', alpha.toString());
 
       ctx.save();
       ctx.translate(px + sway, fallY);

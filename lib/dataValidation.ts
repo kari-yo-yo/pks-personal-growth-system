@@ -67,7 +67,8 @@ export function validateDataIntegrity(data: Partial<DataCollections>): Validatio
       if (!nodeTitles.has(title)) {
         nodeTitles.set(title, []);
       }
-      nodeTitles.get(title)!.push(id);
+      const ids = nodeTitles.get(title);
+      if (ids) ids.push(id);
     }
   }
   for (const [title, ids] of Array.from(nodeTitles.entries())) {

@@ -200,7 +200,10 @@ export function getKnowledgeTreeStats(): KnowledgeTreeStats {
   // Calculate depth for each node
   const depthMap = new Map<string, number>();
   function calcDepth(nodeId: string): number {
-    if (depthMap.has(nodeId)) return depthMap.get(nodeId)!;
+    if (depthMap.has(nodeId)) {
+      const cached = depthMap.get(nodeId);
+      if (cached !== undefined) return cached;
+    }
     const node = nodes.find((n) => n.id === nodeId);
     if (!node || !node.parentId) {
       depthMap.set(nodeId, 0);

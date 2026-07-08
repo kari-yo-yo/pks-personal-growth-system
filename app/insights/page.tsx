@@ -45,7 +45,8 @@ function groupByDate(insights: Insight[]): Map<string, Insight[]> {
     const d = new Date(ins.createdAt);
     const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     if (!groups.has(key)) groups.set(key, []);
-    groups.get(key)!.push(ins);
+    const group = groups.get(key);
+    if (group) group.push(ins);
   }
   return groups;
 }

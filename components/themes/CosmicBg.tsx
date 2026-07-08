@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback } from 'react';
+import { safeReplace } from '@/lib/safeAccess';
 
 interface Star {
   x: number;
@@ -100,9 +101,9 @@ export default function CosmicBg() {
         nb.x + driftX, nb.y + driftY, 0,
         nb.x + driftX, nb.y + driftY, nb.radius
       );
-      const c1 = nb.color1.replace('ALPHA', (currentAlpha * 0.8).toString());
-      const c2 = nb.color2.replace('ALPHA', (currentAlpha * 0.4).toString());
-      const c3 = nb.color3.replace('ALPHA', (currentAlpha * 0.2).toString());
+      const c1 = safeReplace(nb.color1, 'ALPHA', (currentAlpha * 0.8).toString());
+      const c2 = safeReplace(nb.color2, 'ALPHA', (currentAlpha * 0.4).toString());
+      const c3 = safeReplace(nb.color3, 'ALPHA', (currentAlpha * 0.2).toString());
       grad.addColorStop(0, c1);
       grad.addColorStop(0.3, c2);
       grad.addColorStop(0.6, c3);

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback } from 'react';
+import { safeReplace } from '@/lib/safeAccess';
 
 interface GoldenParticle {
   x: number;
@@ -105,8 +106,8 @@ export default function HopeBg() {
         orb.x + driftX, orb.y + driftY, 0,
         orb.x + driftX, orb.y + driftY, orb.radius
       );
-      const c1 = orb.color1.replace('ALPHA', (currentAlpha * 0.8).toString());
-      const c2 = orb.color2.replace('ALPHA', (currentAlpha * 0.3).toString());
+      const c1 = safeReplace(orb.color1, 'ALPHA', (currentAlpha * 0.8).toString());
+      const c2 = safeReplace(orb.color2, 'ALPHA', (currentAlpha * 0.3).toString());
       grad.addColorStop(0, c1);
       grad.addColorStop(0.5, c2);
       grad.addColorStop(1, 'transparent');

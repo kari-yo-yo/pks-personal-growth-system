@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback } from 'react';
+import { safeReplace } from '@/lib/safeAccess';
 
 interface Leaf {
   x: number;
@@ -93,7 +94,7 @@ export default function ForestBg() {
       const sway = Math.sin(t * 0.4 + i * 0.9) * 15;
       const fallY = (y + t * (20 + (seed % 10) * 2)) % (height + 100);
       const colorIdx = seed % leafColors.length;
-      const color = leafColors[colorIdx].replace('ALPHA', alpha.toString());
+      const color = safeReplace(leafColors[colorIdx], 'ALPHA', alpha.toString());
 
       ctx.save();
       ctx.translate(x + sway, fallY);
