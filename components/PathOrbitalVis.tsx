@@ -347,7 +347,7 @@ export default function PathOrbitalVis({
 
   return (
     <div ref={containerRef} className="w-full cursor-pointer" style={{ height: Math.max(220, path.nodes.length * 30) }}>
-      <canvas ref={canvasRef} className="w-full h-full" />
+      <canvas ref={canvasRef} className="w-full h-full" style={{ willChange: 'transform' }} />
     </div>
   );
 }

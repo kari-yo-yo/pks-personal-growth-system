@@ -163,7 +163,7 @@ export default function PapersPage() {
           <div className="space-y-4">
             {/* Add/Edit Form */}
             {showForm && (
-              <div className="glass rounded-2xl p-5">
+              <div className="surface p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-medium text-text-primary">
                     {editingPaper ? '编辑论文' : '添加论文'}
@@ -261,7 +261,7 @@ export default function PapersPage() {
 
             {/* Papers List */}
             {filteredPapers.length === 0 ? (
-              <div className="glass rounded-2xl p-8 text-center">
+              <div className="surface p-7 text-center">
                 <GraduationCap className="w-12 h-12 text-text-muted mx-auto mb-3" />
                 <p className="text-text-muted">
                   {search ? '没有找到匹配的论文' : '暂无论文'}
@@ -273,7 +273,7 @@ export default function PapersPage() {
                 return (
                   <div
                     key={paper.id}
-                    className="glass rounded-2xl p-5 card-hover group"
+                    className="surface p-4 group"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1 min-w-0">

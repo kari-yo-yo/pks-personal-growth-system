@@ -117,6 +117,7 @@ export default function InsightFAB() {
       {/* FAB Button */}
       <button
         onClick={() => setOpen(true)}
+        aria-label="记录灵感"
         className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30 flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-primary/40 active:scale-95"
         title="记录灵感 (Ctrl+Shift+N)"
       >
@@ -153,7 +154,8 @@ export default function InsightFAB() {
               <h3 className="font-semibold text-text-primary text-sm">灵感速记</h3>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-light transition-colors"
+                aria-label="关闭"
+                className="min-w-[44px] min-h-[44px] rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-light transition-colors flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -207,16 +209,21 @@ export default function InsightFAB() {
                         <button
                           key={c.key}
                           onClick={() => setColor(c.key)}
-                          className={`w-7 h-7 rounded-full transition-all ${
+                          aria-label="选择颜色"
+                          className={`w-11 h-11 rounded-full flex items-center justify-center transition-all ${
                             color === c.key ? 'scale-110' : 'hover:scale-110'
                           }`}
-                          style={{
-                            backgroundColor:
-                              c.key === 'indigo' ? '#6366f1' : c.key === 'amber' ? '#f59e0b' : c.key === 'emerald' ? '#22c55e' : c.key === 'rose' ? '#f43f5e' : c.key === 'cyan' ? '#06b6d4' : '#8b5cf6',
-                            outline: color === c.key ? '2px solid #0a0a0f' : 'none',
-                            outlineOffset: '2px',
-                          }}
-                        />
+                        >
+                          <span
+                            className="w-7 h-7 rounded-full block"
+                            style={{
+                              backgroundColor:
+                                c.key === 'indigo' ? '#6366f1' : c.key === 'amber' ? '#f59e0b' : c.key === 'emerald' ? '#22c55e' : c.key === 'rose' ? '#f43f5e' : c.key === 'cyan' ? '#06b6d4' : '#8b5cf6',
+                              outline: color === c.key ? '2px solid var(--color-background)' : 'none',
+                              outlineOffset: '2px',
+                            }}
+                          />
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -237,7 +244,8 @@ export default function InsightFAB() {
                             {t}
                             <button
                               onClick={() => handleRemoveTag(t)}
-                              className="hover:text-error transition-colors"
+                              aria-label={`标签: ${t}`}
+                              className="min-w-[44px] min-h-[44px] hover:text-error transition-colors flex items-center justify-center"
                             >
                               <X className="w-3 h-3" />
                             </button>

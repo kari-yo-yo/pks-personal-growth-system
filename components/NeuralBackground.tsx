@@ -228,7 +228,7 @@ export default function NeuralBackground() {
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none opacity-60">
-      <canvas ref={canvasRef} className="w-full h-full" />
+      <canvas ref={canvasRef} className="w-full h-full" style={{ willChange: 'transform' }} />
     </div>
   );
 }

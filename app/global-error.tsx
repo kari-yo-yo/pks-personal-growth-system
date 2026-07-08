@@ -31,18 +31,18 @@ export default function GlobalError({
       <body className="antialiased" style={{ margin: 0, padding: 0 }}>
         <div
           className="min-h-screen flex items-center justify-center p-8"
-          style={{ backgroundColor: '#0a0a0f' }}
+          style={{ backgroundColor: 'var(--color-background)' }}
         >
           <div className="text-center max-w-md">
             <div className="text-6xl mb-4">😵</div>
-            <h2 className="text-2xl font-bold mb-2" style={{ color: '#ef4444' }}>
+            <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-error)' }}>
               系统出错了
             </h2>
-            <p className="text-sm mb-2" style={{ color: '#94a3b8' }}>
+            <p className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
               {safeMessage}
             </p>
             {safeDigest && (
-              <p className="text-xs mb-4" style={{ color: '#64748b' }}>
+              <p className="text-xs mb-4" style={{ color: 'var(--color-text-muted)' }}>
                 错误 ID: {safeDigest}
               </p>
             )}
@@ -50,8 +50,8 @@ export default function GlobalError({
               onClick={reset}
               className="px-6 py-2.5 rounded-lg text-sm font-medium transition-colors"
               style={{
-                backgroundColor: '#7c3aed',
-                color: '#ffffff',
+                backgroundColor: 'var(--color-primary)',
+                color: 'var(--color-background)',
                 border: 'none',
                 cursor: 'pointer',
               }}

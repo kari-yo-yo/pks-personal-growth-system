@@ -241,7 +241,7 @@ export default function DailyPage() {
         </div>
 
         {/* Heatmap */}
-        <div className="glass rounded-2xl p-5 mb-6">
+        <div className="surface p-4 mb-6">
           <h2 className="text-sm font-medium text-text-secondary mb-4">
             学习热力图
           </h2>
@@ -283,7 +283,7 @@ export default function DailyPage() {
 
         {/* Today's Summary */}
         {todaySummary && !showForm && (
-          <div className="glass rounded-2xl p-5 mb-6">
+          <div className="surface p-4 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-text-primary">
                 今日总结
@@ -313,7 +313,7 @@ export default function DailyPage() {
 
         {/* Form */}
         {showForm && (
-          <div className="glass rounded-2xl p-5 mb-6">
+          <div className="surface p-4 mb-6">
             <h2 className="text-lg font-medium text-text-primary mb-4">
               {todaySummary ? '编辑今日总结' : '写今日总结'}
             </h2>
@@ -447,7 +447,7 @@ export default function DailyPage() {
             历史记录
           </h2>
           {summaries.length === 0 ? (
-            <div className="glass rounded-2xl p-8 text-center">
+            <div className="surface-raised p-6 text-center">
               <Calendar className="w-12 h-12 text-text-muted mx-auto mb-3" />
               <p className="text-text-muted">还没有记录，开始写第一篇总结吧！</p>
             </div>
@@ -463,7 +463,7 @@ export default function DailyPage() {
                         selectedSummary?.id === summary.id ? null : summary
                       )
                     }
-                    className="glass rounded-2xl p-4 cursor-pointer card-hover"
+                    className="surface p-3 cursor-pointer pressable"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -562,7 +562,7 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="glass rounded-xl p-4 text-center">
+    <div className="surface p-3 text-center">
       <Icon className={`w-5 h-5 mx-auto mb-2 ${color}`} />
       <div className="text-xl font-bold text-text-primary">{value}</div>
       <div className="text-xs text-text-muted">{label}</div>

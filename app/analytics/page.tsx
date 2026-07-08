@@ -295,7 +295,7 @@ export default function AnalyticsPage() {
         ) : (
           <>
             {/* Weekly Trend */}
-            <div className="glass rounded-2xl p-5 mb-6">
+            <div className="surface p-4 mb-6">
               <h2 className="text-sm font-medium text-text-primary mb-4 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-primary" />
                 12周趋势
@@ -309,7 +309,7 @@ export default function AnalyticsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               {/* Module Distribution */}
-              <div className="glass rounded-2xl p-5">
+              <div className="surface p-4">
                 <h2 className="text-sm font-medium text-text-primary mb-4">模块分布</h2>
                 <div className="flex items-center gap-6">
                   <canvas
@@ -333,7 +333,7 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Knowledge Tree Stats */}
-              <div className="glass rounded-2xl p-5">
+              <div className="surface p-4">
                 <h2 className="text-sm font-medium text-text-primary mb-4 flex items-center gap-2">
                   <TreePine className="w-4 h-4 text-success" />
                   知识树结构
@@ -355,7 +355,7 @@ export default function AnalyticsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               {/* Tag Frequency */}
-              <div className="glass rounded-2xl p-5">
+              <div className="surface p-4">
                 <h2 className="text-sm font-medium text-text-primary mb-4">热门标签</h2>
                 {tags.length > 0 ? (
                   <canvas
@@ -369,7 +369,7 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Hourly Activity */}
-              <div className="glass rounded-2xl p-5">
+              <div className="surface p-4">
                 <h2 className="text-sm font-medium text-text-primary mb-4">活跃时段</h2>
                 <canvas
                   ref={hourCanvasRef}
@@ -382,7 +382,7 @@ export default function AnalyticsPage() {
 
             {/* Path Progress */}
             {paths.length > 0 && (
-              <div className="glass rounded-2xl p-5 mb-6">
+              <div className="surface p-4 mb-6">
                 <h2 className="text-sm font-medium text-text-primary mb-4">学习路径进度</h2>
                 <div className="space-y-4">
                   {paths.map((path) => {
@@ -412,7 +412,7 @@ export default function AnalyticsPage() {
             )}
 
             {/* Daily Activity Table */}
-            <div className="glass rounded-2xl p-5">
+            <div className="surface p-4">
               <h2 className="text-sm font-medium text-text-primary mb-4">近30日活动</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
@@ -468,7 +468,7 @@ function TreeStat({
   icon: React.ElementType;
 }) {
   return (
-    <div className="glass rounded-xl p-3 text-center">
+    <div className="surface p-2 text-center">
       <Icon className="w-4 h-4 text-primary mx-auto mb-1" />
       <div className="text-lg font-bold text-text-primary">{value}</div>
       <div className="text-[10px] text-text-muted">{label}</div>

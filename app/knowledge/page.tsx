@@ -118,7 +118,7 @@ export default function KnowledgePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Knowledge Tree */}
             <div className="lg:col-span-1">
-              <div className="glass rounded-2xl p-4">
+              <div className="surface p-3">
                 <h2 className="text-sm font-medium text-text-secondary mb-3">
                   知识树
                 </h2>
@@ -135,7 +135,7 @@ export default function KnowledgePage() {
             <div className="lg:col-span-2 space-y-4">
               {/* Add/Edit Form */}
               {(showAddForm || editingNode) && (
-                <div className="glass rounded-2xl p-5">
+                <div className="surface p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-medium text-text-primary">
                       {editingNode ? '编辑节点' : '添加节点'}
@@ -201,7 +201,7 @@ export default function KnowledgePage() {
 
               {/* Selected Node Detail */}
               {selectedNode ? (
-                <div className="glass rounded-2xl p-5">
+                <div className="surface p-4">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h2 className="text-lg font-medium text-text-primary">
@@ -256,7 +256,7 @@ export default function KnowledgePage() {
                   </div>
                 </div>
               ) : (
-                <div className="glass rounded-2xl p-8 text-center">
+                <div className="surface p-7 text-center">
                   <Brain className="w-12 h-12 text-text-muted mx-auto mb-3" />
                   <p className="text-text-muted">选择一个知识节点查看详情</p>
                 </div>

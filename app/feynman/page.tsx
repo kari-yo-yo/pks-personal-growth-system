@@ -188,7 +188,7 @@ export default function FeynmanPage() {
         {/* Cards Grid */}
         {selectedCard ? (
           /* Card Detail View */
-          <div className="glass rounded-2xl p-6 max-w-2xl mx-auto">
+          <div className="surface p-5 max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span
@@ -318,7 +318,7 @@ export default function FeynmanPage() {
                     setSelectedCard(card);
                     setShowBack(false);
                   }}
-                  className="glass rounded-2xl p-5 card-hover cursor-pointer group"
+                  className="surface p-4 cursor-pointer group"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -360,7 +360,7 @@ export default function FeynmanPage() {
         )}
 
         {filteredCards.length === 0 && !selectedCard && (
-          <div className="glass rounded-2xl p-8 text-center">
+          <div className="surface p-7 text-center">
             <Brain className="w-12 h-12 text-text-muted mx-auto mb-3" />
             <p className="text-text-muted">没有找到匹配的概念卡片</p>
           </div>

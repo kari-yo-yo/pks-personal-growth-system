@@ -324,6 +324,7 @@ export default function TopologyCanvas({ graph, onNodeSelect, selectedNodeId }: 
       <canvas
         ref={canvasRef}
         className="w-full h-full cursor-grab active:cursor-grabbing"
+        style={{ willChange: 'transform' }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

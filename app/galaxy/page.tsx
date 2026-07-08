@@ -95,7 +95,8 @@ export default function GalaxyPage() {
     <div className="min-h-screen relative" style={{ background: '#050510' }}>
 
       {/* 全屏 3D 星图 */}
-      <div style={{ height: 'calc(100vh - 56px)', marginTop: '56px' }}>
+      <div className="relative" style={{ height: 'calc(100vh - 56px)', marginTop: '56px' }}>
+        <h1 className="absolute top-4 left-4 text-xl font-bold text-text-primary z-10">银河星图</h1>
         <GalaxyVisualization
           nodes={nodes}
           notesPerNode={notesPerNode}
@@ -110,6 +111,7 @@ export default function GalaxyPage() {
             className="absolute right-4 top-20 w-80 glass rounded-2xl p-5 z-10"
             style={{ maxHeight: '60vh', overflowY: 'auto' }}
           >
+            <h2 className="text-sm font-medium text-text-secondary mb-3">节点详情</h2>
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-text-primary truncate">

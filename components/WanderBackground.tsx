@@ -203,6 +203,7 @@ export default function WanderBackground({ themeColor = '#6366f1' }: { themeColo
         height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
+        willChange: 'transform',
       }}
     />
   );

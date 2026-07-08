@@ -130,7 +130,7 @@ export default function DashboardBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 0, willChange: 'transform' }}
       aria-hidden="true"
     />
   );

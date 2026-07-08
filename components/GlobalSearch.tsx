@@ -270,6 +270,7 @@ export default function GlobalSearch() {
           {query && (
             <button
               onClick={() => setQuery('')}
+              aria-label="清除"
               className="p-1 rounded text-text-muted hover:text-text-primary"
             >
               <X className="w-4 h-4" />

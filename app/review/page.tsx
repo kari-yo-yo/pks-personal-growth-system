@@ -163,19 +163,19 @@ export default function ReviewPage() {
 
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-text-primary">{stats.due}</div>
                 <div className="text-[10px] text-text-muted">待复习</div>
               </div>
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-primary">{stats.newCount}</div>
                 <div className="text-[10px] text-text-muted">新卡片</div>
               </div>
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-warning">{stats.learning}</div>
                 <div className="text-[10px] text-text-muted">学习中</div>
               </div>
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-success">{stats.mastered}</div>
                 <div className="text-[10px] text-text-muted">已掌握</div>
               </div>
@@ -197,7 +197,7 @@ export default function ReviewPage() {
               </div>
             ) : (
               <div className="text-center mb-8">
-                <div className="glass rounded-2xl p-8 max-w-md mx-auto">
+                <div className="surface-raised p-6 max-w-md mx-auto">
                   <CheckCircle2 className="w-10 h-10 text-success mx-auto mb-3" />
                   <p className="text-text-primary font-medium mb-1">暂无待复习内容</p>
                   <p className="text-xs text-text-muted">今天的复习已完成，或知识库还没有内容</p>
@@ -206,7 +206,7 @@ export default function ReviewPage() {
             )}
 
             {/* Keyboard hints */}
-            <div className="glass rounded-2xl p-5 max-w-md mx-auto">
+            <div className="surface p-4 max-w-md mx-auto">
               <h3 className="text-sm font-medium text-text-primary mb-3 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-primary" />
                 操作提示
@@ -283,7 +283,7 @@ export default function ReviewPage() {
               >
                 {/* Front */}
                 <div
-                  className="glass rounded-2xl p-6 sm:p-8 border border-primary/10 absolute inset-0"
+                  className="surface-raised p-5 sm:p-6 border border-primary/10 absolute inset-0"
                   style={{ backfaceVisibility: 'hidden' }}
                 >
                   <div className="flex items-center gap-2 mb-4">
@@ -313,7 +313,7 @@ export default function ReviewPage() {
 
                 {/* Back */}
                 <div
-                  className="glass rounded-2xl p-6 sm:p-8 border border-success/10 absolute inset-0"
+                  className="surface-raised p-5 sm:p-6 border border-success/10 absolute inset-0"
                   style={{
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)',
@@ -374,7 +374,7 @@ export default function ReviewPage() {
           /* ========== Summary View ========== */
           <div className="py-8 flex flex-col items-center">
             <div className="w-full max-w-lg">
-              <div className="glass rounded-2xl p-8 text-center border border-success/10 mb-6">
+              <div className="surface-raised p-6 text-center border border-success/10 mb-6">
                 <Award className="w-12 h-12 text-success mx-auto mb-4" />
                 <h2 className="text-xl font-bold text-text-primary mb-2">复习完成</h2>
                 <p className="text-sm text-text-secondary">
@@ -388,7 +388,7 @@ export default function ReviewPage() {
                   const config = difficultyConfig[d];
                   const count = results.filter((r) => r.difficulty === d).length;
                   return (
-                    <div key={d} className="glass rounded-xl p-3 text-center">
+                    <div key={d} className="surface p-2 text-center">
                       <div className={`text-lg font-bold ${config.color}`}>{count}</div>
                       <div className="text-[10px] text-text-muted">{config.label}</div>
                     </div>
@@ -397,7 +397,7 @@ export default function ReviewPage() {
               </div>
 
               {/* Accuracy */}
-              <div className="glass rounded-xl p-4 text-center mb-6">
+              <div className="surface p-3 text-center mb-6">
                 <div className="text-sm text-text-secondary mb-1">正确率</div>
                 {results.length > 0 ? (
                   <div className="text-2xl font-bold text-primary">

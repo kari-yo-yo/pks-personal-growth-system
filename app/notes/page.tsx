@@ -131,7 +131,7 @@ export default function NotesPage() {
           <div className="space-y-4">
             {/* Add/Edit Form */}
             {showForm && (
-              <div className="glass rounded-2xl p-5">
+              <div className="surface p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-medium text-text-primary">
                     {editingNote ? '编辑笔记' : '新建笔记'}
@@ -216,7 +216,7 @@ export default function NotesPage() {
 
             {/* Notes List */}
             {filteredNotes.length === 0 ? (
-              <div className="glass rounded-2xl p-8 text-center">
+              <div className="surface p-7 text-center">
                 <FileText className="w-12 h-12 text-text-muted mx-auto mb-3" />
                 <p className="text-text-muted">
                   {search ? '没有找到匹配的笔记' : '暂无笔记'}
@@ -226,7 +226,7 @@ export default function NotesPage() {
               filteredNotes.map((note) => (
                 <div
                   key={note.id}
-                  className="glass rounded-2xl p-5 card-hover group"
+                  className="surface p-4 group"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1 min-w-0">

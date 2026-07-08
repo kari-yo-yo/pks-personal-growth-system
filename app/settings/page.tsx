@@ -113,7 +113,7 @@ export default function SettingsPage() {
         ) : (
           <div className="space-y-8">
             {/* 数据概览 */}
-            <section className="glass rounded-2xl p-6">
+            <section className="surface p-5">
               <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
                 <Database className="w-5 h-5 text-primary" />
                 数据概览
@@ -138,7 +138,7 @@ export default function SettingsPage() {
             </section>
 
             {/* GitHub 同步状态 */}
-            <section className="glass rounded-2xl p-6">
+            <section className="surface p-5">
               <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
                 <GitBranch className="w-5 h-5 text-success" />
                 GitHub 同步
@@ -199,7 +199,7 @@ export default function SettingsPage() {
             </section>
 
             {/* 数据导出 */}
-            <section className="glass rounded-2xl p-6">
+            <section className="surface p-5">
               <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
                 <Download className="w-5 h-5 text-primary" />
                 数据导出
@@ -249,7 +249,7 @@ export default function SettingsPage() {
             </section>
 
             {/* 数据导入 */}
-            <section className="glass rounded-2xl p-6">
+            <section className="surface p-5">
               <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
                 <Upload className="w-5 h-5 text-success" />
                 数据导入
@@ -300,7 +300,7 @@ export default function SettingsPage() {
             </section>
 
             {/* 危险操作 */}
-            <section className="glass rounded-2xl p-6 border border-error/20">
+            <section className="surface p-5 border border-error/20">
               <h2 className="text-lg font-medium text-error mb-4 flex items-center gap-2">
                 <Trash2 className="w-5 h-5" />
                 危险操作
@@ -320,7 +320,7 @@ export default function SettingsPage() {
             </section>
 
             {/* 存储信息 */}
-            <section className="glass rounded-2xl p-6">
+            <section className="surface p-5">
               <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
                 <HardDrive className="w-5 h-5 text-accent" />
                 存储配置

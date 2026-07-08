@@ -85,10 +85,10 @@ export default function TopologyPage() {
             {/* Edge types */}
             {stats && stats.edgeCount > 0 && (
               <div>
-                <h3 className="text-xs font-medium text-text-secondary mb-2 flex items-center gap-1.5">
+                <h2 className="text-xs font-medium text-text-secondary mb-2 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5" />
                   关系类型
-                </h3>
+                </h2>
                 <div className="space-y-1.5">
                   {Object.entries(stats.typeCounts).map(([type, count]) => (
                     <div
@@ -106,10 +106,10 @@ export default function TopologyPage() {
             {/* Selected node detail */}
             {selectedNode && (
               <div className="glass rounded-xl p-3 border border-primary/20">
-                <h3 className="text-xs font-medium text-primary mb-2 flex items-center gap-1.5">
+                <h2 className="text-xs font-medium text-primary mb-2 flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5" />
                   选中节点
-                </h3>
+                </h2>
                 <p className="text-sm font-medium text-text-primary mb-1">
                   {selectedNode.title}
                 </p>
@@ -129,7 +129,7 @@ export default function TopologyPage() {
 
             {/* Controls */}
             <div>
-              <h3 className="text-xs font-medium text-text-secondary mb-2">操作</h3>
+              <h2 className="text-xs font-medium text-text-secondary mb-2">操作</h2>
               <div className="space-y-2">
                 <button
                   onClick={loadTopology}
@@ -143,7 +143,7 @@ export default function TopologyPage() {
 
             {/* Legend */}
             <div>
-              <h3 className="text-xs font-medium text-text-secondary mb-2">图例</h3>
+              <h2 className="text-xs font-medium text-text-secondary mb-2">图例</h2>
               <div className="space-y-1.5 text-xs text-text-secondary">
                 <LegendItem color="#6366f1" label="层级 0 (根节点)" />
                 <LegendItem color="#8b5cf6" label="层级 1" />
