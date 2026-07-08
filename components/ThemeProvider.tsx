@@ -51,24 +51,25 @@ function getBgComponent(id: string): React.ComponentType {
 
 /* ─── ThemeProvider ─── */
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const storedId = getStoredThemeId();
-  const initialId: ThemeId = storedId && THEMES[storedId] ? (storedId as ThemeId) : 'ocean';
-
-  const [themeId, setThemeIdState] = useState<ThemeId>(initialId);
-  const [prevTheme, setPrevTheme] = useState<ThemeId>(initialId);
+  // Always use 'ocean' as the initial theme to avoid hydration mismatch.
+  // The actual stored theme is applied in useEffect after mount.
+  const [themeId, setThemeIdState] = useState<ThemeId>('ocean');
+  const [prevTheme, setPrevTheme] = useState<ThemeId>('ocean');
   const [transitionPhase, setTransitionPhase] = useState<'idle' | 'fade-out' | 'fade-in'>('idle');
+  const [mounted, setMounted] = useState(false);
 
   /* Mount: read stored theme & apply */
   useEffect(() => {
     const id = getStoredThemeId();
-    if (id && THEMES[id]) {
-      setThemeIdState(id as ThemeId);
+    if (id && id !== 'ocean' && THEMES[id]) {
+      setThemeIdState(id);
       applyThemeToDOM(THEMES[id]);
       document.documentElement.setAttribute('data-theme', id);
     } else {
       applyThemeToDOM(THEMES['ocean']);
       document.documentElement.setAttribute('data-theme', 'ocean');
     }
+    setMounted(true);
   }, []);
 
   /* switchTheme */
@@ -77,7 +78,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
       const themeIdCast = id as ThemeId;
       if (id === themeId || !THEMES[themeIdCast]) return;
 
-      setPrevTheme(themeId as ThemeId);
+      setPrevTheme(themeId);
       setTransitionPhase('fade-out');
 
       // After 100ms, start applying new theme
@@ -119,7 +120,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
             pointerEvents: 'none',
           }}
         >
-          <PrevBgComponent />
+          {mounted && <PrevBgComponent />}
         </div>
 
         {/* Current / New theme background - fading in */}
@@ -132,7 +133,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
             pointerEvents: 'none',
           }}
         >
-          <CurrentBgComponent />
+          {mounted && <CurrentBgComponent />}
         </div>
       </div>
 
