@@ -15,6 +15,11 @@ import {
 import { loadFromGitHub } from './githubData';
 import { syncToGitHub } from './githubSync';
 
+// ─── 安全辅助：确保 Map 存在 ───
+function ensureMap<T>(map: Map<string, T> | null | undefined): Map<string, T> {
+  return map instanceof Map ? map : new Map();
+}
+
 // 内存缓存
 interface Cache {
   nodes: Map<string, KnowledgeNode>;
@@ -81,7 +86,8 @@ function objectToMap<T>(obj: Record<string, T>): Map<string, T> {
 function initializeEmptyData() {
   console.log('📝 初始化空数据');
   Object.keys(cache).forEach((key) => {
-    (cache as any)[key].clear();
+    const map = (cache as any)[key];
+    if (map instanceof Map) map.clear();
   });
 }
 
@@ -90,16 +96,16 @@ function initializeEmptyData() {
  */
 export function getAllData(): Partial<DataCollections> {
   return {
-    nodes: mapToObject(cache.nodes),
-    notes: mapToObject(cache.notes),
-    papers: mapToObject(cache.papers),
-    paper_progress: mapToObject(cache.paper_progress),
-    paper_notes: mapToObject(cache.paper_notes),
-    summaries: mapToObject(cache.summaries),
-    attachments: mapToObject(cache.attachments),
-    relations: mapToObject(cache.relations),
-    knowledge_paper: mapToObject(cache.knowledge_paper),
-    paper_knowledge: mapToObject(cache.paper_knowledge),
+    nodes: mapToObject(ensureMap(cache.nodes)),
+    notes: mapToObject(ensureMap(cache.notes)),
+    papers: mapToObject(ensureMap(cache.papers)),
+    paper_progress: mapToObject(ensureMap(cache.paper_progress)),
+    paper_notes: mapToObject(ensureMap(cache.paper_notes)),
+    summaries: mapToObject(ensureMap(cache.summaries)),
+    attachments: mapToObject(ensureMap(cache.attachments)),
+    relations: mapToObject(ensureMap(cache.relations)),
+    knowledge_paper: mapToObject(ensureMap(cache.knowledge_paper)),
+    paper_knowledge: mapToObject(ensureMap(cache.paper_knowledge)),
   };
 }
 
@@ -107,6 +113,7 @@ export function getAllData(): Partial<DataCollections> {
  * 恢复数据到缓存
  */
 export function restoreToCache(data: Partial<DataCollections>) {
+  if (!data) return;
   if (data.nodes) cache.nodes = objectToMap(data.nodes);
   if (data.notes) cache.notes = objectToMap(data.notes);
   if (data.papers) cache.papers = objectToMap(data.papers);
@@ -128,17 +135,16 @@ export async function load(): Promise<void> {
 
   loadingPromise = (async () => {
     try {
-      // 1. 优先从 GitHub 加载
       console.log('🌐 尝试从 GitHub 加载数据...');
       const githubData = await loadFromGitHub();
-      const hasData = Object.values(githubData).some(
-        (v) => v && Object.keys(v).length > 0
+      const hasData = githubData && Object.values(githubData).some(
+        (v) => v && typeof v === 'object' && Object.keys(v).length > 0
       );
 
       if (hasData) {
         restoreToCache(githubData);
         console.log(
-          `✅ 从 GitHub 加载: ${cache.nodes.size} 节点, ${cache.notes.size} 笔记, ${cache.papers.size} 论文`
+          `✅ 从 GitHub 加载: ${ensureMap(cache.nodes).size} 节点, ${ensureMap(cache.notes).size} 笔记, ${ensureMap(cache.papers).size} 论文`
         );
         loaded = true;
         loadingPromise = null;
@@ -146,7 +152,6 @@ export async function load(): Promise<void> {
         return;
       }
 
-      // 2. 降级：初始化空数据
       console.log('⚠️ GitHub 无数据，初始化空数据');
       initializeEmptyData();
       loaded = true;
@@ -185,7 +190,8 @@ export function isLoaded(): boolean {
 export async function saveCollection(
   collection: CollectionName
 ): Promise<boolean> {
-  const data = mapToObject((cache as any)[collection]);
+  const map = (cache as any)[collection];
+  const data = map instanceof Map ? mapToObject(map) : {};
   return await syncToGitHub(collection, data);
 }
 
@@ -208,11 +214,11 @@ function sleep(ms: number): Promise<void> {
 // ==================== 节点 CRUD ====================
 
 export function getAllNodes(): KnowledgeNode[] {
-  return Array.from(cache.nodes.values()).sort((a, b) => a.order - b.order);
+  return Array.from(ensureMap(cache.nodes).values()).sort((a, b) => a.order - b.order);
 }
 
 export function getNodeById(id: string): KnowledgeNode | undefined {
-  return cache.nodes.get(id);
+  return ensureMap(cache.nodes).get(id);
 }
 
 export function getChildNodes(parentId: string | null): KnowledgeNode[] {
@@ -220,9 +226,9 @@ export function getChildNodes(parentId: string | null): KnowledgeNode[] {
 }
 
 export function getNodeTree(): KnowledgeNode[] {
-  // 返回根节点（parentId 为 null 或不存在父节点的）
+  const nodesMap = ensureMap(cache.nodes);
   return getAllNodes().filter(
-    (n) => !n.parentId || !cache.nodes.has(n.parentId)
+    (n) => !n.parentId || !nodesMap.has(n.parentId)
   );
 }
 
@@ -235,7 +241,7 @@ export async function addNode(node: Omit<KnowledgeNode, 'id' | 'createdAt' | 'up
     createdAt: now,
     updatedAt: now,
   };
-  cache.nodes.set(id, newNode);
+  ensureMap(cache.nodes).set(id, newNode);
   await saveCollection('nodes');
   notify();
   return newNode;
@@ -245,28 +251,27 @@ export async function updateNode(
   id: string,
   updates: Partial<KnowledgeNode>
 ): Promise<KnowledgeNode | undefined> {
-  const node = cache.nodes.get(id);
+  const node = ensureMap(cache.nodes).get(id);
   if (!node) return undefined;
   const updated = { ...node, ...updates, updatedAt: new Date().toISOString() };
-  cache.nodes.set(id, updated);
+  ensureMap(cache.nodes).set(id, updated);
   await saveCollection('nodes');
   notify();
   return updated;
 }
 
 export async function deleteNode(id: string): Promise<boolean> {
-  // 递归删除子节点
   const children = getChildNodes(id);
   for (const child of children) {
     await deleteNode(child.id);
   }
-  // 删除关联笔记
-  Array.from(cache.notes.entries()).forEach(([noteId, note]) => {
+  const notesMap = ensureMap(cache.notes);
+  Array.from(notesMap.entries()).forEach(([noteId, note]) => {
     if (note.nodeId === id) {
-      cache.notes.delete(noteId);
+      notesMap.delete(noteId);
     }
   });
-  cache.nodes.delete(id);
+  ensureMap(cache.nodes).delete(id);
   await saveCollection('nodes');
   await saveCollection('notes');
   notify();
@@ -276,13 +281,13 @@ export async function deleteNode(id: string): Promise<boolean> {
 // ==================== 笔记 CRUD ====================
 
 export function getAllNotes(): Note[] {
-  return Array.from(cache.notes.values()).sort(
+  return Array.from(ensureMap(cache.notes).values()).sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
 }
 
 export function getNoteById(id: string): Note | undefined {
-  return cache.notes.get(id);
+  return ensureMap(cache.notes).get(id);
 }
 
 export function getNotesByNodeId(nodeId: string): Note[] {
@@ -295,7 +300,7 @@ export async function addNote(
   const id = `note_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
   const now = new Date().toISOString();
   const newNote: Note = { ...note, id, createdAt: now, updatedAt: now };
-  cache.notes.set(id, newNote);
+  ensureMap(cache.notes).set(id, newNote);
   await saveCollection('notes');
   notify();
   return newNote;
@@ -305,17 +310,17 @@ export async function updateNote(
   id: string,
   updates: Partial<Note>
 ): Promise<Note | undefined> {
-  const note = cache.notes.get(id);
+  const note = ensureMap(cache.notes).get(id);
   if (!note) return undefined;
   const updated = { ...note, ...updates, updatedAt: new Date().toISOString() };
-  cache.notes.set(id, updated);
+  ensureMap(cache.notes).set(id, updated);
   await saveCollection('notes');
   notify();
   return updated;
 }
 
 export async function deleteNote(id: string): Promise<boolean> {
-  cache.notes.delete(id);
+  ensureMap(cache.notes).delete(id);
   await saveCollection('notes');
   notify();
   return true;
@@ -324,13 +329,13 @@ export async function deleteNote(id: string): Promise<boolean> {
 // ==================== 论文 CRUD ====================
 
 export function getAllPapers(): Paper[] {
-  return Array.from(cache.papers.values()).sort(
+  return Array.from(ensureMap(cache.papers).values()).sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 }
 
 export function getPaperById(id: string): Paper | undefined {
-  return cache.papers.get(id);
+  return ensureMap(cache.papers).get(id);
 }
 
 export async function addPaper(
@@ -339,7 +344,7 @@ export async function addPaper(
   const id = `paper_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
   const now = new Date().toISOString();
   const newPaper: Paper = { ...paper, id, createdAt: now, updatedAt: now };
-  cache.papers.set(id, newPaper);
+  ensureMap(cache.papers).set(id, newPaper);
   await saveCollection('papers');
   notify();
   return newPaper;
@@ -349,22 +354,22 @@ export async function updatePaper(
   id: string,
   updates: Partial<Paper>
 ): Promise<Paper | undefined> {
-  const paper = cache.papers.get(id);
+  const paper = ensureMap(cache.papers).get(id);
   if (!paper) return undefined;
   const updated = { ...paper, ...updates, updatedAt: new Date().toISOString() };
-  cache.papers.set(id, updated);
+  ensureMap(cache.papers).set(id, updated);
   await saveCollection('papers');
   notify();
   return updated;
 }
 
 export async function deletePaper(id: string): Promise<boolean> {
-  cache.papers.delete(id);
-  cache.paper_progress.delete(id);
-  // 删除关联的 paper_notes
-  Array.from(cache.paper_notes.entries()).forEach(([noteId, note]) => {
+  ensureMap(cache.papers).delete(id);
+  ensureMap(cache.paper_progress).delete(id);
+  const paperNotesMap = ensureMap(cache.paper_notes);
+  Array.from(paperNotesMap.entries()).forEach(([noteId, note]) => {
     if (note.paperId === id) {
-      cache.paper_notes.delete(noteId);
+      paperNotesMap.delete(noteId);
     }
   });
   await saveCollection('papers');
@@ -377,14 +382,14 @@ export async function deletePaper(id: string): Promise<boolean> {
 // ==================== 论文进度 ====================
 
 export function getPaperProgress(paperId: string): PaperProgress | undefined {
-  return cache.paper_progress.get(paperId);
+  return ensureMap(cache.paper_progress).get(paperId);
 }
 
 export async function updatePaperProgress(
   paperId: string,
   progress: Partial<PaperProgress>
 ): Promise<PaperProgress> {
-  const existing = cache.paper_progress.get(paperId);
+  const existing = ensureMap(cache.paper_progress).get(paperId);
   const updated: PaperProgress = {
     paperId,
     status: 'unread',
@@ -393,7 +398,7 @@ export async function updatePaperProgress(
     ...existing,
     ...progress,
   };
-  cache.paper_progress.set(paperId, updated);
+  ensureMap(cache.paper_progress).set(paperId, updated);
   await saveCollection('paper_progress');
   notify();
   return updated;
@@ -402,13 +407,13 @@ export async function updatePaperProgress(
 // ==================== 其他 getter ====================
 
 export function getAllSummaries(): Summary[] {
-  return Array.from(cache.summaries.values()).sort(
+  return Array.from(ensureMap(cache.summaries).values()).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 }
 
 export function getAllRelations(): Relation[] {
-  return Array.from(cache.relations.values());
+  return Array.from(ensureMap(cache.relations).values());
 }
 
 export function getRelationsBySource(sourceId: string): Relation[] {
@@ -421,30 +426,25 @@ export function getRelationsByTarget(targetId: string): Relation[] {
 
 // ==================== 数据恢复 ====================
 
-/**
- * 从外部数据恢复（如从 GitHub 加载后恢复到缓存）
- */
 export async function restoreData(data: Partial<DataCollections>): Promise<void> {
   restoreToCache(data);
-  // 同步到 GitHub
   await saveAll();
   notify();
 }
 
-/**
- * 获取数据统计
- */
+// ==================== 数据统计 ====================
+
 export function getDataStats(): Record<string, number> {
   return {
-    nodes: cache.nodes.size,
-    notes: cache.notes.size,
-    papers: cache.papers.size,
-    paper_progress: cache.paper_progress.size,
-    paper_notes: cache.paper_notes.size,
-    summaries: cache.summaries.size,
-    attachments: cache.attachments.size,
-    relations: cache.relations.size,
-    knowledge_paper: cache.knowledge_paper.size,
-    paper_knowledge: cache.paper_knowledge.size,
+    nodes: ensureMap(cache.nodes).size,
+    notes: ensureMap(cache.notes).size,
+    papers: ensureMap(cache.papers).size,
+    paper_progress: ensureMap(cache.paper_progress).size,
+    paper_notes: ensureMap(cache.paper_notes).size,
+    summaries: ensureMap(cache.summaries).size,
+    attachments: ensureMap(cache.attachments).size,
+    relations: ensureMap(cache.relations).size,
+    knowledge_paper: ensureMap(cache.knowledge_paper).size,
+    paper_knowledge: ensureMap(cache.paper_knowledge).size,
   };
 }

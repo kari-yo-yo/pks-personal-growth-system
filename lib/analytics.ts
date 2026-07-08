@@ -192,7 +192,8 @@ export function getKnowledgeTreeStats(): KnowledgeTreeStats {
     if (!childrenMap.has(node.id)) childrenMap.set(node.id, []);
     if (node.parentId) {
       if (!childrenMap.has(node.parentId)) childrenMap.set(node.parentId, []);
-      childrenMap.get(node.parentId)!.push(node.id);
+      const siblings = childrenMap.get(node.parentId);
+      if (siblings) siblings.push(node.id);
     }
   }
 
