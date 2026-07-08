@@ -1,6 +1,7 @@
 'use client';
 
 import PhotorealBg from './PhotorealBg';
+import { assetPath } from '@/lib/config';
 import {
   drawInkWash,
   noise2D,
@@ -91,7 +92,7 @@ export default function InkBg() {
 
   return (
     <PhotorealBg
-      imageSrc="/images/themes/ink-bg.jpg"
+      imageSrc={assetPath('/images/themes/ink-bg.jpg')}
       fallbackGradient="radial-gradient(ellipse at 50% 40%, #1a1a15 0%, #0a0a08 100%)"
       drawEffect={draw}
       overlayOpacity={0.35}

@@ -1,6 +1,7 @@
 'use client';
 
 import PhotorealBg from './PhotorealBg';
+import { assetPath } from '@/lib/config';
 import {
   drawPetal,
   drawSoftGlow,
@@ -130,7 +131,7 @@ export default function PinkBg() {
 
   return (
     <PhotorealBg
-      imageSrc="/images/themes/pink-bg.jpg"
+      imageSrc={assetPath('/images/themes/pink-bg.jpg')}
       fallbackGradient="radial-gradient(ellipse at 50% 50%, #3a2a30 0%, #1a1018 100%)"
       drawEffect={draw}
       overlayOpacity={0.5}

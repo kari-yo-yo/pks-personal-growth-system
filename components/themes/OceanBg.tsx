@@ -1,6 +1,7 @@
 'use client';
 
 import PhotorealBg from './PhotorealBg';
+import { assetPath } from '@/lib/config';
 import {
   drawLightShaft,
   drawBubble,
@@ -94,7 +95,7 @@ export default function OceanBg() {
 
   return (
     <PhotorealBg
-      imageSrc="/images/themes/ocean-bg.jpg"
+      imageSrc={assetPath('/images/themes/ocean-bg.jpg')}
       fallbackGradient="radial-gradient(ellipse at 50% 60%, #0a2a3a 0%, #051018 100%)"
       drawEffect={draw}
       overlayOpacity={0.55}

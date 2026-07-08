@@ -1,6 +1,7 @@
 'use client';
 
 import PhotorealBg from './PhotorealBg';
+import { assetPath } from '@/lib/config';
 import {
   drawDappledSpot,
   drawMistLayer,
@@ -99,7 +100,7 @@ export default function ForestBg() {
 
   return (
     <PhotorealBg
-      imageSrc="/images/themes/forest-bg.jpg"
+      imageSrc={assetPath('/images/themes/forest-bg.jpg')}
       fallbackGradient="radial-gradient(ellipse at 50% 0%, #1a3a1a 0%, #0a140a 100%)"
       drawEffect={draw}
       overlayOpacity={0.5}

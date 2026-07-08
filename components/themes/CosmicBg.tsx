@@ -1,6 +1,7 @@
 'use client';
 
 import PhotorealBg from './PhotorealBg';
+import { assetPath } from '@/lib/config';
 import {
   drawStar,
   drawShootingStar,
@@ -142,7 +143,7 @@ export default function CosmicBg() {
 
   return (
     <PhotorealBg
-      imageSrc="/images/themes/cosmic-bg.jpg"
+      imageSrc={assetPath('/images/themes/cosmic-bg.jpg')}
       fallbackGradient="radial-gradient(ellipse at 50% 20%, #0e0e24 0%, #050510 100%)"
       drawEffect={draw}
       overlayOpacity={0.6}

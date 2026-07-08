@@ -1,6 +1,7 @@
 'use client';
 
 import PhotorealBg from './PhotorealBg';
+import { assetPath } from '@/lib/config';
 import {
   drawSoftGlow,
   breathe,
@@ -108,7 +109,7 @@ export default function HopeBg() {
 
   return (
     <PhotorealBg
-      imageSrc="/images/themes/hope-bg.jpg"
+      imageSrc={assetPath('/images/themes/hope-bg.jpg')}
       fallbackGradient="radial-gradient(ellipse at 70% 20%, #3a2a10 0%, #1a1208 100%)"
       drawEffect={draw}
       overlayOpacity={0.5}
