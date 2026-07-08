@@ -3,26 +3,25 @@ import './globals.css';
 import GlobalSearch from '@/components/GlobalSearch';
 import InsightFAB from '@/components/InsightFAB';
 import Navigation from '@/components/Navigation';
+import ThemeProvider from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
   title: '个人知识系统',
   description: 'Personal Knowledge Management System',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" className="dark">
       <body className="antialiased">
-        <Navigation />
-        <main className="main-content">
-          {children}
-        </main>
-        <GlobalSearch />
-        <InsightFAB />
+        <ThemeProvider>
+          <Navigation />
+          <main className="main-content pb-16 md:pb-0">
+            {children}
+          </main>
+          <GlobalSearch />
+          <InsightFAB />
+        </ThemeProvider>
       </body>
     </html>
   );

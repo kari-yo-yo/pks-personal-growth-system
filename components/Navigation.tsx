@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { openGlobalSearch } from './GlobalSearch';
 import { openInsightFAB } from './InsightFAB';
+import MobileNav from './MobileNav';
 
 const navItems = [
   { href: '/', label: '首页', icon: Home },
@@ -62,39 +63,47 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             <BookOpen className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-text-primary text-sm">
+            <span className="font-semibold text-text-primary text-sm hidden sm:inline">
               个人知识系统
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop Nav - horizontal scroll */}
+          <div className="hidden md:flex flex-1 items-center gap-0.5 overflow-x-auto scrollbar-hide mx-2">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
+              const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                  className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg text-sm transition-colors shrink-0 ${
                     isActive
                       ? 'bg-primary/20 text-primary-light'
                       : 'text-text-secondary hover:text-text-primary hover:bg-surface-light'
                   }`}
                 >
-                  <item.icon className="w-4 h-4" />
-                  {item.label}
+                  <div className="flex items-center gap-1">
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span className="truncate max-w-[60px] lg:max-w-none text-xs lg:text-sm">
+                      {item.label}
+                    </span>
+                  </div>
+                  {isActive && (
+                    <span className="w-1 h-1 rounded-full bg-primary" />
+                  )}
                 </Link>
               );
             })}
           </div>
 
           {/* Search Button + Mobile toggle */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 shrink-0">
             <button
               onClick={openSearch}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-surface-light transition-colors"
+              className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-surface-light transition-colors"
             >
               <Search className="w-4 h-4" />
               <span className="hidden sm:inline">搜索</span>
@@ -112,12 +121,13 @@ export default function Navigation() {
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobile Drawer */}
       {mobileOpen && (
         <div className="md:hidden border-t border-border glass">
-          <div className="px-4 py-2 space-y-1">
+          <div className="px-4 py-2 space-y-1 max-h-[60vh] overflow-y-auto">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
+              const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
@@ -129,7 +139,7 @@ export default function Navigation() {
                       : 'text-text-secondary hover:text-text-primary hover:bg-surface-light'
                   }`}
                 >
-                  <item.icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4" />
                   {item.label}
                 </Link>
               );
@@ -137,6 +147,9 @@ export default function Navigation() {
           </div>
         </div>
       )}
+
+      {/* Mobile Bottom Nav */}
+      <MobileNav onOpenMenu={() => setMobileOpen(!mobileOpen)} />
     </nav>
   );
 }
