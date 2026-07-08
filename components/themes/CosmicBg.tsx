@@ -1,159 +1,223 @@
 'use client';
 
-import PhotorealBg from './PhotorealBg';
+import { useEffect, useRef, useState } from 'react';
 import { assetPath } from '@/lib/config';
-import {
-  drawStar,
-  drawShootingStar,
-  breathe,
-  clamp,
-} from '@/lib/themeUtils';
-import type { ShootingStar as ShootingStarType } from '@/lib/themeUtils';
 
-interface StarData {
+interface Star {
   x: number;
   y: number;
-  baseRadius: number;
+  size: number;
+  twinklePhase: number;
   twinkleSpeed: number;
-  twinkleOffset: number;
-  color: { r: number; g: number; b: number };
+}
+
+interface ShootingStar {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  active: boolean;
+  life: number;
+  maxLife: number;
 }
 
 export default function CosmicBg() {
-  const draw = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
-    // === 1. 银河脉动 — 银河光带 subtle breathing ===
-    const galaxyAlpha = breathe(t, 15, 0.06, 0.12);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const animRef = useRef<number>(0);
 
-    // Milky way band - diagonal from top-left to bottom-right
-    const galaxyGrad = ctx.createLinearGradient(0, 0, w, h * 0.7);
-    galaxyGrad.addColorStop(0, `rgba(200, 180, 220, 0)`);
-    galaxyGrad.addColorStop(0.2, `rgba(210, 190, 230, ${galaxyAlpha * 0.3})`);
-    galaxyGrad.addColorStop(0.4, `rgba(220, 200, 240, ${galaxyAlpha})`);
-    galaxyGrad.addColorStop(0.6, `rgba(210, 190, 230, ${galaxyAlpha * 0.7})`);
-    galaxyGrad.addColorStop(0.8, `rgba(200, 180, 220, ${galaxyAlpha * 0.3})`);
-    galaxyGrad.addColorStop(1, `rgba(190, 170, 210, 0)`);
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = assetPath('/images/themes/cosmic-bg.jpg');
+    img.onload = () => {
+      imageRef.current = img;
+      setImageLoaded(true);
+    };
+  }, []);
 
-    ctx.save();
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = galaxyGrad;
-    ctx.fillRect(0, 0, w, h * 0.8);
-    ctx.restore();
+  useEffect(() => {
+    if (!imageLoaded || !imageRef.current) return;
 
-    // === 2. 星星闪烁 — 100颗星星，各有不同的闪烁频率 ===
-    const starCount = 100;
-    for (let i = 0; i < starCount; i++) {
-      const seed = i * 137.5;
-      const sx = (seed * 0.71) % w;
-      const sy = (seed * 0.53) % (h * 0.85);
-      const baseRadius = 0.5 + (seed % 2.5);
-      const twinkleSpeed = 0.5 + (seed % 3);
-      const twinkleOffset = seed * 0.1;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-      const colors = [
-        { r: 255, g: 250, b: 240 },
-        { r: 220, g: 230, b: 255 },
-        { r: 255, g: 240, b: 220 },
-        { r: 240, g: 220, b: 255 },
-      ];
-      const color = colors[i % colors.length];
+    const dpr = window.devicePixelRatio || 1;
+    const resize = () => {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener('resize', resize);
 
-      drawStar(ctx, sx, sy, baseRadius, t * twinkleSpeed + twinkleOffset, color);
-    }
+    const img = imageRef.current;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-    // === 3. 流星 ===
-    // Shooting star 1
-    const shootingStarCycle1 = 20;
-    const ssPhase1 = t % shootingStarCycle1;
-    if (ssPhase1 > 1 && ssPhase1 < 4) {
-      const ssProgress = (ssPhase1 - 1) / 3;
-      const ssX = w * 0.8 - ssProgress * w * 0.6;
-      const ssY = h * 0.15 + ssProgress * h * 0.25;
-      const ssAlpha = Math.sin(ssProgress * Math.PI) * 0.9;
+    // 星星
+    const stars: Star[] = Array.from({ length: 80 }, (_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      size: 0.5 + Math.random() * 2,
+      twinklePhase: i * 1.3,
+      twinkleSpeed: 0.5 + Math.random() * 2,
+    }));
 
-      const star1: ShootingStarType = {
-        x: ssX,
-        y: ssY,
-        vx: -120,
-        vy: 50,
-        life: ssAlpha * 3,
-        maxLife: 3,
-        length: 40 + ssAlpha * 30,
-      };
-      drawShootingStar(ctx, star1, { r: 255, g: 255, b: 240 });
-    }
+    // 流星
+    const shootingStars: ShootingStar[] = [
+      { x: 0, y: 0, vx: -3, vy: 1.5, active: false, life: 0, maxLife: 60 },
+      { x: 0, y: 0, vx: -2.5, vy: 1, active: false, life: 0, maxLife: 50 },
+    ];
 
-    // Shooting star 2 (less frequent)
-    const shootingStarCycle2 = 35;
-    const ssPhase2 = (t + 12) % shootingStarCycle2;
-    if (ssPhase2 > 1 && ssPhase2 < 3.5) {
-      const ssProgress = (ssPhase2 - 1) / 2.5;
-      const ssX = w * 0.6 - ssProgress * w * 0.4;
-      const ssY = h * 0.1 + ssProgress * h * 0.2;
-      const ssAlpha = Math.sin(ssProgress * Math.PI) * 0.7;
+    const cols = 14;
+    const rows = 10;
 
-      const star2: ShootingStarType = {
-        x: ssX,
-        y: ssY,
-        vx: -100,
-        vy: 40,
-        life: ssAlpha * 2.5,
-        maxLife: 2.5,
-        length: 30 + ssAlpha * 25,
-      };
-      drawShootingStar(ctx, star2, { r: 220, g: 230, b: 255 });
-    }
+    const animate = (timestamp: number) => {
+      const time = timestamp * 0.001;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-    // === 4. 星云光晕 ===
-    const nebulaAlpha = breathe(t, 18, 0.03, 0.06);
-    const nebulaGrad = ctx.createRadialGradient(
-      w * 0.3, h * 0.25, 0,
-      w * 0.3, h * 0.25, w * 0.5
-    );
-    nebulaGrad.addColorStop(0, `rgba(180, 160, 220, ${nebulaAlpha})`);
-    nebulaGrad.addColorStop(0.5, `rgba(160, 140, 200, ${nebulaAlpha * 0.5})`);
-    nebulaGrad.addColorStop(1, `rgba(140, 120, 180, 0)`);
-    ctx.fillStyle = nebulaGrad;
-    ctx.fillRect(0, 0, w, h);
+      ctx.clearRect(0, 0, width, height);
 
-    // Second nebula region
-    const nebula2Alpha = breathe(t + 5, 20, 0.02, 0.05);
-    const nebula2Grad = ctx.createRadialGradient(
-      w * 0.75, h * 0.3, 0,
-      w * 0.75, h * 0.3, w * 0.4
-    );
-    nebula2Grad.addColorStop(0, `rgba(200, 180, 160, ${nebula2Alpha})`);
-    nebula2Grad.addColorStop(1, `rgba(180, 160, 140, 0)`);
-    ctx.fillStyle = nebula2Grad;
-    ctx.fillRect(0, 0, w, h);
+      // ========== 第一层：动态背景（星空缓慢流动）==========
+      const blockW = img.width / cols;
+      const blockH = img.height / rows;
 
-    // === 5. 雪山反光 — 山脚下微妙的星光反射 ===
-    const reflectAlpha = breathe(t, 10, 0.02, 0.04);
-    for (let i = 0; i < 15; i++) {
-      const seed = i * 293.1;
-      const rx = (seed * 0.37) % w;
-      const ry = h * 0.78 + (seed % 1) * h * 0.15;
-      const rAlpha = reflectAlpha * (0.5 + Math.sin(t * 0.8 + seed) * 0.5);
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const sx = c * blockW;
+          const sy = r * blockH;
 
-      ctx.beginPath();
-      ctx.arc(rx, ry, 1 + (seed % 2), 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(200, 210, 230, ${rAlpha})`;
-      ctx.fill();
-    }
-  };
+          // 星空缓慢漂移
+          const driftX = Math.sin(r * 0.2 + time * 0.08) * 3;
+          const driftY = Math.cos(c * 0.15 + time * 0.06) * 2;
+
+          const dx = c * (width / cols) + driftX;
+          const dy = r * (height / rows) + driftY;
+          const dw = width / cols + 2;
+          const dh = height / rows + 2;
+
+          ctx.drawImage(img, sx, sy, blockW, blockH, dx, dy, dw, dh);
+        }
+      }
+
+      // 银河脉动叠加
+      const galaxyAlpha = 0.04 + Math.sin(time * 0.3) * 0.02;
+      const galaxyGrad = ctx.createLinearGradient(0, 0, width, height * 0.6);
+      galaxyGrad.addColorStop(0, 'rgba(200, 180, 220, 0)');
+      galaxyGrad.addColorStop(0.3, `rgba(210, 190, 230, ${galaxyAlpha * 0.5})`);
+      galaxyGrad.addColorStop(0.5, `rgba(220, 200, 240, ${galaxyAlpha})`);
+      galaxyGrad.addColorStop(0.7, `rgba(210, 190, 230, ${galaxyAlpha * 0.7})`);
+      galaxyGrad.addColorStop(1, 'rgba(200, 180, 220, 0)');
+      ctx.fillStyle = galaxyGrad;
+      ctx.fillRect(0, 0, width, height * 0.7);
+
+      // ========== 第二层：点缀元素 ==========
+
+      // 星星闪烁
+      stars.forEach((star) => {
+        const twinkle = Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.5 + 0.5;
+        const alpha = 0.3 + twinkle * 0.7;
+        const size = star.size * (0.8 + twinkle * 0.2);
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 250, 240, ${alpha})`;
+        ctx.fill();
+
+        // 星光晕
+        if (star.size > 1.2) {
+          const glow = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, size * 4);
+          glow.addColorStop(0, `rgba(255, 250, 240, ${alpha * 0.2})`);
+          glow.addColorStop(1, 'rgba(255, 250, 240, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, size * 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+
+      // 流星
+      shootingStars.forEach((ss, i) => {
+        // 随机激活
+        if (!ss.active && Math.random() < 0.002) {
+          ss.active = true;
+          ss.x = width * (0.6 + Math.random() * 0.3);
+          ss.y = height * (0.05 + Math.random() * 0.15);
+          ss.life = ss.maxLife;
+        }
+
+        if (ss.active) {
+          ss.x += ss.vx;
+          ss.y += ss.vy;
+          ss.life--;
+
+          const progress = ss.life / ss.maxLife;
+          const alpha = Math.sin(progress * Math.PI) * 0.9;
+
+          // 流星尾迹
+          const tailLength = 30 + alpha * 20;
+          const grad = ctx.createLinearGradient(ss.x, ss.y, ss.x - ss.vx * tailLength, ss.y - ss.vy * tailLength);
+          grad.addColorStop(0, `rgba(255, 255, 240, ${alpha})`);
+          grad.addColorStop(0.5, `rgba(255, 255, 240, ${alpha * 0.3})`);
+          grad.addColorStop(1, 'rgba(255, 255, 240, 0)');
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.5;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(ss.x, ss.y);
+          ctx.lineTo(ss.x - ss.vx * tailLength, ss.y - ss.vy * tailLength);
+          ctx.stroke();
+
+          // 流星头部
+          ctx.beginPath();
+          ctx.arc(ss.x, ss.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.fill();
+
+          if (ss.life <= 0 || ss.x < -50 || ss.y > height + 50) {
+            ss.active = false;
+          }
+        }
+      });
+
+      // 星云光晕
+      const nebulaAlpha = 0.03 + Math.sin(time * 0.2) * 0.015;
+      const nebulaGrad = ctx.createRadialGradient(width * 0.3, height * 0.25, 0, width * 0.3, height * 0.25, width * 0.4);
+      nebulaGrad.addColorStop(0, `rgba(180, 160, 220, ${nebulaAlpha})`);
+      nebulaGrad.addColorStop(1, 'rgba(180, 160, 220, 0)');
+      ctx.fillStyle = nebulaGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    animRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener('resize', resize);
+    };
+  }, [imageLoaded]);
 
   return (
-    <PhotorealBg
-      imageSrc={assetPath('/images/themes/cosmic-bg.jpg')}
-      fallbackGradient="radial-gradient(ellipse at 50% 20%, #0e0e24 0%, #050510 100%)"
-      drawEffect={draw}
-      overlayOpacity={0.6}
-      blendMode="screen"
-      breathing={{
-        period: 15,
-        minBrightness: 0.96,
-        maxBrightness: 1.04,
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: -10,
       }}
-      darkOverlay={0.3}
     />
   );
 }

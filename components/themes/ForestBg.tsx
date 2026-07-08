@@ -1,116 +1,222 @@
 'use client';
 
-import PhotorealBg from './PhotorealBg';
+import { useEffect, useRef, useState } from 'react';
 import { assetPath } from '@/lib/config';
-import {
-  drawDappledSpot,
-  drawMistLayer,
-  drawBird,
-  noise2D,
-  organicSine,
-  clamp,
-} from '@/lib/themeUtils';
+
+interface Leaf {
+  x: number;
+  y: number;
+  size: number;
+  rotation: number;
+  rotSpeed: number;
+  fallSpeed: number;
+  swayPhase: number;
+  opacity: number;
+  color: string;
+}
+
+interface LightSpot {
+  x: number;
+  y: number;
+  radius: number;
+  phase: number;
+}
+
+interface Firefly {
+  x: number;
+  y: number;
+  phase: number;
+  speed: number;
+}
 
 export default function ForestBg() {
-  const draw = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
-    // === 1. 光斑晃动 — 不规则的「阳光穿过树叶」形状 ===
-    const spotCount = 8;
-    for (let i = 0; i < spotCount; i++) {
-      const seed = i * 173.3;
-      // Slow organic movement using noise
-      const nx = noise2D(t * 0.08 + seed, 0);
-      const ny = noise2D(0, t * 0.06 + seed);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const animRef = useRef<number>(0);
 
-      const cx = (seed * 0.71 + nx * w * 0.15) % (w + 100) - 50;
-      const cy = (seed * 0.31 + ny * h * 0.1) % (h * 0.6) + h * 0.05;
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = assetPath('/images/themes/forest-bg.jpg');
+    img.onload = () => {
+      imageRef.current = img;
+      setImageLoaded(true);
+    };
+  }, []);
 
-      const life = Math.sin(t * 0.35 + seed) * 0.5 + 0.5;
-      const baseRadius = 20 + life * 35;
-      const alpha = life * 0.1;
+  useEffect(() => {
+    if (!imageLoaded || !imageRef.current) return;
 
-      drawDappledSpot(
-        ctx,
-        cx,
-        cy,
-        baseRadius,
-        { r: 200, g: 235, b: 160 },
-        alpha,
-        0.35
-      );
-    }
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    // === 2. 林间薄雾 — 极淡的雾气缓慢流动 ===
-    drawMistLayer(ctx, w, h, t, h * 0.3, 0.03, { r: 180, g: 210, b: 160 }, 0.04);
-    drawMistLayer(ctx, w, h, t + 15, h * 0.5, 0.025, { r: 160, g: 200, b: 150 }, 0.03);
+    const dpr = window.devicePixelRatio || 1;
+    const resize = () => {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener('resize', resize);
 
-    // === 3. 叶片颤动 — 在树冠区域（画面上半部）叠加微动效 ===
-    const leafCount = 12;
-    for (let i = 0; i < leafCount; i++) {
-      const seed = i * 241.7;
-      const lx = (seed * 0.51) % w;
-      const ly = (seed * 0.23) % (h * 0.55);
+    const img = imageRef.current;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-      // Only in canopy area (upper 55%)
-      if (ly > h * 0.55) continue;
+    // 落叶
+    const leaves: Leaf[] = Array.from({ length: 10 }, (_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      size: 3 + Math.random() * 5,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.02,
+      fallSpeed: 0.2 + Math.random() * 0.3,
+      swayPhase: i * 1.9,
+      opacity: 0.3 + Math.random() * 0.3,
+      color: ['#7cb342', '#8bc34a', '#aed581', '#689f38'][i % 4],
+    }));
 
-      const trembleX = organicSine(t + seed, [0.7, 1.3, 2.1], [1.5, 0.8, 0.4]);
-      const trembleY = organicSine(t + seed + 10, [0.6, 1.1, 1.8], [1.2, 0.7, 0.3]);
-      const leafAlpha = 0.06 + Math.sin(t * 0.4 + seed) * 0.03;
-      const leafSize = 4 + (seed % 4);
+    // 林间光斑
+    const lightSpots: LightSpot[] = Array.from({ length: 6 }, (_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h * 0.7,
+      radius: 25 + Math.random() * 40,
+      phase: i * 2.3,
+    }));
 
-      ctx.save();
-      ctx.translate(lx + trembleX, ly + trembleY);
-      ctx.rotate(Math.sin(t * 0.5 + seed) * 0.3);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, leafSize, leafSize * 0.5, 0, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(140, 190, 100, ${leafAlpha})`;
-      ctx.fill();
-      ctx.restore();
-    }
+    // 萤火虫
+    const fireflies: Firefly[] = Array.from({ length: 4 }, (_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      phase: i * 3.1,
+      speed: 0.2 + Math.random() * 0.3,
+    }));
 
-    // === 4. 飞鸟剪影 — 偶尔掠过，极小极淡 ===
-    const birdCycle = 28;
-    const birdPhase = t % birdCycle;
-    if (birdPhase > 2 && birdPhase < 18) {
-      const birdProgress = (birdPhase - 2) / 16;
-      const birdX = w * 1.05 - birdProgress * w * 1.15;
-      const birdY = h * 0.12 + Math.sin(birdProgress * Math.PI) * h * 0.06;
-      const birdAlpha = Math.sin(birdProgress * Math.PI) * 0.15;
-      const wingPhase = t * 3.5;
+    const cols = 18;
+    const rows = 14;
 
-      // Draw 2 birds in formation
-      drawBird(ctx, birdX, birdY, 0.8, wingPhase, birdAlpha);
-      drawBird(ctx, birdX + 18, birdY + 6, 0.65, wingPhase + 0.5, birdAlpha * 0.8);
-      drawBird(ctx, birdX - 12, birdY + 10, 0.55, wingPhase + 1.0, birdAlpha * 0.6);
-    }
+    const animate = (timestamp: number) => {
+      const time = timestamp * 0.001;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-    // === 5. 极细花粉/灰尘在光柱中飘动 ===
-    for (let i = 0; i < 25; i++) {
-      const seed = i * 97.3;
-      const px = (seed * 0.41 + Math.sin(t * 0.15 + seed) * 25 + t * 4) % (w + 40) - 20;
-      const py = (seed * 0.23 + Math.cos(t * 0.12 + seed) * 20 + t * 2.5) % h;
-      const pAlpha = 0.1 + Math.sin(t * 0.8 + seed) * 0.06;
+      ctx.clearRect(0, 0, width, height);
 
-      ctx.beginPath();
-      ctx.arc(px, py, 0.6, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(220, 245, 200, ${pAlpha})`;
-      ctx.fill();
-    }
-  };
+      // ========== 第一层：动态背景（风吹林动网格扭曲）==========
+      const blockW = img.width / cols;
+      const blockH = img.height / rows;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const sx = c * blockW;
+          const sy = r * blockH;
+
+          // 风吹偏移 - 树冠摇曳
+          const windX =
+            Math.sin(r * 0.3 + time * 0.5) * 5 +
+            Math.sin(c * 0.2 + time * 0.3) * 3;
+          const windY =
+            Math.cos(c * 0.25 + time * 0.4) * 4 +
+            Math.sin(r * 0.2 + time * 0.35) * 2;
+
+          // 底部（树干）偏移小，顶部（树冠）偏移大
+          const treeFactor = r / rows;
+          const dx = c * (width / cols) + windX * treeFactor;
+          const dy = r * (height / rows) + windY * treeFactor;
+          const dw = width / cols + 2;
+          const dh = height / rows + 2;
+
+          ctx.drawImage(img, sx, sy, blockW, blockH, dx, dy, dw, dh);
+        }
+      }
+
+      // ========== 第二层：点缀元素 ==========
+
+      // 林间光斑
+      lightSpots.forEach((spot) => {
+        spot.x += Math.sin(time * 0.15 + spot.phase) * 0.3;
+        spot.y += Math.cos(time * 0.12 + spot.phase * 1.5) * 0.2;
+        const rad = spot.radius + Math.sin(time * 0.25 + spot.phase) * 6;
+        const alpha = 0.06 + Math.sin(time * 0.3 + spot.phase) * 0.03;
+
+        const grad = ctx.createRadialGradient(spot.x, spot.y, 0, spot.x, spot.y, rad);
+        grad.addColorStop(0, `rgba(255, 250, 200, ${alpha})`);
+        grad.addColorStop(0.5, `rgba(255, 245, 180, ${alpha * 0.5})`);
+        grad.addColorStop(1, 'rgba(255, 255, 200, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(spot.x, spot.y, rad, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // 落叶
+      leaves.forEach((leaf) => {
+        leaf.y += leaf.fallSpeed;
+        leaf.x += Math.sin(time * 0.4 + leaf.swayPhase) * 0.4;
+        leaf.rotation += leaf.rotSpeed;
+
+        if (leaf.y > height + 10) {
+          leaf.y = -10;
+          leaf.x = Math.random() * width;
+        }
+
+        ctx.save();
+        ctx.translate(leaf.x, leaf.y);
+        ctx.rotate(leaf.rotation);
+        ctx.globalAlpha = leaf.opacity;
+        ctx.fillStyle = leaf.color;
+
+        // 绘制叶子形状（椭圆）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, leaf.size, leaf.size * 0.6, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      });
+
+      // 萤火虫
+      fireflies.forEach((ff) => {
+        ff.x += Math.sin(time * ff.speed + ff.phase) * 0.3;
+        ff.y += Math.cos(time * ff.speed * 0.7 + ff.phase * 1.2) * 0.2;
+        const flicker = 0.5 + Math.sin(time * 3 + ff.phase) * 0.5;
+        const alpha = 0.3 * flicker;
+
+        const grad = ctx.createRadialGradient(ff.x, ff.y, 0, ff.x, ff.y, 8);
+        grad.addColorStop(0, `rgba(200, 255, 100, ${alpha})`);
+        grad.addColorStop(1, 'rgba(200, 255, 100, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(ff.x, ff.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    animRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener('resize', resize);
+    };
+  }, [imageLoaded]);
 
   return (
-    <PhotorealBg
-      imageSrc={assetPath('/images/themes/forest-bg.jpg')}
-      fallbackGradient="radial-gradient(ellipse at 50% 0%, #1a3a1a 0%, #0a140a 100%)"
-      drawEffect={draw}
-      overlayOpacity={0.5}
-      blendMode="overlay"
-      breathing={{
-        period: 12,
-        minBrightness: 0.96,
-        maxBrightness: 1.04,
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: -10,
       }}
-      darkOverlay={0.38}
     />
   );
 }

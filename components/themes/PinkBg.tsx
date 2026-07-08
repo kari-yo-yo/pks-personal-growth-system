@@ -1,149 +1,202 @@
 'use client';
 
-import PhotorealBg from './PhotorealBg';
+import { useEffect, useRef, useState } from 'react';
 import { assetPath } from '@/lib/config';
-import {
-  drawPetal,
-  drawSoftGlow,
-  bezierCubic,
-  breathe,
-  clamp,
-} from '@/lib/themeUtils';
 
-interface FallingPetal {
-  seed: number;
-  startX: number;
-  startY: number;
-  cp1x: number;
-  cp1y: number;
-  cp2x: number;
-  cp2y: number;
-  endX: number;
-  endY: number;
+interface Petal {
+  x: number;
+  y: number;
   size: number;
-  color: { r: number; g: number; b: number };
-  cycle: number;
-  rotationSpeed: number;
-  tiltSpeed: number;
+  rotation: number;
+  rotSpeed: number;
+  fallSpeed: number;
+  swayPhase: number;
+  opacity: number;
+  color: string;
+}
+
+interface SoftGlow {
+  x: number;
+  y: number;
+  radius: number;
+  phase: number;
 }
 
 export default function PinkBg() {
-  const draw = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
-    // === 1. 粉色柔光 — 画面中轻微的粉色柔光浮动 ===
-    const softAlpha = breathe(t, 12, 0.04, 0.09);
-    const softGrad = ctx.createRadialGradient(
-      w * 0.4, h * 0.35, 0,
-      w * 0.4, h * 0.35, Math.max(w, h) * 0.7
-    );
-    softGrad.addColorStop(0, `rgba(255, 180, 210, ${softAlpha})`);
-    softGrad.addColorStop(0.4, `rgba(255, 170, 200, ${softAlpha * 0.5})`);
-    softGrad.addColorStop(1, `rgba(255, 160, 190, 0)`);
-    ctx.fillStyle = softGrad;
-    ctx.fillRect(0, 0, w, h);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const animRef = useRef<number>(0);
 
-    // Secondary warm glow from the archway
-    const archAlpha = breathe(t, 9, 0.03, 0.07);
-    const archGrad = ctx.createRadialGradient(
-      w * 0.5, h * 0.6, 0,
-      w * 0.5, h * 0.6, w * 0.4
-    );
-    archGrad.addColorStop(0, `rgba(255, 220, 180, ${archAlpha})`);
-    archGrad.addColorStop(1, `rgba(255, 210, 170, 0)`);
-    ctx.fillStyle = archGrad;
-    ctx.fillRect(0, 0, w, h);
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = assetPath('/images/themes/pink-bg.jpg');
+    img.onload = () => {
+      imageRef.current = img;
+      setImageLoaded(true);
+    };
+  }, []);
 
-    // === 2. 花瓣飘落 — 最多12片，贝塞尔曲线风轨迹，3D旋转 ===
-    const petalCount = 12;
-    for (let i = 0; i < petalCount; i++) {
-      const seed = i * 317.3;
-      const cycle = 10 + (seed % 8); // 10-18s per petal
-      const phase = (t + seed * 0.3) % cycle;
-      const progress = phase / cycle;
+  useEffect(() => {
+    if (!imageLoaded || !imageRef.current) return;
 
-      // Start from upper area (where flowers would be)
-      const startX = (seed * 0.41) % (w * 0.8) + w * 0.1;
-      const startY = -15;
-      const endX = startX + Math.sin(seed * 1.7) * w * 0.3;
-      const endY = h + 15;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-      // Bezier control points create wind trajectory
-      const windStrength = Math.sin(t * 0.15 + seed) * w * 0.15;
-      const cp1x = startX + windStrength;
-      const cp1y = startY + h * 0.35;
-      const cp2x = endX - windStrength * 0.5;
-      const cp2y = endY - h * 0.35;
+    const dpr = window.devicePixelRatio || 1;
+    const resize = () => {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener('resize', resize);
 
-      const px = bezierCubic(progress, startX, cp1x, cp2x, endX);
-      const py = bezierCubic(progress, startY, cp1y, cp2y, endY);
+    const img = imageRef.current;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-      // 3D rotation
-      const rotation = progress * Math.PI * 4 + seed;
-      const tilt = Math.sin(progress * Math.PI * 3 + seed) * Math.PI * 0.4;
+    // 花瓣
+    const petals: Petal[] = Array.from({ length: 8 }, (_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      size: 3 + Math.random() * 4,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.015,
+      fallSpeed: 0.15 + Math.random() * 0.25,
+      swayPhase: i * 2.1,
+      opacity: 0.4 + Math.random() * 0.3,
+      color: ['#ffb6c1', '#ffc0cb', '#ffaeb9', '#ffd1dc'][i % 4],
+    }));
 
-      // Size and alpha
-      const size = 6 + (seed % 5);
-      const alpha = (0.8 - progress * 0.5) * Math.sin(progress * Math.PI) * 1.5;
+    // 粉色柔光
+    const glows: SoftGlow[] = Array.from({ length: 4 }, (_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      radius: 40 + Math.random() * 50,
+      phase: i * 2.7,
+    }));
 
-      // Color variation
-      const colors = [
-        { r: 255, g: 182, b: 193 },
-        { r: 255, g: 192, b: 203 },
-        { r: 255, g: 160, b: 180 },
-        { r: 255, g: 200, b: 210 },
-      ];
-      const color = colors[i % colors.length];
+    const cols = 18;
+    const rows = 14;
 
-      if (alpha > 0.02) {
-        drawPetal(ctx, px, py, size * 0.6, size, rotation, tilt, color, clamp(alpha, 0, 0.8));
+    const animate = (timestamp: number) => {
+      const time = timestamp * 0.001;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // ========== 第一层：动态背景（花海起伏）==========
+      const blockW = img.width / cols;
+      const blockH = img.height / rows;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const sx = c * blockW;
+          const sy = r * blockH;
+
+          // 花海起伏 - 波浪式偏移
+          const waveX =
+            Math.sin(r * 0.35 + time * 0.6) * 4 +
+            Math.sin(c * 0.25 + time * 0.4) * 2;
+          const waveY =
+            Math.cos(c * 0.3 + time * 0.5) * 5 +
+            Math.sin(r * 0.2 + time * 0.35) * 3;
+
+          const dx = c * (width / cols) + waveX;
+          const dy = r * (height / rows) + waveY;
+          const dw = width / cols + 2;
+          const dh = height / rows + 2;
+
+          ctx.drawImage(img, sx, sy, blockW, blockH, dx, dy, dw, dh);
+        }
       }
-    }
 
-    // === 3. 光影呼吸 — 整体画面亮度/饱和度变化由 PhotorealBg 处理 ===
-    // 这里添加额外的光斑闪烁
-    for (let i = 0; i < 8; i++) {
-      const seed = i * 193.7;
-      const sx = (seed * 0.51) % w;
-      const sy = (seed * 0.31) % h;
-      const flicker = Math.sin(t * 0.6 + seed) * 0.5 + 0.5;
-      const sAlpha = flicker * 0.06;
-      const radius = 15 + (seed % 25);
+      // ========== 第二层：点缀元素 ==========
 
-      drawSoftGlow(ctx, sx, sy, radius, 255, 190, 210, sAlpha);
-    }
+      // 粉色柔光
+      glows.forEach((glow) => {
+        glow.x += Math.sin(time * 0.1 + glow.phase) * 0.2;
+        glow.y += Math.cos(time * 0.08 + glow.phase * 1.3) * 0.15;
+        const rad = glow.radius + Math.sin(time * 0.2 + glow.phase) * 10;
+        const alpha = 0.05 + Math.sin(time * 0.25 + glow.phase) * 0.03;
 
-    // === 4. 极细花粉粒子 ===
-    for (let i = 0; i < 15; i++) {
-      const seed = i * 227.1;
-      const px = (seed * 0.37 + Math.sin(t * 0.1 + seed) * 20) % (w + 30) - 15;
-      const py = (seed * 0.29 + t * 1.5 + Math.cos(t * 0.08 + seed) * 15) % h;
-      const pAlpha = 0.1 + Math.sin(t * 0.7 + seed) * 0.05;
+        const grad = ctx.createRadialGradient(glow.x, glow.y, 0, glow.x, glow.y, rad);
+        grad.addColorStop(0, `rgba(255, 180, 210, ${alpha})`);
+        grad.addColorStop(0.5, `rgba(255, 160, 190, ${alpha * 0.5})`);
+        grad.addColorStop(1, 'rgba(255, 180, 210, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(glow.x, glow.y, rad, 0, Math.PI * 2);
+        ctx.fill();
+      });
 
-      ctx.save();
-      ctx.shadowBlur = 3;
-      ctx.shadowColor = `rgba(255, 200, 220, ${pAlpha * 0.5})`;
-      ctx.beginPath();
-      ctx.arc(px, py, 0.8, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 220, 235, ${pAlpha})`;
-      ctx.fill();
-      ctx.restore();
-    }
-  };
+      // 花瓣飘落
+      petals.forEach((petal) => {
+        petal.y += petal.fallSpeed;
+        petal.x += Math.sin(time * 0.3 + petal.swayPhase) * 0.35;
+        petal.rotation += petal.rotSpeed;
+
+        if (petal.y > height + 10) {
+          petal.y = -10;
+          petal.x = Math.random() * width;
+        }
+
+        ctx.save();
+        ctx.translate(petal.x, petal.y);
+        ctx.rotate(petal.rotation);
+        ctx.globalAlpha = petal.opacity;
+        ctx.fillStyle = petal.color;
+
+        // 绘制花瓣（椭圆）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, petal.size, petal.size * 0.7, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      });
+
+      // 细碎光点如花粉飘散
+      for (let i = 0; i < 15; i++) {
+        const px = ((Math.sin(time * 0.1 + i * 4.3) * 0.5 + 0.5) * 0.9 + 0.05) * width;
+        const py = ((Math.cos(time * 0.08 + i * 3.9) * 0.5 + 0.5) * 0.9 + 0.05) * height;
+        const flicker = 0.5 + Math.sin(time * 1.2 + i * 2.1) * 0.5;
+        const alpha = 0.15 * flicker;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 220, 235, ${alpha})`;
+        ctx.fill();
+      }
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    animRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener('resize', resize);
+    };
+  }, [imageLoaded]);
 
   return (
-    <PhotorealBg
-      imageSrc={assetPath('/images/themes/pink-bg.jpg')}
-      fallbackGradient="radial-gradient(ellipse at 50% 50%, #3a2a30 0%, #1a1018 100%)"
-      drawEffect={draw}
-      overlayOpacity={0.5}
-      blendMode="screen"
-      breathing={{
-        period: 12,
-        minBrightness: 0.95,
-        maxBrightness: 1.05,
-        minSaturate: 0.94,
-        maxSaturate: 1.06,
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: -10,
       }}
-      darkOverlay={0.36}
     />
   );
 }
