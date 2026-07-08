@@ -12,6 +12,7 @@ import {
   COLORS,
 } from '@/lib/insights';
 import { Insight, InsightColor } from '@/types';
+import PageTransition from '@/components/PageTransition';
 import {
   Pin,
   PinOff,
@@ -111,6 +112,7 @@ export default function InsightsPage() {
   }, [insights]);
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       {/* Neural Background */}
@@ -255,6 +257,7 @@ export default function InsightsPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }
 

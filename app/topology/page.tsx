@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import PageTransition from '@/components/PageTransition';
 import TopologyCanvas from '@/components/TopologyCanvas';
 import {
   load,
@@ -58,11 +59,12 @@ export default function TopologyPage() {
   }, [graph]);
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative flex flex-col">
 
       <main className="flex-1 flex flex-col md:flex-row pt-14 relative z-10">
         {/* Sidebar */}
-        <aside className="w-full md:w-72 glass border-r border-border flex flex-col">
+        <aside className="w-full md:w-72 surface border-r border-border flex flex-col">
           <div className="p-5 border-b border-border">
             <div className="flex items-center gap-2 mb-1">
               <Network className="w-5 h-5 text-primary" />
@@ -105,7 +107,7 @@ export default function TopologyPage() {
 
             {/* Selected node detail */}
             {selectedNode && (
-              <div className="glass rounded-xl p-3 border border-primary/20">
+              <div className="surface p-3 border border-primary/20">
                 <h2 className="text-xs font-medium text-primary mb-2 flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5" />
                   选中节点
@@ -184,6 +186,7 @@ export default function TopologyPage() {
         </div>
       </main>
     </div>
+    </PageTransition>
   );
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import PageTransition from '@/components/PageTransition';
 import DataRecoveryPanel from '@/components/DataRecoveryPanel';
 import { load, getDataStats, saveAll } from '@/lib/db';
 import { isGitHubSyncEnabled } from '@/lib/githubSync';
@@ -103,6 +104,7 @@ export default function SettingsPage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
@@ -187,7 +189,7 @@ export default function SettingsPage() {
             </section>
 
             {/* 数据恢复 */}
-            <section className="glass rounded-2xl p-6">
+            <section className="surface p-5">
               <h2 className="text-lg font-medium text-text-primary mb-4 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-warning" />
                 数据恢复与修复
@@ -344,6 +346,7 @@ export default function SettingsPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }
 

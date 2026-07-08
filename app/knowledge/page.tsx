@@ -11,6 +11,7 @@ import {
   deleteNode,
 } from '@/lib/db';
 import { KnowledgeNode } from '@/types';
+import PageTransition from '@/components/PageTransition';
 import {
   Brain,
   Edit3,
@@ -91,6 +92,7 @@ export default function KnowledgePage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
@@ -266,5 +268,6 @@ export default function KnowledgePage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }

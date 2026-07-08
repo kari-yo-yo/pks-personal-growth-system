@@ -11,6 +11,7 @@ import {
   updatePaperProgress,
 } from '@/lib/db';
 import { Paper, PaperProgress } from '@/types';
+import PageTransition from '@/components/PageTransition';
 import {
   BookOpen,
   Edit3,
@@ -124,6 +125,7 @@ export default function PapersPage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
@@ -347,5 +349,6 @@ export default function PapersPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }

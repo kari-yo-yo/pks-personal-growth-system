@@ -252,7 +252,7 @@ export default function GlobalSearch() {
         className="relative w-full max-w-xl mx-4 glass rounded-2xl overflow-hidden animate-fade-in"
         onClick={(e) => e.stopPropagation()}
         style={{
-          boxShadow: '0 0 80px rgba(99, 102, 241, 0.15), 0 0 0 1px rgba(99, 102, 241, 0.1)',
+          boxShadow: '0 0 80px color-mix(in srgb, var(--color-primary) 15%, transparent), 0 0 0 1px color-mix(in srgb, var(--color-primary) 10%, transparent)',
         }}
       >
         {/* 搜索输入 */}

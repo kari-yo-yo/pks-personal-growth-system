@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import PageTransition from '@/components/PageTransition';
 import WanderBackground from '@/components/WanderBackground';
 import {
   getRandomWanderItem,
@@ -108,6 +109,7 @@ export default function WanderPage() {
   const themeColor = current?.color || '#6366f1';
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative overflow-hidden">
       <WanderBackground themeColor={themeColor} />
 
@@ -152,7 +154,7 @@ export default function WanderPage() {
                 }`}
               >
                 {current && (
-                  <div className="glass rounded-2xl p-6 sm:p-8 border border-primary/10 relative overflow-hidden">
+                  <div className="surface p-5 sm:p-7 border border-primary/10 relative overflow-hidden">
                     {/* Color accent bar */}
                     <div
                       className="absolute top-0 left-0 right-0 h-1"
@@ -262,7 +264,7 @@ export default function WanderPage() {
                             setAnimating(false);
                           }, 300);
                         }}
-                        className="glass rounded-xl p-4 text-left card-hover border border-border hover:border-primary/20 transition-colors"
+                        className="surface p-3 text-left border border-border hover:border-primary/20 transition-colors"
                       >
                         <div className="flex items-center gap-2 mb-2">
                           <div className={`w-6 h-6 rounded-lg ${config.bg} flex items-center justify-center`}>
@@ -291,5 +293,6 @@ export default function WanderPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }

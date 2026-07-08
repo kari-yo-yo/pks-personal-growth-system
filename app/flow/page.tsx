@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { assetPath } from '@/lib/config';
+import PageTransition from '@/components/PageTransition';
 import {
   Download,
   ExternalLink,
@@ -29,6 +30,7 @@ export default function FlowPage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
@@ -78,7 +80,7 @@ export default function FlowPage() {
 
         {/* Info Panel */}
         {showInfo && (
-          <div className="mb-6 glass rounded-2xl p-6 border border-primary/10">
+          <div className="mb-6 surface p-5 border border-primary/10">
             <div className="flex items-start gap-4">
               <Palette className="w-5 h-5 text-primary mt-0.5 shrink-0" />
               <div className="space-y-3 text-sm text-text-secondary">
@@ -109,7 +111,7 @@ export default function FlowPage() {
         )}
 
         {/* Canvas Container */}
-        <div className="glass rounded-2xl border border-border overflow-hidden">
+        <div className="surface border border-border overflow-hidden">
           {!iframeLoaded && (
             <div className="flex items-center justify-center h-[600px] text-text-muted text-sm">
               <RefreshCw className="w-5 h-5 animate-spin mr-2" />
@@ -132,5 +134,6 @@ export default function FlowPage() {
         </p>
       </main>
     </div>
+    </PageTransition>
   );
 }

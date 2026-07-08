@@ -163,7 +163,7 @@ function StarNodeMesh({
               borderRadius: '8px',
               padding: '6px 12px',
               whiteSpace: 'nowrap',
-              color: '#f1f5f9',
+              color: 'var(--color-text-primary)',
               fontSize: '13px',
               fontFamily: "'Noto Sans SC', system-ui, sans-serif",
               boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
@@ -175,7 +175,7 @@ function StarNodeMesh({
               <span style={{
                 marginLeft: '6px',
                 fontSize: '11px',
-                color: '#94a3b8',
+                color: 'var(--color-text-muted)',
               }}>
                 {node.noteCount} 条笔记
               </span>

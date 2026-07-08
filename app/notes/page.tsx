@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { load, getAllNotes, getAllNodes, addNote, updateNote, deleteNote } from '@/lib/db';
 import { Note, KnowledgeNode } from '@/types';
+import PageTransition from '@/components/PageTransition';
 import {
   Edit3,
   FileText,
@@ -92,6 +93,7 @@ export default function NotesPage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
@@ -267,5 +269,6 @@ export default function NotesPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }

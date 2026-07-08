@@ -17,6 +17,7 @@ import {
   KnowledgeTreeStats,
   PathProgress,
 } from '@/lib/analytics';
+import PageTransition from '@/components/PageTransition';
 import {
   BarChart3,
   Brain,
@@ -276,6 +277,7 @@ export default function AnalyticsPage() {
   }, [loading, hourly]);
 
   return (
+    <PageTransition>
     <div className="min-h-screen">
 
       <main className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
@@ -455,6 +457,7 @@ export default function AnalyticsPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }
 

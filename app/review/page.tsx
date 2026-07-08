@@ -13,6 +13,7 @@ import {
   ReviewDifficulty,
 } from '@/lib/review';
 import { load } from '@/lib/db';
+import PageTransition from '@/components/PageTransition';
 import {
   RotateCcw,
   Brain,
@@ -143,6 +144,7 @@ export default function ReviewPage() {
   const current = queue[currentIndex];
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative z-10">
@@ -437,5 +439,6 @@ export default function ReviewPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }

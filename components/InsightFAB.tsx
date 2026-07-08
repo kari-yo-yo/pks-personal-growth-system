@@ -138,7 +138,7 @@ export default function InsightFAB() {
           {/* Modal */}
           <div className="relative z-10 w-full sm:max-w-lg mx-0 sm:mx-4 mb-0 sm:mb-0 rounded-t-3xl sm:rounded-2xl border animate-slide-up overflow-hidden"
             style={{
-              background: 'rgba(19, 19, 31, 0.95)',
+              background: 'color-mix(in srgb, var(--color-background) 95%, transparent)',
               backdropFilter: 'blur(20px)',
               borderColor: colorObj.key === 'indigo' ? 'rgba(99,102,241,0.3)' : colorObj.key === 'amber' ? 'rgba(245,158,11,0.3)' : colorObj.key === 'emerald' ? 'rgba(34,197,94,0.3)' : colorObj.key === 'rose' ? 'rgba(244,63,94,0.3)' : colorObj.key === 'cyan' ? 'rgba(6,182,212,0.3)' : 'rgba(139,92,246,0.3)',
               boxShadow: `0 0 40px ${colorObj.key === 'indigo' ? 'rgba(99,102,241,0.15)' : colorObj.key === 'amber' ? 'rgba(245,158,11,0.15)' : colorObj.key === 'emerald' ? 'rgba(34,197,94,0.15)' : colorObj.key === 'rose' ? 'rgba(244,63,94,0.15)' : colorObj.key === 'cyan' ? 'rgba(6,182,212,0.15)' : 'rgba(139,92,246,0.15)'}`,

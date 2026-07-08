@@ -10,6 +10,7 @@ import {
   TimelineEventType,
 } from '@/lib/timeline';
 import { load } from '@/lib/db';
+import PageTransition from '@/components/PageTransition';
 import {
   Brain,
   Calendar,
@@ -165,6 +166,7 @@ export default function TimelinePage() {
   const stats = useMemo(() => getTimelineStats(events), [events]);
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
       {/* Background canvas */}
       <canvas
@@ -275,6 +277,7 @@ export default function TimelinePage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }
 
@@ -307,7 +310,7 @@ function TimelineItem({ event }: { event: TimelineEvent }) {
       {/* Card */}
       <div className="flex-1 min-w-0">
         <Link href={event.link}>
-          <div className="glass rounded-xl p-4 card-hover border border-border/50 hover:border-border transition-colors">
+          <div className="surface p-4 border border-border/50 hover:border-border transition-colors">
             <div className="flex items-start gap-3">
               <div
                 className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
@@ -362,7 +365,7 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="glass rounded-xl p-4 text-center">
+    <div className="surface p-3 text-center">
       <Icon className="w-4 h-4 mx-auto mb-1.5" style={{ color }} />
       <div className="text-xl font-bold text-text-primary">{value}</div>
       <div className="text-[10px] text-text-muted">{label}</div>

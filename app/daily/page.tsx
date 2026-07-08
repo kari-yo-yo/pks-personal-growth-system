@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
+import PageTransition from '@/components/PageTransition';
 import {
   Calendar,
   CheckCircle,
@@ -174,6 +175,7 @@ export default function DailyPage() {
   }, [heatmapData]);
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
@@ -507,6 +509,7 @@ export default function DailyPage() {
         </div>
       </main>
     </div>
+    </PageTransition>
   );
 }
 

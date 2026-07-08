@@ -5,6 +5,7 @@ import { load } from '@/lib/db';
 import { getDailyActivity } from '@/lib/analytics';
 import { getAllPaths } from '@/lib/paths';
 import { assetPath } from '@/lib/config';
+import PageTransition from '@/components/PageTransition';
 import { RotateCcw, Sparkles } from 'lucide-react';
 
 export default function ReplayPage() {
@@ -54,6 +55,7 @@ export default function ReplayPage() {
     stats.week.insights;
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
@@ -69,7 +71,7 @@ export default function ReplayPage() {
         </div>
 
         {/* Video container */}
-        <div className="glass rounded-2xl overflow-hidden border border-border mb-6">
+        <div className="surface rounded-2xl overflow-hidden border border-border mb-6">
           <div className="relative aspect-video bg-[#0a0a0f]">
             {ready ? (
               <iframe
@@ -109,6 +111,7 @@ export default function ReplayPage() {
         </div>
       </main>
     </div>
+    </PageTransition>
   );
 }
 
@@ -122,7 +125,7 @@ function ReplayStat({
   color: string;
 }) {
   return (
-    <div className="glass rounded-xl p-4 text-center">
+    <div className="surface p-3 text-center">
       <div className="text-2xl font-bold" style={{ color }}>
         {value}
       </div>

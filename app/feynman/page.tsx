@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { PRESET_CARDS } from '@/lib/feynmanData';
 import { FeynmanCard, FeynmanProgress, FEYNMAN_CATEGORIES } from '@/types/feynman';
+import PageTransition from '@/components/PageTransition';
 import {
   Bookmark,
   Brain,
@@ -135,6 +136,7 @@ export default function FeynmanPage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto relative z-10">
@@ -367,6 +369,7 @@ export default function FeynmanPage() {
         )}
       </main>
     </div>
+    </PageTransition>
   );
 }
 

@@ -10,6 +10,7 @@ import {
   subscribePaths,
 } from '@/lib/paths';
 import { LearningPath, PathNodeStatus } from '@/types';
+import PageTransition from '@/components/PageTransition';
 import {
   Route,
   CheckCircle2,
@@ -74,6 +75,7 @@ export default function PathsPage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
@@ -257,5 +259,6 @@ export default function PathsPage() {
         </div>
       </main>
     </div>
+    </PageTransition>
   );
 }
