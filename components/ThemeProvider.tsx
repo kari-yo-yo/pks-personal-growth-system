@@ -24,15 +24,18 @@ interface ThemeContextValue {
   themes: Record<string, ThemeConfig>;
 }
 
-const ThemeContext = createContext<ThemeContextValue | null>(null);
+const defaultThemeValue: ThemeContextValue = {
+  theme: THEMES['ocean'],
+  themeId: 'ocean',
+  setTheme: () => {},
+  themes: THEMES as Record<string, ThemeConfig>,
+};
+
+const ThemeContext = createContext<ThemeContextValue>(defaultThemeValue);
 
 /* ─── useTheme Hook ─── */
 export function useTheme(): ThemeContextValue {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return ctx;
+  return useContext(ThemeContext);
 }
 
 /* ─── Bg Component Map ─── */

@@ -5,6 +5,7 @@ import InsightFAB from '@/components/InsightFAB';
 import Navigation from '@/components/Navigation';
 import ThemeProvider from '@/components/ThemeProvider';
 import ThemeSwitcherWrapper from '@/components/ThemeSwitcherWrapper';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const metadata: Metadata = {
   title: '个人知识系统',
@@ -16,13 +17,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="zh-CN" className="dark">
       <body className="antialiased">
         <ThemeProvider>
-          <Navigation />
-          <main className="main-content pb-16 md:pb-0">
-            {children}
-          </main>
-          <GlobalSearch />
-          <InsightFAB />
-          <ThemeSwitcherWrapper />
+          <ErrorBoundary>
+            <Navigation />
+            <main className="main-content pb-16 md:pb-0">
+              {children}
+            </main>
+            <GlobalSearch />
+            <InsightFAB />
+            <ThemeSwitcherWrapper />
+          </ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>
