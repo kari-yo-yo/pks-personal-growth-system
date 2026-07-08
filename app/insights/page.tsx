@@ -120,9 +120,9 @@ export default function InsightsPage() {
         <NeuralBackground />
       </div>
 
-      <main className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto relative z-10">
+      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center mb-8 animate-fade-in">
+        <div className="text-center mb-10 animate-fade-in">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mb-3">
             <Zap className="w-7 h-7 text-primary" />
           </div>

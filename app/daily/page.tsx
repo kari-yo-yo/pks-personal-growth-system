@@ -179,7 +179,7 @@ export default function DailyPage() {
     <div className="min-h-screen relative">
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-10">
           <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
             <Calendar className="w-6 h-6 text-primary" />
             每日总结
@@ -199,7 +199,7 @@ export default function DailyPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
           <StatCard
             icon={Flame}
             label="连续记录"
@@ -243,7 +243,7 @@ export default function DailyPage() {
         </div>
 
         {/* Heatmap */}
-        <div className="surface p-4 mb-6">
+        <div className="surface p-4 mb-10">
           <h2 className="text-sm font-medium text-text-secondary mb-4">
             学习热力图
           </h2>
@@ -285,7 +285,7 @@ export default function DailyPage() {
 
         {/* Today's Summary */}
         {todaySummary && !showForm && (
-          <div className="surface p-4 mb-6">
+          <div className="surface p-4 mb-10">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-text-primary">
                 今日总结
@@ -315,7 +315,7 @@ export default function DailyPage() {
 
         {/* Form */}
         {showForm && (
-          <div className="surface p-4 mb-6">
+          <div className="surface p-4 mb-10">
             <h2 className="text-lg font-medium text-text-primary mb-4">
               {todaySummary ? '编辑今日总结' : '写今日总结'}
             </h2>

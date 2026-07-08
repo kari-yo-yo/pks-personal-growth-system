@@ -147,7 +147,7 @@ export default function ReviewPage() {
     <PageTransition>
     <div className="min-h-screen relative">
 
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative z-10">
+      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
         {loading ? (
           <div className="text-center py-20 text-text-muted">加载中...</div>
         ) : view === 'home' ? (

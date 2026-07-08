@@ -95,8 +95,8 @@ export default function KnowledgePage() {
     <PageTransition>
     <div className="min-h-screen relative">
 
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
-        <div className="flex items-center justify-between mb-6">
+      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+        <div className="flex items-center justify-between mb-10">
           <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
             <Brain className="w-6 h-6 text-primary" />
             知识系统

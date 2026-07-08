@@ -309,7 +309,7 @@ export default function AnalyticsPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
               {/* Module Distribution */}
               <div className="surface p-4">
                 <h2 className="text-sm font-medium text-text-primary mb-4">模块分布</h2>
@@ -384,7 +384,7 @@ export default function AnalyticsPage() {
 
             {/* Path Progress */}
             {paths.length > 0 && (
-              <div className="surface p-4 mb-6">
+              <div className="surface p-4 mb-10">
                 <h2 className="text-sm font-medium text-text-primary mb-4">学习路径进度</h2>
                 <div className="space-y-4">
                   {paths.map((path) => {
