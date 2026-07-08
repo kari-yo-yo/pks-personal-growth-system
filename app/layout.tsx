@@ -4,6 +4,7 @@ import GlobalSearch from '@/components/GlobalSearch';
 import InsightFAB from '@/components/InsightFAB';
 import Navigation from '@/components/Navigation';
 import ThemeProvider from '@/components/ThemeProvider';
+import ThemeSwitcherWrapper from '@/components/ThemeSwitcherWrapper';
 
 export const metadata: Metadata = {
   title: '个人知识系统',
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <GlobalSearch />
           <InsightFAB />
+          <ThemeSwitcherWrapper />
         </ThemeProvider>
       </body>
     </html>
