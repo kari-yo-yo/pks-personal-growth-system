@@ -1,4 +1,4 @@
-export type ThemeId = 'ocean' | 'forest' | 'hope' | 'pink' | 'ink' | 'cosmic';
+export type ThemeId = 'abyss' | 'study' | 'aurora';
 
 export interface ThemeColors {
   background: string;
@@ -27,160 +27,106 @@ export interface ThemeConfig {
 }
 
 export const THEMES: Record<ThemeId, ThemeConfig> = {
-  ocean: {
-    id: 'ocean',
-    name: '海洋之心',
+  abyss: {
+    id: 'abyss',
+    name: '深渊宁静',
     icon: '🌊',
-    description: '碧波万顷，深海之息 — 从空中俯瞰的碧蓝海洋，轻舟点点',
+    description: '深海般的沉静与专注，黑暗中漂浮着微弱的光点',
     colors: {
-      background: '#061a24',
-      surface: '#0f3a4a',
-      surfaceLight: '#1a4a5a',
-      primary: '#2dd4bf',
-      primaryLight: '#5eead4',
-      accent: '#22d3ee',
-      textPrimary: '#e0f8f4',
-      textSecondary: '#94d4c8',
-      textMuted: '#5a8a80',
-      border: '#1a4a5a',
-      success: '#2dd4bf',
+      background: '#06080e',
+      surface: '#0e1420',
+      surfaceLight: '#1a2238',
+      primary: '#38bdf8',
+      primaryLight: '#7dd3fc',
+      accent: '#06b6d4',
+      textPrimary: '#e8f0f8',
+      textSecondary: '#8aacc0',
+      textMuted: '#4a6a80',
+      border: '#1a2238',
+      success: '#38bdf8',
       warning: '#f59e0b',
       error: '#ef4444',
     },
-    particleColor: { r: 45, g: 212, b: 191 },
-    auraStyle: 'radial-gradient(ellipse at 30% 50%, rgba(45,212,191,0.15) 0%, transparent 70%), radial-gradient(ellipse at 70% 20%, rgba(34,211,238,0.10) 0%, transparent 60%)',
+    particleColor: { r: 56, g: 189, b: 248 },
+    auraStyle: 'radial-gradient(ellipse at 50% 0%, rgba(56,189,248,0.08) 0%, transparent 70%)',
   },
 
-  forest: {
-    id: 'forest',
-    name: '森林秘境',
-    icon: '🌿',
-    description: '虫眼仰望，树冠如盖 — 竹影婆娑，绿意盎然的原始森林',
+  study: {
+    id: 'study',
+    name: '暖沙书房',
+    icon: '📚',
+    description: '像老旧书房一样温暖安心，金色灰尘在光柱中飘浮',
     colors: {
-      background: '#0f1a0f',
-      surface: '#1a3a1a',
-      surfaceLight: '#2a4a2a',
-      primary: '#7cb342',
-      primaryLight: '#aed581',
-      accent: '#8bc34a',
-      textPrimary: '#e0f0d8',
-      textSecondary: '#92b882',
-      textMuted: '#4a6a40',
-      border: '#1a3a1a',
-      success: '#7cb342',
-      warning: '#f59e0b',
-      error: '#ef5350',
-    },
-    particleColor: { r: 124, g: 179, b: 66 },
-    auraStyle: 'radial-gradient(ellipse at 50% 0%, rgba(124,179,66,0.12) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(139,195,74,0.08) 0%, transparent 50%)',
-  },
-
-  hope: {
-    id: 'hope',
-    name: '金色希望',
-    icon: '☀️',
-    description: '粉沙碧海，落日熔金 — 热带天堂的粉色沙滩，沐浴在金色余晖中',
-    colors: {
-      background: '#1a1208',
-      surface: '#3a2a10',
-      surfaceLight: '#4a3a1a',
-      primary: '#f59e0b',
-      primaryLight: '#fbbf24',
-      accent: '#f97316',
-      textPrimary: '#faf0e0',
-      textSecondary: '#c4a870',
-      textMuted: '#7a6040',
-      border: '#3a2a10',
-      success: '#f59e0b',
-      warning: '#eab308',
+      background: '#1a1510',
+      surface: '#2a2318',
+      surfaceLight: '#3a3228',
+      primary: '#d4a054',
+      primaryLight: '#e8c08a',
+      accent: '#c07830',
+      textPrimary: '#f0e8d8',
+      textSecondary: '#b0a088',
+      textMuted: '#7a6a58',
+      border: '#3a3228',
+      success: '#d4a054',
+      warning: '#e8a020',
       error: '#ef4444',
     },
-    particleColor: { r: 245, g: 158, b: 11 },
-    auraStyle: 'radial-gradient(ellipse at 70% 20%, rgba(245,158,11,0.15) 0%, transparent 60%), radial-gradient(ellipse at 30% 80%, rgba(251,191,36,0.10) 0%, transparent 50%)',
+    particleColor: { r: 212, g: 160, b: 84 },
+    auraStyle: 'radial-gradient(ellipse at 30% 50%, rgba(212,160,84,0.06) 0%, transparent 70%)',
   },
 
-  pink: {
-    id: 'pink',
-    name: '粉色浪漫',
-    icon: '🌸',
-    description: '雅法古巷，花影扶疏 — 粉色花簇掩映的金色阶梯，暖意融融',
-    colors: {
-      background: '#1a1018',
-      surface: '#2a1a28',
-      surfaceLight: '#3a2a38',
-      primary: '#f472b6',
-      primaryLight: '#f9a8d4',
-      accent: '#e879f9',
-      textPrimary: '#faf0f4',
-      textSecondary: '#d4a8b8',
-      textMuted: '#7a5a68',
-      border: '#2a1a28',
-      success: '#f472b6',
-      warning: '#f59e0b',
-      error: '#ef4444',
-    },
-    particleColor: { r: 244, g: 114, b: 182 },
-    auraStyle: 'radial-gradient(ellipse at 40% 30%, rgba(244,114,182,0.12) 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(232,121,249,0.08) 0%, transparent 50%)',
-  },
-
-  ink: {
-    id: 'ink',
-    name: '水墨丹青',
-    icon: '🎨',
-    description: '烟雨朦胧，飞瀑流泉 — 远山如黛，墨韵诗意，朱印点晴',
-    colors: {
-      background: '#0a0a08',
-      surface: '#1a1a15',
-      surfaceLight: '#2a2a20',
-      primary: '#c4a35a',
-      primaryLight: '#d4c08a',
-      accent: '#8b7355',
-      textPrimary: '#e8e0d0',
-      textSecondary: '#b0a890',
-      textMuted: '#605848',
-      border: '#1a1a15',
-      success: '#c4a35a',
-      warning: '#d4a040',
-      error: '#bf4040',
-    },
-    particleColor: { r: 196, g: 163, b: 90 },
-    auraStyle: 'radial-gradient(ellipse at 50% 30%, rgba(196,163,90,0.10) 0%, transparent 60%), radial-gradient(ellipse at 30% 70%, rgba(139,115,85,0.08) 0%, transparent 50%)',
-  },
-
-  cosmic: {
-    id: 'cosmic',
-    name: '银河星际',
+  aurora: {
+    id: 'aurora',
+    name: '极光冰原',
     icon: '🌌',
-    description: '星河璀璨，雪峰映辉 — 银河横跨夜空，流星划过雪山之巅',
+    description: '极光下的冰原，壮丽而冷静的签名主题',
     colors: {
-      background: '#050510',
-      surface: '#0e0e24',
-      surfaceLight: '#1a1a3a',
-      primary: '#d4a574',
-      primaryLight: '#e8c49a',
-      accent: '#8b5cf6',
-      textPrimary: '#e8e4f0',
-      textSecondary: '#a89cc0',
-      textMuted: '#585070',
-      border: '#1a1a3a',
-      success: '#d4a574',
-      warning: '#f59e0b',
+      background: '#040810',
+      surface: '#0a1428',
+      surfaceLight: '#142040',
+      primary: '#34d399',
+      primaryLight: '#6ee7b7',
+      accent: '#818cf8',
+      textPrimary: '#e8f4f0',
+      textSecondary: '#80b8a8',
+      textMuted: '#407068',
+      border: '#142040',
+      success: '#34d399',
+      warning: '#fbbf24',
       error: '#ef4444',
     },
-    particleColor: { r: 212, g: 165, b: 116 },
-    auraStyle: 'radial-gradient(ellipse at 50% 20%, rgba(212,165,116,0.10) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, rgba(139,91,246,0.08) 0%, transparent 50%)',
+    particleColor: { r: 52, g: 211, b: 153 },
+    auraStyle: 'radial-gradient(ellipse at 50% 20%, rgba(52,211,153,0.10) 0%, transparent 60%)',
   },
 };
 
+// Backward compatibility: map old theme IDs to new ones
+const OLD_THEME_MAP: Record<string, ThemeId> = {
+  ocean: 'abyss',
+  forest: 'study',
+  hope: 'study',
+  pink: 'study',
+  ink: 'study',
+  cosmic: 'aurora',
+};
+
 export function getStoredThemeId(): ThemeId {
-  if (typeof window === 'undefined') return 'ocean';
+  if (typeof window === 'undefined') return 'abyss';
   try {
     const stored = localStorage.getItem('km-theme-id');
-    if (stored && THEMES[stored as ThemeId]) return stored as ThemeId;
+    if (!stored) return 'abyss';
+    // Direct match
+    if (THEMES[stored as ThemeId]) return stored as ThemeId;
+    // Old theme migration
+    const migrated = OLD_THEME_MAP[stored];
+    if (migrated) {
+      localStorage.setItem('km-theme-id', migrated);
+      return migrated;
+    }
   } catch {
     // localStorage not available
   }
-  return 'ocean';
+  return 'abyss';
 }
 
 export function setStoredThemeId(id: ThemeId): void {

@@ -9,12 +9,9 @@ import {
   setStoredThemeId,
   applyThemeToDOM,
 } from '@/lib/themeConfig';
-import OceanBg from '@/components/themes/OceanBg';
-import ForestBg from '@/components/themes/ForestBg';
-import HopeBg from '@/components/themes/HopeBg';
-import PinkBg from '@/components/themes/PinkBg';
-import InkBg from '@/components/themes/InkBg';
-import CosmicBg from '@/components/themes/CosmicBg';
+import AbyssBg from '@/components/themes/AbyssBg';
+import StudyBg from '@/components/themes/StudyBg';
+import AuroraBg from '@/components/themes/AuroraBg';
 
 /* ─── Context Type ─── */
 interface ThemeContextValue {
@@ -25,8 +22,8 @@ interface ThemeContextValue {
 }
 
 const defaultThemeValue: ThemeContextValue = {
-  theme: THEMES['ocean'],
-  themeId: 'ocean',
+  theme: THEMES['abyss'],
+  themeId: 'abyss',
   setTheme: () => {},
   themes: THEMES as Record<string, ThemeConfig>,
 };
@@ -40,37 +37,32 @@ export function useTheme(): ThemeContextValue {
 
 /* ─── Bg Component Map ─── */
 const bgComponentMap: Record<ThemeId, React.ComponentType> = {
-  ocean: OceanBg,
-  forest: ForestBg,
-  hope: HopeBg,
-  pink: PinkBg,
-  ink: InkBg,
-  cosmic: CosmicBg,
+  abyss: AbyssBg,
+  study: StudyBg,
+  aurora: AuroraBg,
 };
 
 function getBgComponent(id: string): React.ComponentType {
-  return bgComponentMap[id as ThemeId] || OceanBg;
+  return bgComponentMap[id as ThemeId] || AbyssBg;
 }
 
 /* ─── ThemeProvider ─── */
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Always use 'ocean' as the initial theme to avoid hydration mismatch.
-  // The actual stored theme is applied in useEffect after mount.
-  const [themeId, setThemeIdState] = useState<ThemeId>('ocean');
-  const [prevTheme, setPrevTheme] = useState<ThemeId>('ocean');
+  const [themeId, setThemeIdState] = useState<ThemeId>('abyss');
+  const [prevTheme, setPrevTheme] = useState<ThemeId>('abyss');
   const [transitionPhase, setTransitionPhase] = useState<'idle' | 'fade-out' | 'fade-in'>('idle');
   const [mounted, setMounted] = useState(false);
 
   /* Mount: read stored theme & apply */
   useEffect(() => {
     const id = getStoredThemeId();
-    if (id && id !== 'ocean' && THEMES[id]) {
+    if (id && id !== 'abyss' && THEMES[id]) {
       setThemeIdState(id);
       applyThemeToDOM(THEMES[id]);
       document.documentElement.setAttribute('data-theme', id);
     } else {
-      applyThemeToDOM(THEMES['ocean']);
-      document.documentElement.setAttribute('data-theme', 'ocean');
+      applyThemeToDOM(THEMES['abyss']);
+      document.documentElement.setAttribute('data-theme', 'abyss');
     }
     setMounted(true);
   }, []);
@@ -84,7 +76,6 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
       setPrevTheme(themeId);
       setTransitionPhase('fade-out');
 
-      // After 100ms, start applying new theme
       setTimeout(() => {
         setThemeIdState(themeIdCast);
         setStoredThemeId(themeIdCast);
@@ -92,7 +83,6 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
         document.documentElement.setAttribute('data-theme', themeIdCast);
         setTransitionPhase('fade-in');
 
-        // After 500ms more (600ms total), end transition
         setTimeout(() => setTransitionPhase('idle'), 500);
       }, 100);
     },
@@ -113,7 +103,6 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     <ThemeContext.Provider value={value}>
       {/* Background layer with crossfade */}
       <div className="fixed inset-0 z-0">
-        {/* Previous theme background - fading out */}
         <div
           style={{
             position: 'absolute',
@@ -126,7 +115,6 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
           {mounted && <PrevBgComponent />}
         </div>
 
-        {/* Current / New theme background - fading in */}
         <div
           style={{
             position: 'absolute',
