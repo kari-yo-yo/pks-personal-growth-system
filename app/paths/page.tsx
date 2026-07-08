@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import Navigation from '@/components/Navigation';
 import {
   getAllPaths,
   getPathProgress,
@@ -76,7 +75,6 @@ export default function PathsPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
         {/* Header — utility style, no hero fluff */}

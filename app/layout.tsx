@@ -3,6 +3,7 @@ import './globals.css';
 import GlobalSearch from '@/components/GlobalSearch';
 import InsightFAB from '@/components/InsightFAB';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import Navigation from '@/components/Navigation';
 
 export const metadata: Metadata = {
   title: '个人知识系统',
@@ -19,7 +20,10 @@ export default function RootLayout({
       <body className="antialiased">
         <ThemeProvider>
           <Starfield />
-          {children}
+          <Navigation />
+          <main className="main-content">
+            {children}
+          </main>
           <GlobalSearch />
           <InsightFAB />
         </ThemeProvider>

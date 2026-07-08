@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import Navigation from '@/components/Navigation';
 import {
   Calendar,
   CheckCircle,
@@ -176,7 +175,6 @@ export default function DailyPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
         <div className="flex items-center justify-between mb-6">

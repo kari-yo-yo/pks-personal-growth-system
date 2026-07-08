@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navigation from '@/components/Navigation';
 import KnowledgeTree from '@/components/KnowledgeTree';
 import {
   load,
@@ -93,7 +92,6 @@ export default function KnowledgePage() {
 
   return (
     <div className="min-h-screen relative">
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
         <div className="flex items-center justify-between mb-6">

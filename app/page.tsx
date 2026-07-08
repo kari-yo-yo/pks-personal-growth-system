@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navigation from '@/components/Navigation';
 import DashboardBackground from '@/components/DashboardBackground';
 import {
   load,
@@ -77,7 +76,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen relative">
       <DashboardBackground />
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
         {/* Header */}

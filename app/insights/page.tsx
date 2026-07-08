@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import Navigation from '@/components/Navigation';
 import { openInsightFAB } from '@/components/InsightFAB';
 import {
   getAllInsights,
@@ -112,7 +111,6 @@ export default function InsightsPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Navigation />
 
       {/* Neural Background */}
       <div className="fixed inset-0 z-0">

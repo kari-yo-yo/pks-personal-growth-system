@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Navigation from '@/components/Navigation';
 import { load } from '@/lib/db';
 import { getDailyActivity } from '@/lib/analytics';
 import { getAllPaths } from '@/lib/paths';
@@ -56,7 +55,6 @@ export default function ReplayPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
         {/* Header */}

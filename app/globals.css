@@ -42,6 +42,25 @@ body {
   overflow-x: hidden;
 }
 
+/* ─── Navbar Glass ─── */
+.navbar-glass {
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ─── Main Content Padding ─── */
+.main-content {
+  padding-top: 56px; /* h-14 = 56px */
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 48px;
+  }
+}
+
 /* Starfield Background */
 .starfield {
   position: fixed;

@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import Navigation from '@/components/Navigation';
 import {
   load,
   getAllNodes,
@@ -85,7 +84,6 @@ export default function GalaxyPage() {
   if (loading) {
     return (
       <div className="min-h-screen relative" style={{ background: '#050510' }}>
-        <Navigation />
         <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 56px)' }}>
           <GalaxyLoader />
         </div>
@@ -95,7 +93,6 @@ export default function GalaxyPage() {
 
   return (
     <div className="min-h-screen relative" style={{ background: '#050510' }}>
-      <Navigation />
 
       {/* 全屏 3D 星图 */}
       <div style={{ height: 'calc(100vh - 56px)', marginTop: '56px' }}>

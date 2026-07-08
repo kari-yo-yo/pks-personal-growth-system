@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import Navigation from '@/components/Navigation';
 import {
   getDueReviewQueue,
   getReviewStats,
@@ -145,7 +144,6 @@ export default function ReviewPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative z-10">
         {loading ? (

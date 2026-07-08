@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Navigation from '@/components/Navigation';
 import DataRecoveryPanel from '@/components/DataRecoveryPanel';
 import { load, getDataStats, saveAll } from '@/lib/db';
 import { isGitHubSyncEnabled } from '@/lib/githubSync';
@@ -107,7 +106,6 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
         <h1 className="text-2xl font-bold text-text-primary mb-8">设置</h1>

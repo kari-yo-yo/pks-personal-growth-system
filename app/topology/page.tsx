@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Navigation from '@/components/Navigation';
 import TopologyCanvas from '@/components/TopologyCanvas';
 import {
   load,
@@ -60,7 +59,6 @@ export default function TopologyPage() {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      <Navigation />
 
       <main className="flex-1 flex flex-col md:flex-row pt-14 relative z-10">
         {/* Sidebar */}

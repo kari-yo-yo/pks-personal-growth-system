@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Navigation from '@/components/Navigation';
 import { load } from '@/lib/db';
 import {
   getDailyActivity,
@@ -278,7 +277,6 @@ export default function AnalyticsPage() {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
 
       <main className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         {/* Header */}

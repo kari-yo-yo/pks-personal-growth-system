@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import Navigation from '@/components/Navigation';
 import WanderBackground from '@/components/WanderBackground';
 import {
   getRandomWanderItem,
@@ -111,7 +110,6 @@ export default function WanderPage() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       <WanderBackground themeColor={themeColor} />
-      <Navigation />
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative z-10 min-h-screen flex flex-col">
         {/* Header */}

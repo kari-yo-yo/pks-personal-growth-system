@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import Navigation from '@/components/Navigation';
 import {
   getTimelineEvents,
   groupEventsByDate,
@@ -174,7 +173,6 @@ export default function TimelinePage() {
         style={{ zIndex: 0 }}
       />
 
-      <Navigation />
 
       <main className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
         {/* Header */}
