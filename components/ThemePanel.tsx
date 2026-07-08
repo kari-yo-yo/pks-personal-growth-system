@@ -27,7 +27,7 @@ export default function ThemePanel() {
         <h3 className="text-sm font-medium text-text-primary">主题</h3>
       </div>
       <p className="text-xs text-text-secondary">
-        选择视觉主题，改变整体色彩氛围
+        选择视觉主题，改变整体色彩氛围与动态背景
       </p>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -58,7 +58,8 @@ export default function ThemePanel() {
               {/* Info */}
               <div className="px-3 py-2 bg-surface">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-text-primary">
+                  <span className="text-xs font-medium text-text-primary flex items-center gap-1">
+                    <span>{t.icon}</span>
                     {t.name}
                   </span>
                   {isActive && (
@@ -68,6 +69,12 @@ export default function ThemePanel() {
                 <p className="text-[10px] text-text-muted mt-0.5 truncate">
                   {t.description}
                 </p>
+                {/* Decorations */}
+                <div className="flex gap-0.5 mt-1 text-[10px]">
+                  {t.decorations.slice(0, 3).map((d, i) => (
+                    <span key={i}>{d}</span>
+                  ))}
+                </div>
               </div>
 
               {/* Selected indicator bar */}

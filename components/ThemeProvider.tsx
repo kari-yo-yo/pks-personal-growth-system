@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { ThemeConfig } from '@/types';
 import { THEMES, getStoredThemeId, setStoredThemeId, applyThemeToDOM } from '@/lib/theme';
-import ThemeDynamics from './theme/ThemeDynamics';
+import ThemeBackground from './theme/ThemeBackground';
 
 interface ThemeContextValue {
   theme: ThemeConfig;
@@ -21,15 +21,17 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [themeId, setThemeIdState] = useState('deepSpace');
+  const [themeId, setThemeIdState] = useState('ocean');
   const [mounted, setMounted] = useState(false);
 
-  // 初始化 — 从 localStorage 读取
+  // 初始化 - 从 localStorage 读取
   useEffect(() => {
     const stored = getStoredThemeId();
     if (THEMES[stored]) {
       setThemeIdState(stored);
       applyThemeToDOM(THEMES[stored]);
+    } else {
+      applyThemeToDOM(THEMES.ocean);
     }
     setMounted(true);
   }, []);
@@ -42,7 +44,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     applyThemeToDOM(theme);
   }, []);
 
-  const theme = THEMES[themeId] || THEMES.deepSpace;
+  const theme = THEMES[themeId] || THEMES.ocean;
 
   // 防止 SSR 水合不匹配
   if (!mounted) {
@@ -51,7 +53,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ theme, themeId, setTheme, themes: THEMES }}>
-      <ThemeDynamics dynamics={theme.dynamics} />
+      <ThemeBackground theme={theme.dynamics} />
       {children}
     </ThemeContext.Provider>
   );

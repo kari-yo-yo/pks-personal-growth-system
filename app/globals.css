@@ -8,20 +8,20 @@
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Noto Sans SC', system-ui, sans-serif;
 
-  /* Default theme: deepSpace */
-  --color-background: #0a0a0f;
-  --color-surface: #13131f;
-  --color-surface-light: #1a1a2e;
-  --color-primary: #6366f1;
-  --color-primary-light: #818cf8;
-  --color-accent: #8b5cf6;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  --color-border: #27273a;
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  /* Default theme: ocean */
+  --color-background: #060a0f;
+  --color-surface: #0c1620;
+  --color-surface-light: #122030;
+  --color-primary: #0ea5e9;
+  --color-primary-light: #38bdf8;
+  --color-accent: #06b6d4;
+  --color-text-primary: #f0f9ff;
+  --color-text-secondary: #bae6fd;
+  --color-text-muted: #7dd3fc;
+  --color-border: #1a2a3a;
+  --color-success: #34d399;
+  --color-warning: #fcd34d;
+  --color-error: #fca5a5;
 }
 
 * {

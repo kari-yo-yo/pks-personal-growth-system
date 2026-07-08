@@ -191,20 +191,16 @@ export interface ThemeColors {
   error: string;
 }
 
-export type ThemeDynamics =
-  | 'cosmic'
-  | 'ocean'
-  | 'forest'
-  | 'golden'
-  | 'nebula'
-  | 'monochrome';
+export type ThemeType = 'ocean' | 'forest' | 'hope' | 'pink' | 'cosmic';
 
 export interface ThemeConfig {
-  id: string;
+  id: ThemeType;
   name: string;
   description: string;
+  icon: string;
   colors: ThemeColors;
   particleColor: { r: number; g: number; b: number };
   auraStyle: string;
-  dynamics: ThemeDynamics;
+  dynamics: ThemeType;
+  decorations: string[];
 }
