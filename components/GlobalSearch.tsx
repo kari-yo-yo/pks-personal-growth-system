@@ -276,7 +276,7 @@ export default function GlobalSearch() {
               <X className="w-4 h-4" />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface border border-border text-[10px] text-text-muted">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface border border-border text-xs text-text-muted">
             ESC
           </kbd>
         </div>
@@ -365,7 +365,7 @@ export default function GlobalSearch() {
                             {item.title}
                           </p>
                           {item.category && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface text-text-muted shrink-0">
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-surface text-text-muted shrink-0">
                               {item.category}
                             </span>
                           )}
@@ -395,7 +395,7 @@ export default function GlobalSearch() {
         {/* 底部快捷键提示 */}
         {query.trim() && results.length > 0 && (
           <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-surface/30">
-            <div className="flex items-center gap-3 text-[10px] text-text-muted">
+            <div className="flex items-center gap-3 text-xs text-text-muted">
               <span className="flex items-center gap-1">
                 <kbd className="px-1 py-0.5 rounded bg-surface border border-border">
                   ↑↓
@@ -409,7 +409,7 @@ export default function GlobalSearch() {
                 打开
               </span>
             </div>
-            <span className="text-[10px] text-text-muted">
+            <span className="text-xs text-text-muted">
               {results.length} 个结果
             </span>
           </div>

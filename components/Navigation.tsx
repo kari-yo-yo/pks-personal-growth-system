@@ -147,7 +147,7 @@ export default function Navigation() {
             >
               <Search className="w-4 h-4" />
               <span className="hidden sm:inline">搜索</span>
-              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border)] text-[10px] text-[var(--color-text-muted)] ml-1">
+              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border)] text-xs text-[var(--color-text-muted)] ml-1">
                 Ctrl+K
               </kbd>
             </button>

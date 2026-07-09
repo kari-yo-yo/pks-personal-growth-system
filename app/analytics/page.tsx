@@ -378,7 +378,7 @@ export default function AnalyticsPage() {
                   className="w-full"
                   style={{ height: 140 }}
                 />
-                <p className="text-[10px] text-text-muted mt-2 text-center">0时 - 23时</p>
+                <p className="text-xs text-text-muted mt-2 text-center">0时 - 23时</p>
               </div>
             </div>
 
@@ -474,7 +474,7 @@ function TreeStat({
     <div className="surface p-2 text-center">
       <Icon className="w-4 h-4 text-primary mx-auto mb-1" />
       <div className="text-lg font-bold text-text-primary">{value}</div>
-      <div className="text-[10px] text-text-muted">{label}</div>
+      <div className="text-xs text-text-muted">{label}</div>
     </div>
   );
 }

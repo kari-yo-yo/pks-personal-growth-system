@@ -130,7 +130,7 @@ export default function PapersPage() {
 
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
+          <h1 className="heading-display text-3xl font-bold text-text-primary flex items-center gap-2">
             <GraduationCap className="w-6 h-6 text-accent" />
             论文
           </h1>

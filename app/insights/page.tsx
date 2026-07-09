@@ -126,7 +126,7 @@ export default function InsightsPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mb-3">
             <Zap className="w-7 h-7 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-text-primary mb-1.5">
+          <h1 className="heading-display text-3xl font-bold text-text-primary mb-1.5">
             灵感速记
           </h1>
           <p className="text-sm text-text-secondary max-w-md mx-auto">
@@ -302,7 +302,7 @@ function InsightCard({
             {insight.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] px-1.5 py-0.5 rounded bg-surface/50 text-text-muted"
+                className="text-xs px-1.5 py-0.5 rounded bg-surface/50 text-text-muted"
               >
                 #{tag}
               </span>

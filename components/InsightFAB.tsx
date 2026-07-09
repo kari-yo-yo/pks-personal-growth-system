@@ -268,7 +268,7 @@ export default function InsightFAB() {
             {/* Footer */}
             {!saved && (
               <div className="flex items-center justify-between px-5 py-3 border-t border-border">
-                <span className="text-[10px] text-text-muted">Ctrl+Enter 提交 · Esc 关闭</span>
+                <span className="text-xs text-text-muted">Ctrl+Enter 提交 · Esc 关闭</span>
                 <button
                   onClick={handleSubmit}
                   disabled={!content.trim()}

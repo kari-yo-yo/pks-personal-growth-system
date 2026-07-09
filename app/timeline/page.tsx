@@ -181,7 +181,7 @@ export default function TimelinePage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="w-5 h-5 text-primary" />
-            <h1 className="text-2xl font-bold text-text-primary">知识时间线</h1>
+            <h1 className="heading-display text-3xl font-bold text-text-primary">知识时间线</h1>
           </div>
           <p className="text-sm text-text-secondary">
             追溯每一步成长的足迹，从知识节点到灵感闪光，所有学习活动一目了然。
@@ -293,7 +293,7 @@ function TimelineItem({ event }: { event: TimelineEvent }) {
     <div className="flex items-start gap-4">
       {/* Time */}
       <div className="w-[15%] flex justify-end pr-4 pt-3">
-        <span className="text-[10px] text-text-muted font-mono">{timeStr}</span>
+        <span className="text-xs text-text-muted font-mono">{timeStr}</span>
       </div>
 
       {/* Dot */}
@@ -336,7 +336,7 @@ function TimelineItem({ event }: { event: TimelineEvent }) {
                         value !== undefined && (
                           <span
                             key={key}
-                            className="text-[10px] px-2 py-0.5 rounded bg-surface border border-border text-text-muted"
+                            className="text-xs px-2 py-0.5 rounded bg-surface border border-border text-text-muted"
                           >
                             {key}: {value}
                           </span>
@@ -368,7 +368,7 @@ function StatCard({
     <div className="surface p-3 text-center">
       <Icon className="w-4 h-4 mx-auto mb-1.5" style={{ color }} />
       <div className="text-xl font-bold text-text-primary">{value}</div>
-      <div className="text-[10px] text-text-muted">{label}</div>
+      <div className="text-xs text-text-muted">{label}</div>
     </div>
   );
 }

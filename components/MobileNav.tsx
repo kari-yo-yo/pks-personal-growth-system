@@ -32,7 +32,7 @@ export default function MobileNav({ onOpenMenu }: { onOpenMenu: () => void }) {
               }`}
             >
               <Icon className="w-5 h-5" />
-              <span className="text-[10px] font-medium">{item.label}</span>
+              <span className="text-xs font-medium">{item.label}</span>
               {isActive && (
                 <span className="w-1 h-1 rounded-full bg-primary" />
               )}
@@ -59,7 +59,7 @@ export default function MobileNav({ onOpenMenu }: { onOpenMenu: () => void }) {
             <circle cx="12" cy="5" r="1" />
             <circle cx="12" cy="19" r="1" />
           </svg>
-          <span className="text-[10px] font-medium">更多</span>
+          <span className="text-xs font-medium">更多</span>
         </button>
       </div>
     </nav>

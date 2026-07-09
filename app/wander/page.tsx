@@ -175,7 +175,7 @@ export default function WanderPage() {
                           </Link>
                         );
                       })()}
-                      <span className="text-[10px] text-text-muted ml-auto flex items-center gap-1">
+                      <span className="text-xs text-text-muted ml-auto flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {new Date(current.date).toLocaleDateString('zh-CN')}
                       </span>
@@ -197,7 +197,7 @@ export default function WanderPage() {
                         {current.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-surface border border-border text-[10px] text-text-muted"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-surface border border-border text-xs text-text-muted"
                           >
                             <Tag className="w-2.5 h-2.5" />
                             {tag}
@@ -213,7 +213,7 @@ export default function WanderPage() {
                           value !== undefined ? (
                             <span
                               key={key}
-                              className="text-[10px] px-2 py-0.5 rounded-md bg-surface border border-border text-text-muted"
+                              className="text-xs px-2 py-0.5 rounded-md bg-surface border border-border text-text-muted"
                             >
                               {key}: {String(value)}
                             </span>
@@ -270,7 +270,7 @@ export default function WanderPage() {
                           <div className={`w-6 h-6 rounded-lg ${config.bg} flex items-center justify-center`}>
                             <Icon className={`w-3 h-3 ${config.color}`} />
                           </div>
-                          <span className={`text-[10px] ${config.color}`}>{config.label}</span>
+                          <span className={`text-xs ${config.color}`}>{config.label}</span>
                         </div>
                         <h4 className="text-sm font-medium text-text-primary truncate mb-1">
                           {item.title}
@@ -287,7 +287,7 @@ export default function WanderPage() {
 
             {/* Bottom hint */}
             <div className="text-center pb-4">
-              <p className="text-[10px] text-text-muted">按空格键随机探索下一个知识碎片</p>
+              <p className="text-xs text-text-muted">按空格键随机探索下一个知识碎片</p>
             </div>
           </>
         )}

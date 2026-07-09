@@ -81,7 +81,7 @@ export default function PathsPage() {
       <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
         {/* Header — utility style, no hero fluff */}
         <div className="mb-8 animate-fade-in">
-          <h1 className="text-xl font-bold text-text-primary mb-1">学习路径</h1>
+          <h1 className="heading-display text-2xl font-bold text-text-primary mb-1">学习路径</h1>
           <p className="text-sm text-text-secondary">
             结构化管理学习进度，逐步解锁知识节点
           </p>
@@ -129,7 +129,7 @@ export default function PathsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-[10px] text-text-muted">{progress}%</span>
+                    <span className="text-xs text-text-muted">{progress}%</span>
                   </div>
                 </button>
               );

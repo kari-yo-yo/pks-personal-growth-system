@@ -63,7 +63,7 @@ export default function ReplayPage() {
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-5 h-5 text-primary" />
-            <h1 className="text-2xl font-bold text-text-primary">突触回放</h1>
+            <h1 className="heading-display text-3xl font-bold text-text-primary">突触回放</h1>
           </div>
           <p className="text-sm text-text-secondary">
             将你的学习轨迹转化为动态视觉叙事。
@@ -129,7 +129,7 @@ function ReplayStat({
       <div className="text-2xl font-bold" style={{ color }}>
         {value}
       </div>
-      <div className="text-[10px] text-text-muted mt-1">{label}</div>
+      <div className="text-xs text-text-muted mt-1">{label}</div>
     </div>
   );
 }

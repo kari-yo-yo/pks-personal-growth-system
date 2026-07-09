@@ -68,7 +68,7 @@ export default function TopologyPage() {
           <div className="p-5 border-b border-border">
             <div className="flex items-center gap-2 mb-1">
               <Network className="w-5 h-5 text-primary" />
-              <h1 className="text-lg font-bold text-text-primary">知识拓扑</h1>
+              <h1 className="heading-display text-2xl font-bold text-text-primary">知识拓扑</h1>
             </div>
             <p className="text-xs text-text-secondary">
               力导向网络可视化知识节点关联
@@ -203,7 +203,7 @@ function StatBox({
     <div className="px-3 py-2 rounded-xl bg-surface border border-border text-center">
       <Icon className="w-4 h-4 text-primary mx-auto mb-1" />
       <div className="text-lg font-bold text-text-primary">{value}</div>
-      <div className="text-[10px] text-text-muted">{label}</div>
+      <div className="text-xs text-text-muted">{label}</div>
     </div>
   );
 }

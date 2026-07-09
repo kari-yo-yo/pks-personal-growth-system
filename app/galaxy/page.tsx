@@ -94,7 +94,7 @@ export default function GalaxyPage() {
 
         {/* 全屏 3D 星图 */}
         <div className="relative" style={{ height: 'calc(100vh - 56px)', marginTop: '56px' }}>
-          <h1 className="absolute top-4 left-4 text-xl font-bold text-text-primary z-10">银河星图</h1>
+          <h1 className="absolute top-4 left-4 heading-display text-xl font-bold text-text-primary z-10">银河星图</h1>
           <GalaxyVisualization
             nodes={nodes}
             notesPerNode={notesPerNode}

@@ -176,7 +176,7 @@ export default function HomePage() {
                           transition: 'height 300ms var(--ease-out-quart)',
                         }}
                       />
-                      <span className="text-[9px] text-[var(--color-text-muted)]">{dayName}</span>
+                      <span className="text-xs text-[var(--color-text-muted)]">{dayName}</span>
                     </div>
                   );
                 })}

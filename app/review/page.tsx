@@ -157,7 +157,7 @@ export default function ReviewPage() {
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                 <RotateCcw className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold text-text-primary mb-2">智能回顾</h1>
+              <h1 className="heading-display text-3xl font-bold text-text-primary mb-2">智能回顾</h1>
               <p className="text-sm text-text-secondary max-w-lg mx-auto">
                 基于间隔重复算法 (SM-2)，自动追踪你的知识掌握度，在最合适的时机推送复习。
               </p>
@@ -167,19 +167,19 @@ export default function ReviewPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-text-primary">{stats.due}</div>
-                <div className="text-[10px] text-text-muted">待复习</div>
+                <div className="text-xs text-text-muted">待复习</div>
               </div>
               <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-primary">{stats.newCount}</div>
-                <div className="text-[10px] text-text-muted">新卡片</div>
+                <div className="text-xs text-text-muted">新卡片</div>
               </div>
               <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-warning">{stats.learning}</div>
-                <div className="text-[10px] text-text-muted">学习中</div>
+                <div className="text-xs text-text-muted">学习中</div>
               </div>
               <div className="surface p-3 text-center">
                 <div className="text-2xl font-bold text-success">{stats.mastered}</div>
-                <div className="text-[10px] text-text-muted">已掌握</div>
+                <div className="text-xs text-text-muted">已掌握</div>
               </div>
             </div>
 
@@ -193,7 +193,7 @@ export default function ReviewPage() {
                   <Layers className="w-5 h-5" />
                   开始复习 ({stats.due} 张卡片)
                 </button>
-                <p className="text-[10px] text-text-muted mt-2">
+                <p className="text-xs text-text-muted mt-2">
                   按 1-4 快速评分 · 空格翻转卡片
                 </p>
               </div>
@@ -215,23 +215,23 @@ export default function ReviewPage() {
               </h3>
               <div className="space-y-2 text-xs text-text-secondary">
                 <div className="flex items-center gap-3">
-                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-[10px] text-text-muted w-16 text-center">Space</kbd>
+                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-xs text-text-muted w-16 text-center">Space</kbd>
                   <span>翻转卡片（查看答案）</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-[10px] text-text-muted w-16 text-center">1</kbd>
+                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-xs text-text-muted w-16 text-center">1</kbd>
                   <span>重来（重新学习）</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-[10px] text-text-muted w-16 text-center">2</kbd>
+                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-xs text-text-muted w-16 text-center">2</kbd>
                   <span>困难（记忆模糊）</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-[10px] text-text-muted w-16 text-center">3</kbd>
+                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-xs text-text-muted w-16 text-center">3</kbd>
                   <span>良好（正确回忆）</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-[10px] text-text-muted w-16 text-center">4</kbd>
+                  <kbd className="px-2 py-0.5 rounded bg-surface border border-border text-xs text-text-muted w-16 text-center">4</kbd>
                   <span>简单（轻松掌握）</span>
                 </div>
               </div>
@@ -335,7 +335,7 @@ export default function ReviewPage() {
                   {current.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-4">
                       {current.tags.map((tag) => (
-                        <span key={tag} className="text-[10px] px-2 py-0.5 rounded-md bg-surface border border-border text-text-muted">
+                        <span key={tag} className="text-xs px-2 py-0.5 rounded-md bg-surface border border-border text-text-muted">
                           {tag}
                         </span>
                       ))}
@@ -362,7 +362,7 @@ export default function ReviewPage() {
                       >
                         <Icon className={`w-5 h-5 ${config.color}`} />
                         <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>
-                        <kbd className="text-[9px] px-1.5 py-0.5 rounded bg-surface border border-border text-text-muted">
+                        <kbd className="text-xs px-1.5 py-0.5 rounded bg-surface border border-border text-text-muted">
                           {Object.keys(difficultyConfig).indexOf(key) + 1}
                         </kbd>
                       </button>
@@ -392,7 +392,7 @@ export default function ReviewPage() {
                   return (
                     <div key={d} className="surface p-2 text-center">
                       <div className={`text-lg font-bold ${config.color}`}>{count}</div>
-                      <div className="text-[10px] text-text-muted">{config.label}</div>
+                      <div className="text-xs text-text-muted">{config.label}</div>
                     </div>
                   );
                 })}
