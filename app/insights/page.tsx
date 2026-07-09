@@ -129,6 +129,7 @@ export default function InsightsPage() {
           <h1 className="heading-display text-3xl font-bold text-text-primary mb-1.5">
             灵感速记
           </h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1">随时记录灵感，稍后整理</p>
           <p className="text-sm text-text-secondary max-w-md mx-auto">
             随时记录脑海中闪现的灵感碎片，让每个想法都被捕获
           </p>

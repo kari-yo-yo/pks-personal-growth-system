@@ -163,24 +163,24 @@ export default function ReviewPage() {
               </p>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-              <div className="surface p-3 text-center">
-                <div className="text-2xl font-bold text-text-primary">{stats.due}</div>
-                <div className="text-xs text-text-muted">待复习</div>
-              </div>
-              <div className="surface p-3 text-center">
-                <div className="text-2xl font-bold text-primary">{stats.newCount}</div>
-                <div className="text-xs text-text-muted">新卡片</div>
-              </div>
-              <div className="surface p-3 text-center">
-                <div className="text-2xl font-bold text-warning">{stats.learning}</div>
-                <div className="text-xs text-text-muted">学习中</div>
-              </div>
-              <div className="surface p-3 text-center">
-                <div className="text-2xl font-bold text-success">{stats.mastered}</div>
-                <div className="text-xs text-text-muted">已掌握</div>
-              </div>
+            {/* Stats — inline pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+                <span className="font-bold text-text-primary">{stats.due}</span>
+                <span className="text-text-muted">待复习</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+                <span className="font-bold text-primary">{stats.newCount}</span>
+                <span className="text-text-muted">新卡片</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+                <span className="font-bold text-warning">{stats.learning}</span>
+                <span className="text-text-muted">学习中</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+                <span className="font-bold text-success">{stats.mastered}</span>
+                <span className="text-text-muted">已掌握</span>
+              </span>
             </div>
 
             {/* Action */}

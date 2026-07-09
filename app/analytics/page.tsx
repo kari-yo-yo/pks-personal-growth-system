@@ -286,6 +286,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center gap-2 mb-2">
             <BarChart3 className="w-5 h-5 text-primary" />
             <h1 className="text-2xl font-bold text-text-primary">统计洞察</h1>
+            <p className="text-sm text-[var(--color-text-muted)] mt-1">学习数据可视化与趋势分析</p>
           </div>
           <p className="text-sm text-text-secondary">
             数据驱动的学习分析，看清你的知识增长轨迹与学习习惯。

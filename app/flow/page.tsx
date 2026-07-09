@@ -39,6 +39,7 @@ export default function FlowPage() {
           <div className="flex items-center gap-3 mb-2">
             <Wind className="w-6 h-6 text-primary" />
             <h1 className="heading-display text-3xl font-bold text-text-primary">突触扩散</h1>
+            <p className="text-sm text-[var(--color-text-muted)] mt-1">从一个知识点出发，发现相关的其他知识</p>
             <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs border border-primary/20">
               生成艺术
             </span>

@@ -134,6 +134,7 @@ export default function PapersPage() {
             <GraduationCap className="w-6 h-6 text-accent" />
             论文
           </h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1">整理和管理你的论文库</p>
           <button
             onClick={() => {
               setShowForm(true);

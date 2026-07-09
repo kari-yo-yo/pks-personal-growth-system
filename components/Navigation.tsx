@@ -32,25 +32,25 @@ import MobileNav from './MobileNav';
 /* ── Primary nav items (always visible on desktop) ── */
 const primaryNav = [
   { href: '/', label: '首页', icon: Home },
+  { href: '/daily', label: '总结', icon: Calendar },
   { href: '/knowledge', label: '知识', icon: Brain },
   { href: '/notes', label: '笔记', icon: FileText },
+  { href: '/review', label: '回顾', icon: RefreshCcw },
   { href: '/feynman', label: '费曼', icon: Lightbulb },
   { href: '/galaxy', label: '星图', icon: Sparkles },
-  { href: '/daily', label: '总结', icon: Calendar },
+  { href: '/wander', label: '漫游', icon: Compass },
 ];
 
 /* ── Secondary nav items (in "more" dropdown / mobile drawer) ── */
 const secondaryNav = [
   { href: '/papers', label: '论文', icon: GraduationCap },
   { href: '/insights', label: '灵感速记', icon: Zap },
-  { href: '/topology', label: '拓扑', icon: Network },
+  { href: '/topology', label: '知识拓扑', icon: Network },
   { href: '/paths', label: '学习路径', icon: Route },
-  { href: '/flow', label: '流场', icon: Wind },
-  { href: '/wander', label: '漫游', icon: Compass },
+  { href: '/flow', label: '突触扩散', icon: Wind },
   { href: '/timeline', label: '时间线', icon: Clock },
-  { href: '/analytics', label: '统计', icon: BarChart3 },
-  { href: '/replay', label: '回放', icon: Video },
-  { href: '/review', label: '回顾', icon: RefreshCcw },
+  { href: '/analytics', label: '统计洞察', icon: BarChart3 },
+  { href: '/replay', label: '突触回放', icon: Video },
   { href: '/settings', label: '设置', icon: Settings },
 ];
 

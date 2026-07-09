@@ -182,6 +182,7 @@ export default function TimelinePage() {
           <div className="flex items-center gap-2 mb-2">
             <Clock className="w-5 h-5 text-primary" />
             <h1 className="heading-display text-3xl font-bold text-text-primary">知识时间线</h1>
+            <p className="text-sm text-[var(--color-text-muted)] mt-1">按时间回顾你的学习历程</p>
           </div>
           <p className="text-sm text-text-secondary">
             追溯每一步成长的足迹，从知识节点到灵感闪光，所有学习活动一目了然。

@@ -64,6 +64,7 @@ export default function ReplayPage() {
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-5 h-5 text-primary" />
             <h1 className="heading-display text-3xl font-bold text-text-primary">突触回放</h1>
+            <p className="text-sm text-[var(--color-text-muted)] mt-1">回顾你的知识探索路径</p>
           </div>
           <p className="text-sm text-text-secondary">
             将你的学习轨迹转化为动态视觉叙事。

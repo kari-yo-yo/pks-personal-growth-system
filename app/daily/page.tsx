@@ -198,48 +198,28 @@ export default function DailyPage() {
           )}
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
-          <StatCard
-            icon={Flame}
-            label="连续记录"
-            value={`${streak} 天`}
-            color="text-warning"
-          />
-          <StatCard
-            icon={CheckCircle}
-            label="总计记录"
-            value={`${summaries.length} 天`}
-            color="text-success"
-          />
-          <StatCard
-            icon={Star}
-            label="本月记录"
-            value={`${
-              summaries.filter((s) => {
-                const d = new Date(s.date);
-                const now = new Date();
-                return (
-                  d.getMonth() === now.getMonth() &&
-                  d.getFullYear() === now.getFullYear()
-                );
-              }).length
-            } 天`}
-            color="text-primary"
-          />
-          <StatCard
-            icon={TrendingUp}
-            label="本周记录"
-            value={`${
-              summaries.filter((s) => {
-                const d = new Date(s.date);
-                const now = new Date();
-                const diff = now.getTime() - d.getTime();
-                return diff < 7 * 24 * 60 * 60 * 1000;
-              }).length
-            } 天`}
-            color="text-accent"
-          />
+        {/* Stats — inline pills */}
+        <div className="flex flex-wrap items-center gap-2 mb-10">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+            <Flame className="w-3.5 h-3.5 text-warning" />
+            <span className="font-bold text-text-primary">{streak} 天</span>
+            <span className="text-text-muted">连续</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+            <CheckCircle className="w-3.5 h-3.5 text-success" />
+            <span className="font-bold text-text-primary">{summaries.length} 天</span>
+            <span className="text-text-muted">总计</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+            <Star className="w-3.5 h-3.5 text-primary" />
+            <span className="font-bold text-text-primary">{summaries.filter((s) => { const d = new Date(s.date); const now = new Date(); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); }).length} 天</span>
+            <span className="text-text-muted">本月</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full surface text-sm">
+            <TrendingUp className="w-3.5 h-3.5 text-primary" />
+            <span className="font-bold text-text-primary">{summaries.filter((s) => { const d = new Date(s.date); const now = new Date(); const diff = now.getTime() - d.getTime(); return diff < 7 * 24 * 60 * 60 * 1000; }).length} 天</span>
+            <span className="text-text-muted">本周</span>
+          </span>
         </div>
 
         {/* Heatmap */}
@@ -553,22 +533,4 @@ function SummaryCard({ summary }: { summary: DailySummary }) {
   );
 }
 
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  color,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string;
-  color: string;
-}) {
-  return (
-    <div className="surface p-3 text-center">
-      <Icon className={`w-5 h-5 mx-auto mb-2 ${color}`} />
-      <div className="text-xl font-bold text-text-primary">{value}</div>
-      <div className="text-xs text-text-muted">{label}</div>
-    </div>
-  );
-}
+

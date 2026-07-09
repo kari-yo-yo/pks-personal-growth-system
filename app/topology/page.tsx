@@ -69,6 +69,7 @@ export default function TopologyPage() {
             <div className="flex items-center gap-2 mb-1">
               <Network className="w-5 h-5 text-primary" />
               <h1 className="heading-display text-2xl font-bold text-text-primary">知识拓扑</h1>
+              <p className="text-sm text-[var(--color-text-muted)] mt-1">查看知识点之间的关联网络</p>
             </div>
             <p className="text-xs text-text-secondary">
               力导向网络可视化知识节点关联

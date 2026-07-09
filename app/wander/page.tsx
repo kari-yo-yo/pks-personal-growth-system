@@ -119,6 +119,7 @@ export default function WanderPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface/60 border border-border mb-3">
             <Compass className="w-3.5 h-3.5 text-primary" />
             <span className="text-xs text-text-secondary">知识漫游</span>
+            <p className="text-sm text-[var(--color-text-muted)] mt-1">随机发现知识碎片，激发灵感</p>
           </div>
           <p className="text-xs text-text-muted">
             共 {stats.totalItems} 个知识碎片 · 按空格键继续漫游

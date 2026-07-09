@@ -82,6 +82,7 @@ export default function PathsPage() {
         {/* Header — utility style, no hero fluff */}
         <div className="mb-8 animate-fade-in">
           <h1 className="heading-display text-2xl font-bold text-text-primary mb-1">学习路径</h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1">规划和管理你的学习计划</p>
           <p className="text-sm text-text-secondary">
             结构化管理学习进度，逐步解锁知识节点
           </p>
