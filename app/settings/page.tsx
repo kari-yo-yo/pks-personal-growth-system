@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import DataRecoveryPanel from '@/components/DataRecoveryPanel';
 import { load, getDataStats, saveAll } from '@/lib/db';
 import { isGitHubSyncEnabled } from '@/lib/githubSync';
@@ -105,9 +106,7 @@ export default function SettingsPage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen relative">
-
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+      <PageLayout>
         <h1 className="heading-display text-3xl font-bold text-text-primary mb-8">设置</h1>
 
         {loading ? (
@@ -344,8 +343,7 @@ export default function SettingsPage() {
             </section>
           </div>
         )}
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }

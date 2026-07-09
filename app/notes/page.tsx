@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { load, getAllNotes, getAllNodes, addNote, updateNote, deleteNote } from '@/lib/db';
 import { Note, KnowledgeNode } from '@/types';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import {
   Edit3,
   FileText,
@@ -94,9 +95,7 @@ export default function NotesPage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen relative">
-
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+      <PageLayout>
         <div className="flex items-center justify-between mb-10">
           <h1 className="heading-display text-3xl font-bold text-text-primary flex items-center gap-2">
             <FileText className="w-6 h-6 text-success" />
@@ -223,6 +222,19 @@ export default function NotesPage() {
                 <p className="text-text-muted">
                   {search ? '没有找到匹配的笔记' : '暂无笔记'}
                 </p>
+                {!search && (
+                  <button
+                    onClick={() => {
+                      setShowForm(true);
+                      setEditingNote(null);
+                      setFormData({ title: '', content: '', nodeId: '' });
+                    }}
+                    className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                    写第一条笔记
+                  </button>
+                )}
               </div>
             ) : (
               filteredNotes.map((note) => (
@@ -267,8 +279,7 @@ export default function NotesPage() {
             )}
           </div>
         )}
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }

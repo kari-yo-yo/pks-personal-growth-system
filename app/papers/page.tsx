@@ -269,6 +269,19 @@ export default function PapersPage() {
                 <p className="text-text-muted">
                   {search ? '没有找到匹配的论文' : '暂无论文'}
                 </p>
+                {!search && (
+                  <button
+                    onClick={() => {
+                      setShowForm(true);
+                      setEditingPaper(null);
+                      setFormData({ title: '', authors: '', abstract: '', url: '', year: '', venue: '' });
+                    }}
+                    className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                    添加第一篇论文
+                  </button>
+                )}
               </div>
             ) : (
               filteredPapers.map((paper) => {

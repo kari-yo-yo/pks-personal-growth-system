@@ -18,6 +18,7 @@ import {
   PathProgress,
 } from '@/lib/analytics';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import {
   BarChart3,
   Brain,
@@ -278,9 +279,7 @@ export default function AnalyticsPage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen">
-
-      <main className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <PageLayout maxWidth="6xl">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-2">
@@ -456,8 +455,7 @@ export default function AnalyticsPage() {
             </div>
           </>
         )}
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }

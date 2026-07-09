@@ -13,6 +13,7 @@ import {
 } from '@/lib/insights';
 import { Insight, InsightColor } from '@/types';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import {
   Pin,
   PinOff,
@@ -113,14 +114,10 @@ export default function InsightsPage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen relative">
-
-      {/* Neural Background */}
       <div className="fixed inset-0 z-0">
         <NeuralBackground />
       </div>
-
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative z-10">
+      <PageLayout maxWidth="4xl">
         {/* Header */}
         <div className="text-center mb-10 animate-fade-in">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mb-3">
@@ -225,10 +222,10 @@ export default function InsightsPage() {
             <p className="text-text-muted text-sm mb-4">还没有灵感记录</p>
             <button
               onClick={() => openInsightFAB()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface border border-border text-sm text-text-secondary hover:text-text-primary hover:border-primary/30 transition-colors"
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
             >
               <Plus className="w-4 h-4" />
-              记录第一条灵感
+              记录第一个灵感
             </button>
           </div>
         ) : (
@@ -256,8 +253,7 @@ export default function InsightsPage() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }

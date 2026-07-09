@@ -14,6 +14,7 @@ import {
 } from '@/lib/review';
 import { load } from '@/lib/db';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import {
   RotateCcw,
   Brain,
@@ -61,10 +62,11 @@ export default function ReviewPage() {
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<{ itemId: string; difficulty: ReviewDifficulty }[]>([]);
   const [sessionStart, setSessionStart] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function init() {
-      load().catch(() => {});
+      load().catch(() => setError('数据加载失败，请刷新页面重试'));
       setStats(getReviewStats());
       setLoading(false);
     }
@@ -145,9 +147,10 @@ export default function ReviewPage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen relative">
-
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+      <PageLayout>
+        {error && (
+          <div className="surface p-4 text-center text-error mb-4">{error}</div>
+        )}
         {loading ? (
           <div className="text-center py-20 text-text-muted">加载中...</div>
         ) : view === 'home' ? (
@@ -437,8 +440,7 @@ export default function ReviewPage() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }

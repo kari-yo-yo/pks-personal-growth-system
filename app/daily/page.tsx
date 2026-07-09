@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import {
   Calendar,
   CheckCircle,
@@ -47,6 +48,7 @@ export default function DailyPage() {
     tomorrowGoals: '',
     reflections: '',
   });
+  const [error, setError] = useState<string | null>(null);
 
   // 从 localStorage 加载
   useEffect(() => {
@@ -54,7 +56,9 @@ export default function DailyPage() {
     if (saved) {
       try {
         setSummaries(JSON.parse(saved));
-      } catch {}
+      } catch {
+        setError('数据加载失败，请刷新页面重试');
+      }
     }
   }, []);
 
@@ -176,9 +180,10 @@ export default function DailyPage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen relative">
-
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+      <PageLayout>
+        {error && (
+          <div className="surface p-4 text-center text-error mb-4">{error}</div>
+        )}
         <div className="flex items-center justify-between mb-10">
           <h1 className="heading-display text-3xl font-bold text-text-primary flex items-center gap-2">
             <Calendar className="w-6 h-6 text-primary" />
@@ -487,8 +492,7 @@ export default function DailyPage() {
             </div>
           )}
         </div>
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }

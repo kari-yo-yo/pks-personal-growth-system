@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Trash2,
   BarChart3,
+  Plus,
 } from 'lucide-react';
 
 const PathOrbitalVis = dynamic(() => import('@/components/PathOrbitalVis'), {
@@ -143,7 +144,14 @@ export default function PathsPage() {
               <div className="flex items-center justify-center h-64 border border-dashed border-border rounded-xl">
                 <div className="text-center">
                   <Route className="w-8 h-8 text-text-muted/30 mx-auto mb-2" />
-                  <p className="text-sm text-text-muted">选择一条路径查看详情</p>
+                  <p className="text-sm text-text-muted mb-4">暂无学习路径</p>
+                  <button
+                    onClick={() => {}}
+                    className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                    创建第一条路径
+                  </button>
                 </div>
               </div>
             ) : (

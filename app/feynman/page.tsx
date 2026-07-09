@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { PRESET_CARDS } from '@/lib/feynmanData';
 import { FeynmanCard, FeynmanProgress, FEYNMAN_CATEGORIES } from '@/types/feynman';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import {
   Bookmark,
   Brain,
@@ -12,6 +13,7 @@ import {
   Filter,
   Heart,
   Lightbulb,
+  Plus,
   RotateCcw,
   Search,
   Star,
@@ -24,6 +26,7 @@ export default function FeynmanPage() {
   const [selectedCard, setSelectedCard] = useState<FeynmanCard | null>(null);
   const [progress, setProgress] = useState<Record<string, FeynmanProgress>>({});
   const [showBack, setShowBack] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // 从 localStorage 加载进度
   useEffect(() => {
@@ -31,7 +34,9 @@ export default function FeynmanPage() {
     if (saved) {
       try {
         setProgress(JSON.parse(saved));
-      } catch {}
+      } catch {
+        setError('进度加载失败，请刷新页面重试');
+      }
     }
   }, []);
 
@@ -137,9 +142,10 @@ export default function FeynmanPage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen relative">
-
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto relative z-10">
+      <PageLayout maxWidth="6xl">
+        {error && (
+          <div className="surface p-4 text-center text-error mb-4">{error}</div>
+        )}
         <div className="flex items-center justify-between mb-6">
           <h1 className="heading-display text-3xl font-bold text-text-primary flex items-center gap-2">
             <Brain className="w-6 h-6 text-primary" />
@@ -365,10 +371,19 @@ export default function FeynmanPage() {
           <div className="surface p-7 text-center">
             <Brain className="w-12 h-12 text-text-muted mx-auto mb-3" />
             <p className="text-text-muted">没有找到匹配的概念卡片</p>
+            <button
+              onClick={() => {
+                setSearch('');
+                setSelectedCategory('全部');
+              }}
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              创建第一张卡片
+            </button>
           </div>
         )}
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }

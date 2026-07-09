@@ -6,7 +6,8 @@ import { getDailyActivity } from '@/lib/analytics';
 import { getAllPaths } from '@/lib/paths';
 import { assetPath } from '@/lib/config';
 import PageTransition from '@/components/PageTransition';
-import { RotateCcw, Sparkles } from 'lucide-react';
+import { RotateCcw, Sparkles, Plus } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ReplayPage() {
   const [ready, setReady] = useState(false);
@@ -75,12 +76,29 @@ export default function ReplayPage() {
         <div className="surface rounded-2xl overflow-hidden border border-border mb-6">
           <div className="relative aspect-video bg-[#0a0a0f]">
             {ready ? (
-              <iframe
-                key={replayKey}
-                src={iframeSrc}
-                className="w-full h-full border-0"
-                allow="autoplay"
-              />
+              totalEvents === 0 ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <Sparkles className="w-12 h-12 text-text-muted mx-auto mb-3" />
+                    <p className="text-text-muted mb-1">暂无回放数据</p>
+                    <p className="text-xs text-text-secondary mb-4">开始探索知识，生成你的第一条回放</p>
+                    <Link
+                      href="/wander"
+                      className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      开始探索
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <iframe
+                  key={replayKey}
+                  src={iframeSrc}
+                  className="w-full h-full border-0"
+                  allow="autoplay"
+                />
+              )
             ) : (
               <div className="flex items-center justify-center h-full">
                 <p className="text-text-muted">加载中...</p>

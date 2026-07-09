@@ -24,6 +24,7 @@ import {
   Calendar,
   Sparkles,
   Compass,
+  Plus,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -138,9 +139,9 @@ export default function WanderPage() {
               <p className="text-xs text-text-muted mb-4">先去添加一些知识内容吧</p>
               <Link
                 href="/knowledge"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
               >
-                <Brain className="w-4 h-4" />
+                <Plus className="w-4 h-4" />
                 去添加知识
               </Link>
             </div>

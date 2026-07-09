@@ -18,6 +18,7 @@ import {
   FileText,
   Filter,
   GraduationCap,
+  Plus,
   Route,
   TrendingUp,
   Zap,
@@ -242,9 +243,16 @@ export default function TimelinePage() {
           <div className="text-center py-20">
             <Clock className="w-12 h-12 text-text-muted mx-auto mb-3" />
             <p className="text-text-muted">暂无时间线事件</p>
-            <p className="text-xs text-text-secondary mt-1">
+            <p className="text-xs text-text-secondary mt-1 mb-4">
               开始记录知识、笔记或灵感，时间线将自动呈现你的成长轨迹
             </p>
+            <Link
+              href="/knowledge"
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              去添加内容
+            </Link>
           </div>
         ) : (
           <div className="relative">

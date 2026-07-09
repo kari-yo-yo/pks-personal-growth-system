@@ -12,6 +12,7 @@ import {
 } from '@/lib/db';
 import { KnowledgeNode } from '@/types';
 import PageTransition from '@/components/PageTransition';
+import PageLayout from '@/components/PageLayout';
 import {
   Brain,
   Edit3,
@@ -93,9 +94,7 @@ export default function KnowledgePage() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen relative">
-
-      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+      <PageLayout>
         <div className="flex items-center justify-between mb-10">
           <h1 className="heading-display text-3xl font-bold text-text-primary flex items-center gap-2">
             <Brain className="w-6 h-6 text-primary" />
@@ -124,12 +123,30 @@ export default function KnowledgePage() {
                 <h2 className="text-sm font-medium text-text-secondary mb-3">
                   知识树
                 </h2>
-                <KnowledgeTree
-                  nodes={nodes}
-                  selectedId={selectedNode?.id}
-                  onSelect={handleSelectNode}
-                  className="max-h-[60vh]"
-                />
+                {nodes.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Brain className="w-10 h-10 text-text-muted mx-auto mb-3" />
+                    <p className="text-text-muted text-sm mb-4">还没有知识节点</p>
+                    <button
+                      onClick={() => {
+                        setShowAddForm(true);
+                        setEditingNode(null);
+                        setFormData({ title: '', description: '' });
+                      }}
+                      className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm hover:bg-primary/20 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      添加第一个知识点
+                    </button>
+                  </div>
+                ) : (
+                  <KnowledgeTree
+                    nodes={nodes}
+                    selectedId={selectedNode?.id}
+                    onSelect={handleSelectNode}
+                    className="max-h-[60vh]"
+                  />
+                )}
               </div>
             </div>
 
@@ -266,8 +283,7 @@ export default function KnowledgePage() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      </PageLayout>
     </PageTransition>
   );
 }
